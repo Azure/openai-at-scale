@@ -270,3 +270,8 @@ dist
 
 .azure/*
 .azure
+
+
+# Azure az webapp deployment details
+.azure
+*_env

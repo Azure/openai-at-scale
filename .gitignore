@@ -275,3 +275,6 @@ dist
 # Azure az webapp deployment details
 .azure
 *_env
+
+# Mac
+.DS_Store

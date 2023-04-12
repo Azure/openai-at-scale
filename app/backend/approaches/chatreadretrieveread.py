@@ -1,6 +1,4 @@
 import openai
-from azure.search.documents import SearchClient
-from azure.search.documents.models import QueryType
 from approaches.approach import Approach
 from text import nonewlines
 
@@ -10,8 +8,7 @@ from text import nonewlines
 class ChatReadRetrieveReadApproach(Approach):
 
 
-    def __init__(self, search_client: SearchClient, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
-        self.search_client = search_client
+    def __init__(self, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
         self.chatgpt_deployment = chatgpt_deployment
         self.gpt_deployment = gpt_deployment
         self.sourcepage_field = sourcepage_field

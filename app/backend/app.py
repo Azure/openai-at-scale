@@ -42,26 +42,9 @@ openai.api_version = "2023-03-15-preview"
 # openai.api_key = openai_token.token
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Set up clients for Cognitive Search and Storage
-search_client = SearchClient(
-    endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
-    index_name=AZURE_SEARCH_INDEX,
-    credential=azure_credential)
-blob_client = BlobServiceClient(
-    account_url=f"https://{AZURE_STORAGE_ACCOUNT}.blob.core.windows.net", 
-    credential=azure_credential)
-blob_container = blob_client.get_container_client(AZURE_STORAGE_CONTAINER)
-
-# Various approaches to integrate GPT and external knowledge, most applications will use a single one of these patterns
-# or some derivative, here we include several for exploration purposes
-ask_approaches = {
-    "rtr": RetrieveThenReadApproach(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT),
-    "rrr": ReadRetrieveReadApproach(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT),
-    "rda": ReadDecomposeAsk(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
-}
 
 chat_approaches = {
-    "rrr": ChatReadRetrieveReadApproach(search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
+    "rrr": ChatReadRetrieveReadApproach(AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
 }
 
 app = Flask(__name__)
@@ -82,23 +65,7 @@ def content_file(path):
     if mime_type == "application/octet-stream":
         mime_type = mimetypes.guess_type(path)[0] or "application/octet-stream"
     return blob.readall(), 200, {"Content-Type": mime_type, "Content-Disposition": f"inline; filename={path}"}
-    
-@app.route("/ask", methods=["POST"])
-def ask():
-    print("/ask request", request)
-    # ensure_openai_token()
-    approach = request.json["approach"]
-    print(approach)
-    try:
-        impl = ask_approaches.get(approach)
-        if not impl:
-            return jsonify({"error": "unknown approach"}), 400
-        r = impl.run(request.json["question"], request.json.get("overrides") or {})
-        return jsonify(r)
-    except Exception as e:
-        logging.exception("Exception in /ask")
-        return jsonify({"error": str(e)}), 500
-    
+
 @app.route("/chat", methods=["POST"])
 def chat():
     print("/chat request", request)
@@ -113,14 +80,6 @@ def chat():
     except Exception as e:
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
-
-# def ensure_openai_token():
-#     print("ensure_openai_token...")
-#     global openai_token
-#     if openai_token.expires_on < int(time.time()) - 60:
-#         print("expired ...")
-#         openai_token = azure_credential.get_token("https://cognitiveservices.azure.com/.default")
-#         openai.api_key = openai_token.token
     
 if __name__ == "__main__":
     app.run()

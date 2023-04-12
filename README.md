@@ -6,10 +6,14 @@ This content is in early alpha stage and is subject to change.
 
 <img src="./docs/appcomponents.png" width="400">
 
-<br />
+
+## Features
+- Chat and Q&A interfaces
+- Configure system prompts and hyperparameters
+- Authenticate with Azure Active Directory
+- Store logs into Cosmos DB and Log Analytics
 
 <img src="./docs/chatscreen.png" width="400">
-
 
 ---
 ## Get Started

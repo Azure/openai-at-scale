@@ -1,6 +1,5 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
 import { ChatMultiple24Regular, BookQuestionMark24Regular } from "@fluentui/react-icons";
-import { Label } from "@fluentui/react";
 
 import github from "../../assets/github.svg";
 
@@ -42,9 +41,6 @@ const Layout = () => {
                             </li>
                         </ul>
                     </nav>
-                    {
-                        // <h4 className={styles.headerRightText}>vanilla ChatGPT UI by Azure OpenAI Service</h4>
-                    }
                 </div>
             </header>
 

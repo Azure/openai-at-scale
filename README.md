@@ -4,6 +4,10 @@ This content is in early alpha stage and is subject to change.
 
 **OpenAI at Scale** is a workshop by FastTrack for Azure team that helps customers to build and deploy simple ChatGPT UI application on Azure.
 
+<img src="./docs/appcomponents.png" width="400">
+
+<br />
+
 <img src="./docs/chatscreen.png" width="400">
 
 

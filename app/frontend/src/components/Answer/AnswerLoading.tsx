@@ -14,12 +14,7 @@ export const AnswerLoading = () => {
     return (
         <animated.div style={{ ...animatedStyles }}>
             <Stack className={styles.answerContainer} verticalAlign="space-between">
-                {/* <AnswerIcon /> */}
                 <Stack.Item grow>
-                    {/* <p className={styles.answerText}>
-                        <span className={styles.loadingdots} />
-                    </p> */}
-                    {/* <AnswerIcon /> */}
                     <ProgressIndicator label="Finding answer ..." barHeight={barHeight} />
                 </Stack.Item>
             </Stack>

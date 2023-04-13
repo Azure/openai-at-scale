@@ -14,7 +14,7 @@ const Layout = () => {
                     </Link>
                     <ul className={styles.headerNavList}>
                         <li className={styles.headerNavList}>
-                            <a href="https://aka.ms/entgptsearch" target={"_blank"} title="Github repository link">
+                            <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">
                                 <img
                                     src={github}
                                     alt="Github logo"

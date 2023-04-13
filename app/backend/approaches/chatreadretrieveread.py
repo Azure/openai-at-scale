@@ -16,7 +16,8 @@ class ChatReadRetrieveReadApproach(Approach):
         # self.content_field = content_field
 
     def run(self, history: list[dict], overrides: dict) -> any:
-        print(overrides)
+        print("history:", history)
+        print("override:", overrides)
         use_semantic_captions = True if overrides.get("semantic_captions") else False
         top = overrides.get("top") or 3
         exclude_category = overrides.get("exclude_category") or None

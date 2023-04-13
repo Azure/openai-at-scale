@@ -10,11 +10,10 @@
 }
 .stackItem {
     display: flex;
-    flex-direction: column;
     height: 100%;
     width: 70%;
     margin-right: 5px;
-    /* box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px; */
+    flex-direction: row-reverse;
 }
 
 .stackItemConfig {
@@ -22,6 +21,8 @@
     flex-direction: column;
     height: 100%;
     margin-left: 5px;
+    background-color: #f2f2f2;
+    padding: 10px;
     /* box-shadow: rgba(0, 0, 0, 0.2) 3px 1px 1px 3px; */
 }
 
@@ -105,7 +106,7 @@
     padding-right: 24px;
     width: 100%;
     max-width: 1028px;
-    background: #f2f2f2;
+    background: #ffffff;
     display: flex;
     flex-direction: row;
 }
@@ -125,6 +126,8 @@
 .chatSettingsLabel {
     font-size: 20px;
     font-weight: bold;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
 }
 
 .loadingLogo {

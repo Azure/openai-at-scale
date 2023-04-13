@@ -15,7 +15,7 @@ export const AnswerLoading = () => {
         <animated.div style={{ ...animatedStyles }}>
             <Stack className={styles.answerContainer} verticalAlign="space-between">
                 <Stack.Item grow>
-                    <ProgressIndicator label="Finding answer ..." barHeight={barHeight} />
+                    <ProgressIndicator className={styles.isLoading} label="Finding answer ..." barHeight={barHeight} />
                 </Stack.Item>
             </Stack>
         </animated.div>

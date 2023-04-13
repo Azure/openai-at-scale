@@ -8,11 +8,12 @@ from text import nonewlines
 class ChatReadRetrieveReadApproach(Approach):
 
 
-    def __init__(self, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
+    # def __init__(self, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
+    def __init__(self, chatgpt_deployment: str, gpt_deployment: str):
         self.chatgpt_deployment = chatgpt_deployment
         self.gpt_deployment = gpt_deployment
-        self.sourcepage_field = sourcepage_field
-        self.content_field = content_field
+        # self.sourcepage_field = sourcepage_field
+        # self.content_field = content_field
 
     def run(self, history: list[dict], overrides: dict) -> any:
         print(overrides)

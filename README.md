@@ -19,6 +19,13 @@ This content is in early alpha stage and is subject to change.
 ## Get Started
 ### Deploy to local environment
 
+**Configure environment variables**
+```shell
+export AZURE_OPENAI_SERVICE=<resource name>
+export OPENAI_API_KEY=<your access key of azure openai service>
+export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
+```
+
 **Set up Python environment**
 ```shell
 cd app

@@ -17,12 +17,6 @@ export type AskRequestOverrides = {
     promptSytemTemplate?: string;
 };
 
-export type AskRequest = {
-    question: string;
-    approach: Approaches;
-    overrides?: AskRequestOverrides;
-};
-
 export type AskResponse = {
     answer: string;
     thoughts: string | null;

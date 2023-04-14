@@ -112,6 +112,7 @@ sup {
 }
 
 .retryButton {
+    margin-top: 10px;
     width: fit-content;
 }
 
@@ -136,4 +137,7 @@ sup {
 .loadingdots::after {
     content: "";
     animation: loading 1s infinite;
+}
+.isLoading {
+    margin-left: 50px;
 }

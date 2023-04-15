@@ -32,11 +32,11 @@ You can follow the [official document](https://learn.microsoft.com/en-us/azure/c
 
 ```shell
 # Set environment variables
-export SUBSCRIPTION_ID = <your subscription id>
-export RESOURCE_GROUP = <your resource group name>
-export LOCATION = <your location>
-export OPENAI_SERVICE_NAME = <your openai service name>
-export AZURE_OPENAI_CHATGPT_DEPLOYMENT = <deployment name of your gpt-35-turbo model>
+export SUBSCRIPTION_ID=<your subscription id>
+export RESOURCE_GROUP=<your resource group name>
+export LOCATION=<your location>
+export OPENAI_SERVICE_NAME=<your openai service name>
+export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
 ```
 
 export RESOURCE_GROUP='openai-kyoheim'
@@ -70,9 +70,9 @@ az cognitiveservices account deployment create \
 if you alrady set up your Open AI Service, you need to set up your environment variables before you spin up your app.
 
 ```shell
-export RESOURCE_GROUP = <your resource group name>
-export OPENAI_SERVICE_NAME = <your openai service name>
-export AZURE_OPENAI_CHATGPT_DEPLOYMENT = <deployment name of your gpt-35-turbo model>
+export RESOURCE_GROUP=<your resource group name>
+export OPENAI_SERVICE_NAME=<your openai service name>
+export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
 export OPENAI_API_KEY=az cognitiveservices account keys list \
 -n $OPENAI_SERVICE_NAME \
 -g $RESOURCE_GROUP \

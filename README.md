@@ -58,7 +58,7 @@ az cognitiveservices account create \
 az cognitiveservices account deployment create \
    -g $RESOURCE_GROUP  \
    -n $OPENAI_SERVICE_NAME \
-   --deployment-name MyModel \
+   --deployment-name $AZURE_OPENAI_CHATGPT_DEPLOYMENT \
    --model-name gpt-35-turbo \
    --model-version "0301"  \
    --model-format OpenAI \
@@ -73,11 +73,11 @@ if you alrady set up your Open AI Service, you need to set up your environment v
 export RESOURCE_GROUP=<your resource group name>
 export OPENAI_SERVICE_NAME=<your openai service name>
 export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
-export OPENAI_API_KEY=az cognitiveservices account keys list \
+export OPENAI_API_KEY=`az cognitiveservices account keys list \
 -n $OPENAI_SERVICE_NAME \
 -g $RESOURCE_GROUP \
 -o json \
-| jq -r .key1
+| jq -r .key1`
 export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
 -n $OPENAI_SERVICE_NAME \
 -g $RESOURCE_GROUP \
@@ -98,7 +98,7 @@ python -m venv backend/backend_env
 ```shell
 cd app/frontend
 npm install
-npm start
+npm run dev
 ```
 
 **Start Backend (Flask)**

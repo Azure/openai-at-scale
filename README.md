@@ -39,11 +39,6 @@ export OPENAI_SERVICE_NAME=<your openai service name>
 export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
 ```
 
-export RESOURCE_GROUP='openai-kyoheim'
-export LOCATION=eastus
-export OPENAI_SERVICE_NAME=openai-kyoheim002
-export AZURE_OPENAI_CHATGPT_DEPLOYMENT=kyoheim-gpt-model
-
 ```shell
 az login #check your subscription id
 az account set --subscription $SUBSCRIPTION_ID

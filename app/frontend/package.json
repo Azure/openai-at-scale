@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "watch": "tsc && vite build --watch"
+    "watch": "tsc && vite build --watch",
+    "deploy": "cp -r src/* ../backend/static/"
   },
   "dependencies": {
     "@fluentui/example-data": "^8.4.7",

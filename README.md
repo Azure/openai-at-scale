@@ -83,18 +83,27 @@ export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
 **Set up Python environment**
 
 ```shell
-cd app
-python -m venv backend/backend_env
+cd app/backend
+python -m venv ./backend_env
 ./backend_env/bin/python -m pip install -r requirements.txt
 ```
 
-**Start Frontend (React)**
-
+**Start Frontend (React)**<br/>
+For development<br/>
 ```shell
 cd app/frontend
 npm install
 npm run dev
 ```
+
+For production<br/>
+```shell
+cd app/frontend
+npm install
+npm run build
+```
+> It is used to optimize and reduce the size of all application files which are deployed in app/backend/static folder. <br/>
+> Please access via Flask application.
 
 **Start Backend (Flask)**
 

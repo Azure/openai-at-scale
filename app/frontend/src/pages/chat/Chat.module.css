@@ -45,7 +45,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-height: 1024px;
     padding-top: 60px;
 }
 
@@ -61,20 +60,8 @@
     margin-bottom: 10px;
 }
 
-@media only screen and (max-height: 780px) {
-    .chatEmptyState {
-        padding-top: 0;
-    }
-
-    .chatEmptyStateTitle {
-        font-size: 3rem;
-        margin-bottom: 0px;
-    }
-}
-
 .chatMessageStream {
     flex-grow: 1;
-    max-height: 1024px;
     max-width: 1028px;
     width: 100%;
     overflow-y: auto;
@@ -88,7 +75,7 @@
     margin-bottom: 20px;
     max-width: 80%;
     display: flex;
-    min-width: 500px;
+    min-width: 100px;
 }
 
 .chatMessageGptMinWidth {
@@ -109,18 +96,6 @@
     background: #ffffff;
     display: flex;
     flex-direction: row;
-}
-
-.chatAnalysisPanel {
-    flex: 1;
-    overflow-y: auto;
-    max-height: 89vh;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.chatSettingsSeparator {
-    padding: 15px;
 }
 
 .chatSettingsLabel {

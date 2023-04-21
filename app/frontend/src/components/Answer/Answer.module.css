@@ -21,6 +21,10 @@
     padding-top: 16px;
     padding-bottom: 16px;
     white-space: pre-line;
+    margin-bottom: 20px;
+    max-width: 60%;
+    display: flex;
+    min-width: 500px;
 }
 
 .answerText table {

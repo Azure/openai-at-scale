@@ -84,13 +84,6 @@
     flex-direction: column;
 }
 
-.chatMessageGpt {
-    margin-bottom: 20px;
-    max-width: 80%;
-    display: flex;
-    min-width: 500px;
-}
-
 .chatMessageGptMinWidth {
     max-width: 500px;
     margin-bottom: 20px;

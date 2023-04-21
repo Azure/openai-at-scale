@@ -101,7 +101,6 @@ const Chat = () => {
                                 ) : null}
                                 <div ref={chatMessageStreamEnd} />
                             </div>
-                            {/* 質問入力画面 */}
                             <div className={styles.chatInput}>
                                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                                 <QuestionInput

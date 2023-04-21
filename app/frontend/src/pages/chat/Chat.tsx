@@ -78,7 +78,6 @@ const Chat = () => {
                 <Stack.Item grow align="stretch" disableShrink className={styles.stackItem}>
                     <div className={styles.chatRoot}>
                         <div className={styles.chatContainer}>
-                            {/* チャット画面 */}
                             <div className={styles.chatMessageStream}>
                                 {answers.map((answer, index) => (
                                     <div key={index}>

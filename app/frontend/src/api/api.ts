@@ -12,16 +12,10 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             history: options.history,
             approach: options.approach,
             overrides: {
-                semantic_ranker: options.overrides?.semanticRanker,
-                semantic_captions: options.overrides?.semanticCaptions,
                 top: options.overrides?.top,
                 temperature: options.overrides?.temperature,
                 prompt_template: options.overrides?.promptTemplate,
-                prompt_template_prefix: options.overrides?.promptTemplatePrefix,
-                prompt_template_suffix: options.overrides?.promptTemplateSuffix,
-                prompt_system_template: options.overrides?.promptSytemTemplate,
-                exclude_category: options.overrides?.excludeCategory,
-                suggest_followup_questions: options.overrides?.suggestFollowupQuestions
+                prompt_system_template: options.overrides?.promptSytemTemplate
             }
         })
     });
@@ -30,6 +24,6 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
     if (response.status > 299 || !response.ok) {
         throw Error(parsedResponse.error || "Unknown error");
     }
-
+    console.log("shweta request", parsedResponse);
     return parsedResponse;
 }

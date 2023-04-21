@@ -63,13 +63,14 @@ const Chat = () => {
         setAnswers([]);
     };
 
+    //setState for parameters setting
     const onPromptSystemTemplateChange = (_ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         setPromptSystemTemplate(newValue || "");
     };
-
+    const maxResponseOnChange = (value: number) => setMaxResponse(value);
     const temperatureOnChange = (value: number) => setTemperature(value);
-
     const topOnChange = (value: number) => setTop(value);
+    const pastMessagesOnChange = (value: number) => setPastMessages(value);
 
     return (
         <div className={styles.container}>
@@ -131,6 +132,17 @@ const Chat = () => {
                         />
                         <Slider
                             className={styles.chatSettingsSeparator}
+                            label="Max response"
+                            min={0}
+                            max={4000}
+                            step={1}
+                            showValue
+                            snapToStep
+                            defaultValue={maxResponse}
+                            onChange={maxResponseOnChange}
+                        />
+                        <Slider
+                            className={styles.chatSettingsSeparator}
                             label="Temperature"
                             min={0}
                             max={1}
@@ -150,6 +162,18 @@ const Chat = () => {
                             snapToStep
                             defaultValue={top}
                             onChange={topOnChange}
+                        />
+                        <h3>Session settings</h3>
+                        <Slider
+                            className={styles.chatSettingsSeparator}
+                            label="Past message included"
+                            min={0}
+                            max={20}
+                            step={1}
+                            showValue
+                            snapToStep
+                            defaultValue={pastMessages}
+                            onChange={pastMessagesOnChange}
                         />
                     </div>
                 </Stack.Item>

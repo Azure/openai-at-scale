@@ -98,6 +98,10 @@
     flex-direction: row;
 }
 
+.chatSettingsSeparator {
+    padding: 15px;
+}
+
 .chatSettingsLabel {
     font-size: 20px;
     font-weight: bold;

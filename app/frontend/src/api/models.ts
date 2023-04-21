@@ -8,13 +8,11 @@ export type AskRequestOverrides = {
     semanticRanker?: boolean;
     semanticCaptions?: boolean;
     excludeCategory?: string;
-    top?: number;
+    promptSystemTemplate?: string;
+    maxResponse?: number;
     temperature?: number;
-    promptTemplate?: string;
-    promptTemplatePrefix?: string;
-    promptTemplateSuffix?: string;
-    suggestFollowupQuestions?: boolean;
-    promptSytemTemplate?: string;
+    top?: number;
+    pastMessages?: number;
 };
 
 export type AskResponse = {

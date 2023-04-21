@@ -11,12 +11,15 @@ import { UserChatMessage } from "../../components/UserChatMessage";
 import { ClearChatButton } from "../../components/ClearChatButton";
 
 const Chat = () => {
+    //Parameters of model
+    const [maxResponse, setMaxResponse] = useState<number>(800);
     const [promptSystemTemplate, setPromptSystemTemplate] = useState<string>("");
-    const [topp, setTopp] = useState<number>(0.95);
     const [temperature, setTemperature] = useState<number>(0.5);
+    const [top, setTop] = useState<number>(0.95);
+    //Session settings
+    const [pastMessages, setPastMessages] = useState<number>(10);
 
     const lastQuestionRef = useRef<string>("");
-    const chatMessageStreamEnd = useRef<HTMLDivElement | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<unknown>();
@@ -36,8 +39,11 @@ const Chat = () => {
                 history: [...history, { user: question, bot: undefined }],
                 approach: Approaches.ReadRetrieveRead,
                 overrides: {
-                    promptSytemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
-                    temperature: temperature
+                    promptSystemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
+                    maxResponse: maxResponse,
+                    temperature: temperature,
+                    top: top,
+                    pastMessages: pastMessages
                 }
             };
             console.log("request: ", request);
@@ -57,15 +63,13 @@ const Chat = () => {
         setAnswers([]);
     };
 
-    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
-
     const onPromptSystemTemplateChange = (_ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         setPromptSystemTemplate(newValue || "");
     };
 
     const temperatureOnChange = (value: number) => setTemperature(value);
 
-    const toppOnChange = (value: number) => setTopp(value);
+    const topOnChange = (value: number) => setTop(value);
 
     return (
         <div className={styles.container}>
@@ -99,9 +103,7 @@ const Chat = () => {
                                         </div>
                                     </>
                                 ) : null}
-                                <div ref={chatMessageStreamEnd} />
                             </div>
-                            {/* 質問入力画面 */}
                             <div className={styles.chatInput}>
                                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                                 <QuestionInput
@@ -146,8 +148,8 @@ const Chat = () => {
                             step={0.05}
                             showValue
                             snapToStep
-                            defaultValue={topp}
-                            onChange={toppOnChange}
+                            defaultValue={top}
+                            onChange={topOnChange}
                         />
                     </div>
                 </Stack.Item>

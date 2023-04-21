@@ -24,12 +24,13 @@ const Chat = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<unknown>();
 
-    const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
+    const [answers, setAnswers] = useState<[user: string, response?: AskResponse][]>([]);
 
     const makeApiRequest = async (question: string) => {
         console.log("make api request ....", question);
         lastQuestionRef.current = question;
-
+        setAnswers([...answers, [question, undefined]]);
+        console.log("answers: ", answers);
         error && setError(undefined);
         setIsLoading(true);
 
@@ -49,6 +50,7 @@ const Chat = () => {
             console.log("request: ", request);
             const result = await chatApi(request);
             console.log("answer: ", result);
+            console.log([...answers, [question, result]]);
             setAnswers([...answers, [question, result]]);
         } catch (e) {
             setError(e);
@@ -82,14 +84,13 @@ const Chat = () => {
                                 {answers.map((answer, index) => (
                                     <div key={index}>
                                         <UserChatMessage message={answer[0]} />
-                                        <div className={styles.chatMessageGpt}>
-                                            <Answer key={index} answer={answer[1]}></Answer>
-                                        </div>
+                                        {/* <div className={styles.chatMessageGpt}> */}
+                                        <Answer key={index} answer={answer[1]}></Answer>
+                                        {/* </div> */}
                                     </div>
                                 ))}
                                 {isLoading && (
                                     <>
-                                        <UserChatMessage message={lastQuestionRef.current} />
                                         <div className={styles.chatMessageGptMinWidth}>
                                             <AnswerLoading />
                                         </div>

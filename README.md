@@ -116,6 +116,14 @@ cd app/backend
 
 > Under construction
 
+> ⚠ Before you run following command, you must run `npm run build` on app/frontend to set frontend files to backend static dir.
+
+- example of App Service
+```shell
+cd app/backend
+az webapp up --runtime "python:3.10" --sku B1
+```
+
 ## Resources
 
 - [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)

@@ -11,22 +11,26 @@ import { UserChatMessage } from "../../components/UserChatMessage";
 import { ClearChatButton } from "../../components/ClearChatButton";
 
 const Chat = () => {
+    //Parameters of model
+    const [maxResponse, setMaxResponse] = useState<number>(800);
     const [promptSystemTemplate, setPromptSystemTemplate] = useState<string>("");
-    const [topp, setTopp] = useState<number>(0.95);
     const [temperature, setTemperature] = useState<number>(0.5);
+    const [top, setTop] = useState<number>(0.95);
+    //Session settings
+    const [pastMessages, setPastMessages] = useState<number>(10);
 
     const lastQuestionRef = useRef<string>("");
-    const chatMessageStreamEnd = useRef<HTMLDivElement | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<unknown>();
 
-    const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
+    const [answers, setAnswers] = useState<[user: string, response?: AskResponse][]>([]);
 
     const makeApiRequest = async (question: string) => {
         console.log("make api request ....", question);
         lastQuestionRef.current = question;
-
+        setAnswers([...answers, [question, undefined]]);
+        console.log("answers: ", answers);
         error && setError(undefined);
         setIsLoading(true);
 
@@ -36,13 +40,17 @@ const Chat = () => {
                 history: [...history, { user: question, bot: undefined }],
                 approach: Approaches.ReadRetrieveRead,
                 overrides: {
-                    promptSytemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
-                    temperature: temperature
+                    promptSystemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
+                    maxResponse: maxResponse,
+                    temperature: temperature,
+                    top: top,
+                    pastMessages: pastMessages
                 }
             };
             console.log("request: ", request);
             const result = await chatApi(request);
             console.log("answer: ", result);
+            console.log([...answers, [question, result]]);
             setAnswers([...answers, [question, result]]);
         } catch (e) {
             setError(e);
@@ -57,15 +65,14 @@ const Chat = () => {
         setAnswers([]);
     };
 
-    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
-
+    //setState for parameters setting
     const onPromptSystemTemplateChange = (_ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         setPromptSystemTemplate(newValue || "");
     };
-
+    const maxResponseOnChange = (value: number) => setMaxResponse(value);
     const temperatureOnChange = (value: number) => setTemperature(value);
-
-    const toppOnChange = (value: number) => setTopp(value);
+    const topOnChange = (value: number) => setTop(value);
+    const pastMessagesOnChange = (value: number) => setPastMessages(value);
 
     return (
         <div className={styles.container}>
@@ -73,19 +80,17 @@ const Chat = () => {
                 <Stack.Item grow align="stretch" disableShrink className={styles.stackItem}>
                     <div className={styles.chatRoot}>
                         <div className={styles.chatContainer}>
-                            {/* チャット画面 */}
                             <div className={styles.chatMessageStream}>
                                 {answers.map((answer, index) => (
                                     <div key={index}>
                                         <UserChatMessage message={answer[0]} />
-                                        <div className={styles.chatMessageGpt}>
-                                            <Answer key={index} answer={answer[1]}></Answer>
-                                        </div>
+                                        {/* <div className={styles.chatMessageGpt}> */}
+                                        <Answer key={index} answer={answer[1]}></Answer>
+                                        {/* </div> */}
                                     </div>
                                 ))}
                                 {isLoading && (
                                     <>
-                                        <UserChatMessage message={lastQuestionRef.current} />
                                         <div className={styles.chatMessageGptMinWidth}>
                                             <AnswerLoading />
                                         </div>
@@ -99,9 +104,7 @@ const Chat = () => {
                                         </div>
                                     </>
                                 ) : null}
-                                <div ref={chatMessageStreamEnd} />
                             </div>
-                            {/* 質問入力画面 */}
                             <div className={styles.chatInput}>
                                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                                 <QuestionInput
@@ -129,6 +132,17 @@ const Chat = () => {
                         />
                         <Slider
                             className={styles.chatSettingsSeparator}
+                            label="Max response"
+                            min={0}
+                            max={4000}
+                            step={1}
+                            showValue
+                            snapToStep
+                            defaultValue={maxResponse}
+                            onChange={maxResponseOnChange}
+                        />
+                        <Slider
+                            className={styles.chatSettingsSeparator}
                             label="Temperature"
                             min={0}
                             max={1}
@@ -146,8 +160,20 @@ const Chat = () => {
                             step={0.05}
                             showValue
                             snapToStep
-                            defaultValue={topp}
-                            onChange={toppOnChange}
+                            defaultValue={top}
+                            onChange={topOnChange}
+                        />
+                        <h3>Session settings</h3>
+                        <Slider
+                            className={styles.chatSettingsSeparator}
+                            label="Past message included"
+                            min={0}
+                            max={20}
+                            step={1}
+                            showValue
+                            snapToStep
+                            defaultValue={pastMessages}
+                            onChange={pastMessagesOnChange}
                         />
                     </div>
                 </Stack.Item>

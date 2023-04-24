@@ -13,8 +13,9 @@ interface Props {
 }
 
 export const Answer = ({ answer }: Props) => {
-    const parsedAnswer = useMemo(() => parseAnswerToHtml(answer.answer), [answer]);
+    if (answer == undefined) return null;
 
+    const parsedAnswer = useMemo(() => parseAnswerToHtml(answer.answer), [answer]);
     const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml);
 
     return (

@@ -116,6 +116,20 @@ cd app/backend
 
 > Under construction
 
+> ⚠ Before you run following command, you must run `npm run build` on app/frontend to set frontend files to backend static dir.
+
+- example of App Service
+  - deploy to app service
+  ```shell
+  cd app/backend
+  az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
+  ```
+
+  - after dployed webapp, you must change the environment variables with application settings of App Service.
+  ```shell
+  az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name>
+  ```
+
 ## Resources
 
 - [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)

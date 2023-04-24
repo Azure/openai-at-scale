@@ -121,7 +121,7 @@ cd app/backend
 - example of App Service
 ```shell
 cd app/backend
-az webapp up --runtime "python:3.10" --sku B1
+az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
 ```
 
 ## Resources

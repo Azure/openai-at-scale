@@ -16,13 +16,13 @@ export type AskRequestOverrides = {
 };
 
 export type AskResponse = {
-    answer: string;
+    answer: string | undefined;
     error?: string;
 };
 
 export type ChatTurn = {
     user: string;
-    bot?: string;
+    bot: string | undefined;
 };
 
 export type ChatRequest = {

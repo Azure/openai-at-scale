@@ -99,7 +99,6 @@ const Chat = () => {
                                 )}
                                 {error ? (
                                     <>
-                                        <UserChatMessage message={lastQuestionRef.current} />
                                         <div className={styles.chatMessageGptMinWidth}>
                                             <AnswerError error={error.toString()} onRetry={() => makeApiRequest(lastQuestionRef.current)} />
                                         </div>

@@ -4,7 +4,7 @@ import DOMPurify from "dompurify";
 
 import styles from "./Answer.module.css";
 
-import { AskResponse, getCitationFilePath } from "../../api";
+import { AskResponse } from "../../api";
 import { parseAnswerToHtml } from "./AnswerParser";
 import { AnswerIcon } from "./AnswerIcon";
 
@@ -14,8 +14,9 @@ interface Props {
 
 export const Answer = ({ answer }: Props) => {
     if (answer == undefined) return null;
-
-    const parsedAnswer = useMemo(() => parseAnswerToHtml(answer.answer), [answer]);
+    if (answer.answer == undefined) return null;
+    const generatedAnswer: string = answer.answer;
+    const parsedAnswer = useMemo(() => parseAnswerToHtml(generatedAnswer), [answer]);
     const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml);
 
     return (

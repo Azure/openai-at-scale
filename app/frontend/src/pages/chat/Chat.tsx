@@ -24,12 +24,13 @@ const Chat = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<unknown>();
 
-    const [answers, setAnswers] = useState<[user: string, response?: AskResponse][]>([]);
+    const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
 
     const makeApiRequest = async (question: string) => {
         console.log("make api request ....", question);
         lastQuestionRef.current = question;
-        setAnswers([...answers, [question, undefined]]);
+        const nullAnswer: AskResponse = { answer: undefined };
+        setAnswers([...answers, [question, nullAnswer]]);
         console.log("answers: ", answers);
         error && setError(undefined);
         setIsLoading(true);

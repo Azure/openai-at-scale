@@ -53,15 +53,7 @@ const Layout = () => {
                         <h3 className={styles.headerTitle}>OpenAI at Scale</h3>
                     </Link>
                     <div className={styles.headerNavList}>
-                        {isAuthenticated ? (
-                            //<div>
-                            <button onClick={logout}>logout</button>
-                        ) : (
-                            // </div>
-                            //<div>
-                            <button onClick={login}>login</button>
-                            //</div>
-                        )}
+                        {isAuthenticated ? <button onClick={logout}>logout</button> : <button onClick={login}>login</button>}
                         {error ? <> {error.message} </> : null}
 
                         {user ? <> You are logged-in with {user.username}</> : null}

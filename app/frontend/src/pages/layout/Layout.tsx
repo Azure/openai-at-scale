@@ -1,10 +1,50 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
-
+import { AccountInfo, PublicClientApplication } from "@azure/msal-browser";
 import github from "../../assets/github.svg";
 
 import styles from "./Layout.module.css";
+import { useState } from "react";
+import { aadConfig } from "../../aadConfig";
+
+type Account = Partial<AccountInfo>;
 
 const Layout = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [error, setError] = useState<any>(null);
+    const [user, setUser] = useState<Account | null>(null);
+
+    const publicClientApp = new PublicClientApplication({
+        auth: {
+            clientId: aadConfig.clientId, //"ac40c95c-6e6c-4188-bee7-ac02b425fbc1",
+            redirectUri: aadConfig.redirectUri, //"http://localhost:3333",
+            authority: aadConfig.authorityBaseUrl + aadConfig.tenantId //"https://login.microsoftonline.com/ryuichinishidevgmail.onmicrosoft.com/"
+        },
+        cache: {
+            cacheLocation: "sessionStorage",
+            storeAuthStateInCookie: true
+        }
+    });
+
+    const login = async () => {
+        try {
+            const res = await publicClientApp.loginPopup({
+                scopes: ["user.read"],
+                prompt: "select_account"
+            });
+            setIsAuthenticated(true);
+            setUser({ ...res.account });
+        } catch (error) {
+            setIsAuthenticated(false);
+            setUser(null);
+            setError(error);
+        }
+    };
+
+    const logout = async () => {
+        await publicClientApp.logoutPopup();
+        setIsAuthenticated(false);
+        setUser(null);
+    };
     return (
         <div className={styles.layout}>
             <header className={styles.header} role={"banner"}>
@@ -12,6 +52,20 @@ const Layout = () => {
                     <Link to="/" className={styles.headerTitleContainer}>
                         <h3 className={styles.headerTitle}>OpenAI at Scale</h3>
                     </Link>
+                    <div className={styles.headerNavList}>
+                        {isAuthenticated ? (
+                            //<div>
+                            <button onClick={logout}>logout</button>
+                        ) : (
+                            // </div>
+                            //<div>
+                            <button onClick={login}>login</button>
+                            //</div>
+                        )}
+                        {error ? <> {error.message} </> : null}
+
+                        {user ? <> You are logged-in with {user.username}</> : null}
+                    </div>
                     <ul className={styles.headerNavList}>
                         <li className={styles.headerNavList}>
                             <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">
@@ -28,7 +82,6 @@ const Layout = () => {
                     </ul>
                 </div>
             </header>
-
             <Outlet />
         </div>
     );

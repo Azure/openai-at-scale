@@ -15,9 +15,9 @@ const Layout = () => {
 
     const publicClientApp = new PublicClientApplication({
         auth: {
-            clientId: aadConfig.clientId, //"ac40c95c-6e6c-4188-bee7-ac02b425fbc1",
-            redirectUri: aadConfig.redirectUri, //"http://localhost:3333",
-            authority: aadConfig.authorityBaseUrl + aadConfig.tenantId //"https://login.microsoftonline.com/ryuichinishidevgmail.onmicrosoft.com/"
+            clientId: aadConfig.clientId,
+            redirectUri: aadConfig.redirectUri,
+            authority: aadConfig.authorityBaseUrl + aadConfig.tenantId 
         },
         cache: {
             cacheLocation: "sessionStorage",

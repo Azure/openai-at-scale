@@ -1,9 +1,10 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
-import { AccountInfo, PublicClientApplication } from "@azure/msal-browser";
+import { AccountInfo, AuthenticationResult, PublicClientApplication } from "@azure/msal-browser";
 import github from "../../assets/github.svg";
+import { IPersonaProps, Persona } from "@fluentui/react/lib/Persona";
 
 import styles from "./Layout.module.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { aadConfig } from "../../aadConfig";
 
 type Account = Partial<AccountInfo>;
@@ -12,18 +13,32 @@ const Layout = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [error, setError] = useState<any>(null);
     const [user, setUser] = useState<Account | null>(null);
+    const [profilePicture, setProfilePicture] = useState("");
 
     const publicClientApp = new PublicClientApplication({
         auth: {
             clientId: aadConfig.clientId,
             redirectUri: aadConfig.redirectUri,
-            authority: aadConfig.authorityBaseUrl + aadConfig.tenantId 
+            authority: aadConfig.authorityBaseUrl + aadConfig.tenantId
         },
         cache: {
             cacheLocation: "sessionStorage",
             storeAuthStateInCookie: true
         }
     });
+
+    const getProfileImageAsync = async (res: AuthenticationResult, callback: Function) => {
+        let profileImageUrl = "";
+        try {
+            const profileResponse = await fetch(`https://graph.microsoft.com/v1.0/me/photo/$value`, {
+                headers: { Authorization: `Bearer ${res.accessToken}` }
+            });
+            const profileImage = await profileResponse.blob();
+            profileImageUrl = URL.createObjectURL(profileImage);
+        } finally {
+            callback(profileImageUrl);
+        }
+    };
 
     const login = async () => {
         try {
@@ -32,12 +47,19 @@ const Layout = () => {
                 prompt: "select_account"
             });
             setIsAuthenticated(true);
+            console.log(res);
             setUser({ ...res.account });
+            getProfileImageAsync(res, setProfilePicture);
         } catch (error) {
             setIsAuthenticated(false);
             setUser(null);
             setError(error);
         }
+    };
+
+    const examplePersona: IPersonaProps = {
+        imageUrl: profilePicture,
+        text: user?.name
     };
 
     const logout = async () => {
@@ -57,6 +79,8 @@ const Layout = () => {
                         {error ? <> {error.message} </> : null}
 
                         {user ? <> You are logged-in with {user.username}</> : null}
+
+                        {/* <img src={profilePicture} /> */}
                     </div>
                     <ul className={styles.headerNavList}>
                         <li className={styles.headerNavList}>
@@ -72,6 +96,7 @@ const Layout = () => {
                             </a>
                         </li>
                     </ul>
+                    <Persona {...examplePersona} hidePersonaDetails />
                 </div>
             </header>
             <Outlet />

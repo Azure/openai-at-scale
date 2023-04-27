@@ -13,15 +13,30 @@ pr:
       - main
 
 jobs:
+  - job: PrepEnv
+    displayName: 'install dependency'
   - job: Build
     displayName: 'Build Job'
     steps:
-      - script: echo 'Building...'
-        displayName: 'Build Step'
+      - task: Bash@3
+        displayName: 'build frontend'
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd ~/app/frontend/src
+            npm install
+            npm run build
+      - task: Bash@3
+        displayName: 'build backend'
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd ~/app/backend
+            python -m venv .venv
+            source .venv/bin/activate
+            pip install -r requirements.txt
+            python app.py &
 
-  - job: Test
-    displayName: 'Test Job'
-    dependsOn: Build
-    steps:
-      - script: echo 'Testing...'
-        displayName: 'Test Step'
+
+
+          

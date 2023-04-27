@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+      - '*'
+  paths:
+    exclude:
+      - 'README.md'
+      - 'docs/*'
+
+pr:
+  branches:
+    include:
+      - main
+
+jobs:
+  - job: Build
+    displayName: 'Build Job'
+    steps:
+      - script: echo 'Building...'
+        displayName: 'Build Step'
+
+  - job: Test
+    displayName: 'Test Job'
+    dependsOn: Build
+    steps:
+      - script: echo 'Testing...'
+        displayName: 'Test Step'

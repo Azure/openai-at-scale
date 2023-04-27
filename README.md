@@ -34,7 +34,7 @@ You can follow the [official document](https://learn.microsoft.com/en-us/azure/c
 # Set environment variables
 export SUBSCRIPTION_ID=<your subscription id>
 export RESOURCE_GROUP=<your resource group name>
-export LOCATION=<your location>
+export LOCATION=eastus #hard coded to avoid confusion, you can change any avaiable location.
 export OPENAI_SERVICE_NAME=<your openai service name>
 export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
 ```
@@ -78,6 +78,19 @@ export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
 -g $RESOURCE_GROUP \
 -o json \
 | jq -r .properties.endpoint`
+```
+
+You need to create following file, which will be used for authentication function by Azure AD SDK.
+
+- `app/frontend/src/aadConfig.ts`
+```typescript
+export const aadConfig = {
+    clientId: "<your clientid>",
+    tenantId: "<your tenantid>",
+    redirectUri: "http://localhost:5000",
+    authorityBaseUrl: "https://login.microsoftonline.com/"
+};
+
 ```
 
 **Set up Python environment**

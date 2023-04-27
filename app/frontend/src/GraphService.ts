@@ -6,7 +6,7 @@ import { Client, GraphRequestOptions, PageCollection, PageIterator } from "@micr
 import { AuthCodeMSALBrowserAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser";
 // import { endOfWeek, startOfWeek } from "date-fns";
 // import { zonedTimeToUtc } from "date-fns-tz";
-import { User, Event, ProfilePhoto } from "microsoft-graph";
+import { User, Event } from "microsoft-graph";
 
 let graphClient: Client | undefined = undefined;
 
@@ -27,17 +27,17 @@ export async function getUser(authProvider: AuthCodeMSALBrowserAuthenticationPro
     const user: User = await graphClient!
         .api("/me")
         // Only retrieve the specific fields needed
-        .select("displayName,mail,mailboxSettings,userPrincipalName")
+        .select("displayName,mail,userPrincipalName,photo")
         .get();
 
     return user;
 }
 
-export async function getProfileImage(authProvider: AuthCodeMSALBrowserAuthenticationProvider): Promise<ProfilePhoto> {
+export async function getProfilePhoto(authProvider: AuthCodeMSALBrowserAuthenticationProvider): Promise<string> {
     ensureClient(authProvider);
 
     // Return the /me/photo API endpoint result as a ProfilePhoto object
-    const profilePhoto: ProfilePhoto = await graphClient!.api("/me/photo/$value").get();
-
-    return profilePhoto;
+    let blob = await graphClient!.api("/me/photo/$value").get();
+    const url = window.URL || window.webkitURL;
+    return url.createObjectURL(blob);
 }

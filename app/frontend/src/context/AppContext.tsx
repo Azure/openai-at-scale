@@ -6,7 +6,8 @@ import { AuthCodeMSALBrowserAuthenticationProvider } from "@microsoft/microsoft-
 import { InteractionType, PublicClientApplication } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 
-import { getUser } from "../GraphService";
+import { getUser, getProfilePhoto } from "../GraphService";
+import { ProfilePhoto } from "microsoft-graph";
 
 // <AppContextSnippet>
 export interface AppUser {
@@ -88,12 +89,13 @@ function useProvideAppContext() {
                     if (account) {
                         // Get the user from Microsoft Graph
                         const user = await getUser(authProvider);
-
+                        const avatar = await getProfilePhoto(authProvider);
                         setUser({
                             displayName: user.displayName || "",
-                            email: user.mail || user.userPrincipalName || "",
-                            timeFormat: user.mailboxSettings?.timeFormat || "h:mm a",
-                            timeZone: user.mailboxSettings?.timeZone || "UTC"
+                            email: user.mail || "",
+                            // timeFormat: user.mailboxSettings?.timeFormat || "h:mm a",
+                            // timeZone: user.mailboxSettings?.timeZone || "UTC",
+                            avatar: avatar || ""
                         });
                     }
                 } catch (err: any) {
@@ -117,9 +119,9 @@ function useProvideAppContext() {
 
         setUser({
             displayName: user.displayName || "",
-            email: user.mail || user.userPrincipalName || "",
-            timeFormat: user.mailboxSettings?.timeFormat || "",
-            timeZone: user.mailboxSettings?.timeZone || "UTC"
+            email: user.mail || ""
+            // timeFormat: user.mailboxSettings?.timeFormat || "",
+            // timeZone: user.mailboxSettings?.timeZone || "UTC"
         });
     };
     // </SignInSnippet>

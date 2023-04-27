@@ -6,6 +6,7 @@ import { IPersonaProps, Persona } from "@fluentui/react/lib/Persona";
 import styles from "./Layout.module.css";
 import { useContext, useState } from "react";
 import { aadConfig } from "../../aadConfig";
+import Welcome from "../../Welcome";
 
 type Account = Partial<AccountInfo>;
 
@@ -74,6 +75,7 @@ const Layout = () => {
                     <Link to="/" className={styles.headerTitleContainer}>
                         <h3 className={styles.headerTitle}>OpenAI at Scale</h3>
                     </Link>
+
                     <div className={styles.headerNavList}>
                         {isAuthenticated ? <button onClick={logout}>logout</button> : <button onClick={login}>login</button>}
                         {error ? <> {error.message} </> : null}
@@ -82,6 +84,7 @@ const Layout = () => {
 
                         {/* <img src={profilePicture} /> */}
                     </div>
+                    <Welcome />
                     <ul className={styles.headerNavList}>
                         <li className={styles.headerNavList}>
                             <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">

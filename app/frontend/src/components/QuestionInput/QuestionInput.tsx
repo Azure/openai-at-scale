@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Stack, TextField } from "@fluentui/react";
 import { Send28Filled } from "@fluentui/react-icons";
-
+import { useAppContext } from "../../context/AppContext";
 import styles from "./QuestionInput.module.css";
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
 }
 
 export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Props) => {
+    const app = useAppContext();
     const [question, setQuestion] = useState<string>("");
     const sendQuestion = () => {
         if (disabled || !question.trim()) {
@@ -58,6 +59,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
                 onChange={onQuestionChange}
                 onKeyDown={onEnterPress}
             />
+            {app.user?.displayName}
             <div className={styles.questionInputButtonsContainer}>
                 <div
                     className={`${styles.questionInputSendButton} ${sendQuestionDisabled ? styles.questionInputSendButtonDisabled : ""}`}

@@ -25,19 +25,19 @@ jobs:
           script: |
             ls
             pwd
-      #       cd ~/app/frontend/src
-      #       npm install
-      #       npm run build
-      # - task: Bash@3
-      #   displayName: 'build backend'
-      #   inputs:
-      #     targetType: 'inline'
-      #     script: |
-      #       cd ~/app/backend
-      #       python -m venv .venv
-      #       source .venv/bin/activate
-      #       pip install -r requirements.txt
-      #       python app.py &
+            cd app/frontend/src
+            npm install
+            npm run build
+      - task: Bash@3
+        displayName: 'build backend'
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd app/backend
+            python -m venv .venv
+            source .venv/bin/activate
+            pip install -r requirements.txt
+            python app.py &
 
 
 

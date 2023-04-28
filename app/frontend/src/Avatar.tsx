@@ -1,90 +1,115 @@
-import * as React from "react";
-import { DefaultButton } from "@fluentui/react/lib/Button";
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 
 import { IPersonaSharedProps, Persona, PersonaSize, PersonaPresence } from "@fluentui/react/lib/Persona";
-import {
-    Dropdown,
-    DropdownMenuItemType,
-    IDropdownStyles,
-    IDropdownOption,
-    Nav,
-    Tooltip,
-    TooltipHost,
-    TooltipDelay,
-    DirectionalHint,
-    ITooltipProps,
-    ITooltipHostStyles,
-    Popup,
-    mergeStyleSets,
-    FocusTrapZone,
-    Layer,
-    Overlay
-} from "@fluentui/react";
+import { IStackStyles, IStackTokens, IStackItemStyles, Label, Stack, Callout, DirectionalHint, mergeStyleSets, Layer } from "@fluentui/react";
 import { useId } from "@fluentui/react-hooks";
 import { useAppContext } from "./context/AppContext";
-import { IRenderFunction } from "@fluentui/react/lib/Utilities";
-// import { Dropdown } from "react-bootstrap";
 import { useBoolean } from "@fluentui/react-hooks";
 
-const hostStyles: Partial<ITooltipHostStyles> = { root: { display: "inline-block" } };
-const popupStyles = mergeStyleSets({
-    root: {
-        // background: "rgba(0, 0, 0, 0.2)",
-        bottom: "10%",
-        left: "50%",
-        // position: "fixed",
-        right: "0",
-        top: "0"
-    },
-    content: {
-        background: "white",
-        // left: "50%",
-        right: "0%",
-        maxWidth: "400px",
-        // padding: "0 2em 2em",
-        position: "absolute"
-        // top: "50%",
-        // transform: "translate(-50%, -50%)"
-    }
-});
 export default function Avatar() {
     const app = useAppContext();
     const examplePersona: IPersonaSharedProps = {
-        imageUrl: app.user?.avatar,
-        text: app.user?.displayName
+        imageUrl: app.user?.avatar || "",
+        text: app.user?.displayName || "Anonymous",
+        secondaryText: app.user?.email || ""
     };
 
-    const tooltipProps: ITooltipProps = {
-        onRenderContent: () => (
-            <div>
-                <Overlay />
-                <Persona {...examplePersona} size={PersonaSize.size48} />
-                <AuthenticatedTemplate>
-                    <h1>
-                        <DefaultButton onClick={app.signOut}>Sign out</DefaultButton>
-                    </h1>
-                </AuthenticatedTemplate>
-                <UnauthenticatedTemplate>
-                    <h1>
-                        <DefaultButton onClick={app.signIn}>Sign in</DefaultButton>
-                    </h1>
-                </UnauthenticatedTemplate>
-            </div>
-        )
+    const styles = mergeStyleSets({
+        button: {
+            width: 130
+        },
+        callout: {
+            background: "white",
+            width: 250,
+            maxWidth: "100%"
+        }
+    });
+    // Tokens definition
+    const outerStackTokens: IStackTokens = { childrenGap: 3 };
+    const innerStackTokens: IStackTokens = {
+        childrenGap: 5
+    };
+    const stackStyles: IStackStyles = {
+        root: {
+            height: 150
+        }
+    };
+    const stackAvatarStyles: IStackItemStyles = {
+        root: {
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "white",
+            height: "100%"
+        }
+    };
+    const stackSignFormStyles: IStackItemStyles = {
+        root: {
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "rgb(248, 248, 248)",
+            height: "50px",
+            fontSize: "5px"
+        }
     };
 
+    const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
+    const buttonId = useId("callout-button");
+    const labelId = useId("callout-label");
+    const descriptionId = useId("callout-description");
     return (
-        <div>
-            <TooltipHost
-                tooltipProps={tooltipProps}
-                delay={TooltipDelay.zero}
-                closeDelay={600}
-                directionalHint={DirectionalHint.bottomCenter}
-                styles={hostStyles}
-            >
-                <Persona {...examplePersona} size={PersonaSize.size32} hidePersonaDetails />
-            </TooltipHost>
-        </div>
+        <>
+            <AuthenticatedTemplate>
+                <Persona id={buttonId} onClick={toggleIsCalloutVisible} {...examplePersona} size={PersonaSize.size32} hidePersonaDetails />
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+                <Persona
+                    showUnknownPersonaCoin={true}
+                    id={buttonId}
+                    onClick={toggleIsCalloutVisible}
+                    {...examplePersona}
+                    size={PersonaSize.size32}
+                    hidePersonaDetails
+                />
+            </UnauthenticatedTemplate>
+            {isCalloutVisible && (
+                <Layer>
+                    <Callout
+                        className={styles.callout}
+                        ariaLabelledBy={labelId}
+                        ariaDescribedBy={descriptionId}
+                        role="dialog"
+                        gapSpace={4}
+                        target={`#${buttonId}`}
+                        onDismiss={toggleIsCalloutVisible}
+                        directionalHint={DirectionalHint.bottomRightEdge}
+                        setInitialFocus
+                        isBeakVisible={false}
+                    >
+                        <Stack enableScopedSelectors tokens={outerStackTokens}>
+                            <Stack enableScopedSelectors styles={stackStyles} tokens={innerStackTokens}>
+                                <Stack.Item styles={stackAvatarStyles}>
+                                    <AuthenticatedTemplate>
+                                        <Persona {...examplePersona} size={PersonaSize.size48} />
+                                    </AuthenticatedTemplate>
+                                    <UnauthenticatedTemplate>
+                                        <Persona showUnknownPersonaCoin={true} {...examplePersona} size={PersonaSize.size48} />
+                                    </UnauthenticatedTemplate>
+                                </Stack.Item>
+                                <Stack.Item styles={stackSignFormStyles}>
+                                    <AuthenticatedTemplate>
+                                        <Label onClick={app.signOut}>Sign Out</Label>
+                                    </AuthenticatedTemplate>
+                                    <UnauthenticatedTemplate>
+                                        <Label onClick={app.signIn}>Sign in</Label>
+                                    </UnauthenticatedTemplate>
+                                </Stack.Item>
+                            </Stack>
+                        </Stack>
+                    </Callout>
+                </Layer>
+            )}
+        </>
     );
 }

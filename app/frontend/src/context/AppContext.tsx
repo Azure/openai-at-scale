@@ -13,8 +13,6 @@ export interface AppUser {
     displayName?: string;
     email?: string;
     avatar?: string;
-    timeZone?: string;
-    timeFormat?: string;
 }
 
 export interface AppError {
@@ -90,6 +88,7 @@ function useProvideAppContext() {
                     if (account) {
                         // Get the user from Microsoft Graph
                         const user = await getUser(authProvider);
+                        console.log(user);
                         const avatar = await getProfilePhoto(authProvider);
                         setUser({
                             displayName: user.displayName || "",

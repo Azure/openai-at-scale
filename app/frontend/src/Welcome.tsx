@@ -16,7 +16,8 @@ export default function Welcome() {
                 {/* <p className="lead">This sample app shows how to use the Microsoft Graph API to access a user's data from React</p> */}
                 <AuthenticatedTemplate>
                     <div>
-                        <h4>Welcome {app.user?.displayName || ""}!</h4>
+                        <Button onClick={app.signOut!}>sign out</Button>
+                        {app.user?.displayName || ""}
                     </div>
                 </AuthenticatedTemplate>
                 <UnauthenticatedTemplate>

@@ -7,7 +7,6 @@ import { InteractionType, PublicClientApplication } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 
 import { getUser, getProfilePhoto } from "../GraphService";
-import { ProfilePhoto } from "microsoft-graph";
 
 // <AppContextSnippet>
 export interface AppUser {
@@ -31,6 +30,7 @@ type AppContext = {
     displayError?: Function;
     clearError?: Function;
     authProvider?: AuthCodeMSALBrowserAuthenticationProvider;
+    isAuthenticated?: boolean;
 };
 
 const appContext = createContext<AppContext>({
@@ -61,6 +61,7 @@ function useProvideAppContext() {
     const msal = useMsal();
     const [user, setUser] = useState<AppUser | undefined>(undefined);
     const [error, setError] = useState<AppError | undefined>(undefined);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const displayError = (message: string, debug?: string) => {
         setError({ message, debug });
@@ -93,8 +94,6 @@ function useProvideAppContext() {
                         setUser({
                             displayName: user.displayName || "",
                             email: user.mail || "",
-                            // timeFormat: user.mailboxSettings?.timeFormat || "h:mm a",
-                            // timeZone: user.mailboxSettings?.timeZone || "UTC",
                             avatar: avatar || ""
                         });
                     }
@@ -105,9 +104,7 @@ function useProvideAppContext() {
         };
         checkUser();
     });
-    // </UseEffectSnippet>
 
-    // <SignInSnippet>
     const signIn = async () => {
         await msal.instance.loginPopup({
             scopes: ["user.read"],
@@ -120,18 +117,15 @@ function useProvideAppContext() {
         setUser({
             displayName: user.displayName || "",
             email: user.mail || ""
-            // timeFormat: user.mailboxSettings?.timeFormat || "",
-            // timeZone: user.mailboxSettings?.timeZone || "UTC"
         });
+        setIsAuthenticated(true);
     };
-    // </SignInSnippet>
 
-    // <SignOutSnippet>
     const signOut = async () => {
         await msal.instance.logoutPopup();
         setUser(undefined);
+        setIsAuthenticated(false);
     };
-    // </SignOutSnippet>
 
     return {
         user,
@@ -140,6 +134,7 @@ function useProvideAppContext() {
         signOut,
         displayError,
         clearError,
-        authProvider
+        authProvider,
+        isAuthenticated
     };
 }

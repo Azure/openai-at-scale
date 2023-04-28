@@ -33,15 +33,20 @@
 }
 
 .headerNavList {
+    background-color: rgb(0, 120, 212);
+    display: flex;
     list-style: none;
-    margin-right: 10px;
-    margin-left: 10px;
 }
-
+/* 
 .headerNavList a {
     padding: 5px;
-}
+} */
 
 .githubLogo {
     height: 20px;
+}
+
+.headerAvatar {
+    margin-right: 10px;
+    margin-left: 10px;
 }

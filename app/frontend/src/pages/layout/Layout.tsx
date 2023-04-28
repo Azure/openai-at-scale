@@ -7,15 +7,22 @@ import styles from "./Layout.module.css";
 import { useContext, useState } from "react";
 import { aadConfig } from "../../aadConfig";
 import Welcome from "../../Welcome";
-
+import Avatar from "../../Avatar";
+import { useAppContext } from "../../context/AppContext";
+import { ITheme, ThemeProvider, PartialTheme, CommandBar, ICommandBarItemProps } from "@fluentui/react";
 type Account = Partial<AccountInfo>;
 
 const Layout = () => {
+    const app = useAppContext();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [error, setError] = useState<any>(null);
     const [user, setUser] = useState<Account | null>(null);
     const [profilePicture, setProfilePicture] = useState("");
-
+    const headerTheme: PartialTheme = {
+        palette: {
+            themePrimary: "orange"
+        }
+    };
     const publicClientApp = new PublicClientApplication({
         auth: {
             clientId: aadConfig.clientId,
@@ -28,19 +35,6 @@ const Layout = () => {
         }
     });
 
-    const getProfileImageAsync = async (res: AuthenticationResult, callback: Function) => {
-        let profileImageUrl = "";
-        try {
-            const profileResponse = await fetch(`https://graph.microsoft.com/v1.0/me/photo/$value`, {
-                headers: { Authorization: `Bearer ${res.accessToken}` }
-            });
-            const profileImage = await profileResponse.blob();
-            profileImageUrl = URL.createObjectURL(profileImage);
-        } finally {
-            callback(profileImageUrl);
-        }
-    };
-
     const login = async () => {
         try {
             const res = await publicClientApp.loginPopup({
@@ -50,17 +44,11 @@ const Layout = () => {
             setIsAuthenticated(true);
             console.log(res);
             setUser({ ...res.account });
-            getProfileImageAsync(res, setProfilePicture);
         } catch (error) {
             setIsAuthenticated(false);
             setUser(null);
             setError(error);
         }
-    };
-
-    const examplePersona: IPersonaProps = {
-        imageUrl: profilePicture,
-        text: user?.name
     };
 
     const logout = async () => {
@@ -75,18 +63,28 @@ const Layout = () => {
                     <Link to="/" className={styles.headerTitleContainer}>
                         <h3 className={styles.headerTitle}>OpenAI at Scale</h3>
                     </Link>
-
-                    <div className={styles.headerNavList}>
-                        {isAuthenticated ? <button onClick={logout}>logout</button> : <button onClick={login}>login</button>}
+                    {/* <div className={styles.headerNavList}>
                         {error ? <> {error.message} </> : null}
 
                         {user ? <> You are logged-in with {user.username}</> : null}
-
-                        {/* <img src={profilePicture} /> */}
-                    </div>
-                    <Welcome />
+                    </div> */}
+                    <ThemeProvider theme={headerTheme}>
+                        <CommandBar className={styles.headerNavList} items={_items} />
+                    </ThemeProvider>
                     <ul className={styles.headerNavList}>
-                        <li className={styles.headerNavList}>
+                        <li>
+                            <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">
+                                <img
+                                    src={github}
+                                    alt="Github logo"
+                                    aria-label="Link to github repository"
+                                    width="20px"
+                                    height="20px"
+                                    className={styles.githubLogo}
+                                />
+                            </a>
+                        </li>
+                        <li>
                             <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">
                                 <img
                                     src={github}
@@ -99,7 +97,9 @@ const Layout = () => {
                             </a>
                         </li>
                     </ul>
-                    <Persona {...examplePersona} hidePersonaDetails />
+                    <div className={styles.headerAvatar}>
+                        <Avatar />
+                    </div>
                 </div>
             </header>
             <Outlet />

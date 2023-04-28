@@ -68,22 +68,7 @@ const Layout = () => {
 
                         {user ? <> You are logged-in with {user.username}</> : null}
                     </div> */}
-                    <ThemeProvider theme={headerTheme}>
-                        <CommandBar className={styles.headerNavList} items={_items} />
-                    </ThemeProvider>
                     <ul className={styles.headerNavList}>
-                        <li>
-                            <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">
-                                <img
-                                    src={github}
-                                    alt="Github logo"
-                                    aria-label="Link to github repository"
-                                    width="20px"
-                                    height="20px"
-                                    className={styles.githubLogo}
-                                />
-                            </a>
-                        </li>
                         <li>
                             <a href="https://github.com/Azure/openai-at-scale" target={"_blank"} title="Github repository link">
                                 <img

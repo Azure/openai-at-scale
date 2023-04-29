@@ -1,5 +1,4 @@
-import { IPersonaSharedProps, Persona, PersonaSize, PersonaPresence } from "@fluentui/react/lib/Persona";
-import { TestImages } from "@fluentui/example-data";
+import { IPersonaSharedProps, Persona, PersonaSize, PersonaInitialsColor } from "@fluentui/react";
 import { useAppContext } from "../../context/AppContext";
 
 export const UserChatMessageIcon = () => {
@@ -9,5 +8,5 @@ export const UserChatMessageIcon = () => {
         imageUrl: app.user?.avatar
     };
 
-    return <Persona {...examplePersona} size={PersonaSize.size40} />;
+    return <Persona {...examplePersona} initialsColor={PersonaInitialsColor.darkBlue} size={PersonaSize.size40} hidePersonaDetails />;
 };

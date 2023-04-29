@@ -9,7 +9,13 @@
 }
 
 .logo {
-    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 100px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .message {

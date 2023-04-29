@@ -1,7 +1,18 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 
-import { IPersonaSharedProps, Persona, PersonaSize, PersonaPresence } from "@fluentui/react/lib/Persona";
-import { IStackStyles, IStackTokens, IStackItemStyles, Label, Stack, Callout, DirectionalHint, mergeStyleSets, Layer } from "@fluentui/react";
+import { IPersonaSharedProps, Persona, PersonaSize } from "@fluentui/react/lib/Persona";
+import {
+    IStackStyles,
+    IStackTokens,
+    IStackItemStyles,
+    Label,
+    Stack,
+    Callout,
+    DirectionalHint,
+    mergeStyleSets,
+    Layer,
+    PersonaInitialsColor
+} from "@fluentui/react";
 import { useId } from "@fluentui/react-hooks";
 import { useAppContext } from "./context/AppContext";
 import { useBoolean } from "@fluentui/react-hooks";
@@ -64,14 +75,7 @@ export default function Avatar() {
                 <Persona id={buttonId} onClick={toggleIsCalloutVisible} {...examplePersona} size={PersonaSize.size32} hidePersonaDetails />
             </AuthenticatedTemplate>
             <UnauthenticatedTemplate>
-                <Persona
-                    showUnknownPersonaCoin={true}
-                    id={buttonId}
-                    onClick={toggleIsCalloutVisible}
-                    {...examplePersona}
-                    size={PersonaSize.size32}
-                    hidePersonaDetails
-                />
+                <Persona id={buttonId} onClick={toggleIsCalloutVisible} initialsColor={PersonaInitialsColor.darkBlue} size={PersonaSize.size32} />
             </UnauthenticatedTemplate>
             {isCalloutVisible && (
                 <Layer>
@@ -94,7 +98,7 @@ export default function Avatar() {
                                         <Persona {...examplePersona} size={PersonaSize.size48} />
                                     </AuthenticatedTemplate>
                                     <UnauthenticatedTemplate>
-                                        <Persona showUnknownPersonaCoin={true} {...examplePersona} size={PersonaSize.size48} />
+                                        <Persona initialsColor={PersonaInitialsColor.darkBlue} {...examplePersona} size={PersonaSize.size48} />
                                     </UnauthenticatedTemplate>
                                 </Stack.Item>
                                 <Stack.Item styles={stackSignFormStyles}>

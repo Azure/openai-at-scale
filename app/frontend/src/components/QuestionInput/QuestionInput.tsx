@@ -53,13 +53,13 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
                 inputClassName={styles.questionInputTextAreaInput}
                 placeholder={placeholder}
                 multiline
+                autoAdjustHeight
                 resizable={false}
                 borderless
                 value={question}
                 onChange={onQuestionChange}
                 onKeyDown={onEnterPress}
             />
-            {app.user?.displayName}
             <div className={styles.questionInputButtonsContainer}>
                 <div
                     className={`${styles.questionInputSendButton} ${sendQuestionDisabled ? styles.questionInputSendButtonDisabled : ""}`}

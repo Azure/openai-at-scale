@@ -1,7 +1,6 @@
 .questionInputContainer {
     border-radius: 8px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.14), 0px 0px 2px rgba(0, 0, 0, 0.12);
-    height: 90px;
     width: 100%;
     padding: 15px;
     background: white;
@@ -23,7 +22,7 @@
 .questionInputButtonsContainer {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .questionInputSendButton {

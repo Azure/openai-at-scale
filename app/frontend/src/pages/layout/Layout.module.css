@@ -6,7 +6,31 @@
 
 .header {
     background-color: rgb(0, 120, 212);
+    height: 44px;
+}
+.headerTitle {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    text-decoration: none;
     color: #f2f2f2;
+    width: 1500px;
+    float: left;
+}
+.headerTitleText {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    color: #f2f2f2;
+    width: 150px;
+    font-size: 16px;
+}
+
+.headerCommandBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
     height: 40px;
 }
 
@@ -18,35 +42,9 @@
     height: 40px;
 }
 
-.headerTitleContainer {
-    display: flex;
-    align-items: center;
-    margin-right: 30px;
-    margin-left: 30px;
-    color: #f2f2f2;
-    text-decoration: none;
-    height: 40px;
-}
-
-.headerTitle {
-    font-weight: 600;
-}
-
-.headerNavList {
-    background-color: rgb(0, 120, 212);
-    display: flex;
-    list-style: none;
-}
-/* 
-.headerNavList a {
-    padding: 5px;
-} */
-
-.githubLogo {
-    height: 20px;
-}
-
 .headerAvatar {
-    margin-right: 10px;
-    margin-left: 10px;
+    display: flex;
+    width: 50px;
+    align-items: center;
+    justify-content: center;
 }

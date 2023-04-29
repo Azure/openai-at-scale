@@ -80,7 +80,7 @@ export default function Avatar() {
                         ariaLabelledBy={labelId}
                         ariaDescribedBy={descriptionId}
                         role="dialog"
-                        gapSpace={4}
+                        gapSpace={10}
                         target={`#${buttonId}`}
                         onDismiss={toggleIsCalloutVisible}
                         directionalHint={DirectionalHint.bottomRightEdge}

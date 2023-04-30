@@ -41,14 +41,14 @@ def static_file(path):
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    print("/chat request", request)
+    print("/chat request", request.json)
     # ensure_openai_token()
     approach = request.json["approach"]
     try:
         impl = chat_approaches.get(approach)
         if not impl:
             return jsonify({"error": "unknown approach"}), 400
-        r = impl.run(request.json["history"], request.json.get("overrides") or {})
+        r = impl.run(request.json["history"], request.json.get("overrides") or {}, request.json.get("sessionConfig") or {})
         return jsonify(r)
     except Exception as e:
         logging.exception("Exception in /chat")

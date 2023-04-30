@@ -11,6 +11,10 @@ export type AskRequestOverrides = {
     top?: number;
 };
 
+export type SessionConfig = {
+    pastMessages?: number;
+};
+
 export type AskResponse = {
     answer: string | undefined;
     error?: string;
@@ -25,4 +29,5 @@ export type ChatRequest = {
     history: ChatTurn[];
     approach: Approaches;
     overrides?: AskRequestOverrides;
+    sessionConfig?: SessionConfig;
 };

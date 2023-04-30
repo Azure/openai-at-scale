@@ -9,23 +9,25 @@ class ChatReadRetrieveReadApproach(Approach):
         self.chatgpt_deployment = chatgpt_deployment
         self.gpt_deployment = gpt_deployment
 
-    def run(self, history: list[dict], overrides: dict) -> any:
+    def run(self, history: list[dict], overrides: dict, sessionConfig: dict) -> any:
         print("history:", history)
         print("override:", overrides)
+        print("sessionConfig:", sessionConfig)
         top_p = overrides.get("top") or 0.95
         temperature = overrides.get("temperature") or 0.7
         max_tokens = overrides.get("maxResponse") or 800
         promptSystemTemplate = overrides.get("prompt_system_template") or "You are an AI assistant that helps people find information."
+        pastMessages = sessionConfig.get("pastMessages") or 10
 
         # Step
         system_prompt_template = {}
         system_prompt_template["role"] = "system"
         system_prompt_template["content"] = promptSystemTemplate
-        print("prompt:",[system_prompt_template]+self.get_chat_history_as_text(history))
+        print("prompt:",[system_prompt_template]+self.get_chat_history_as_text(history, pastMessages))
 
         completion = openai.ChatCompletion.create(
             engine=self.chatgpt_deployment,
-            messages = [system_prompt_template]+self.get_chat_history_as_text(history),
+            messages = [system_prompt_template]+self.get_chat_history_as_text(history, pastMessages),
             temperature=temperature,
             max_tokens=max_tokens,
             top_p=top_p,
@@ -35,7 +37,7 @@ class ChatReadRetrieveReadApproach(Approach):
         print("completion: ", completion)
         return {"answer": completion.choices[0].message["content"]}
     
-    def get_chat_history_as_text(self, history, include_last_turn=True, approx_max_tokens=1000) -> list:
+    def get_chat_history_as_text(self, history, pastMessages) -> list:
         history_text = []
         for h in history:
             user_text = {}
@@ -49,7 +51,4 @@ class ChatReadRetrieveReadApproach(Approach):
                 bot_text["role"] = "assistant"
                 bot_text["content"] = h.get("bot")
                 history_text = history_text + [user_text, bot_text]
-            # if len(history_text) > approx_max_tokens*4:
-            #     break
-        
-        return history_text
+        return history_text[-(pastMessages+1):]

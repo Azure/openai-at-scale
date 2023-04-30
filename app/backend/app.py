@@ -27,10 +27,8 @@ openai.api_version = "2023-03-15-preview"
 # openai.api_key = openai_token.token
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-
 chat_approaches = {
     "rrr": ChatReadRetrieveReadApproach(AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT)
-
 }
 
 app = Flask(__name__)

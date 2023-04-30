@@ -44,8 +44,7 @@ const Chat = () => {
                     promptSystemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
                     maxResponse: maxResponse,
                     temperature: temperature,
-                    top: top,
-                    pastMessages: pastMessages
+                    top: top
                 }
             };
             console.log("request: ", request);

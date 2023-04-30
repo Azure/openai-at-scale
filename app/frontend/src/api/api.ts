@@ -14,7 +14,8 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             overrides: {
                 top: options.overrides?.top,
                 temperature: options.overrides?.temperature,
-                prompt_system_template: options.overrides?.promptSystemTemplate
+                prompt_system_template: options.overrides?.promptSystemTemplate,
+                maxResponse: options.overrides?.maxResponse
             }
         })
     });

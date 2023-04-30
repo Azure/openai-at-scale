@@ -16,6 +16,7 @@ const Chat = () => {
     const [promptSystemTemplate, setPromptSystemTemplate] = useState<string>("");
     const [temperature, setTemperature] = useState<number>(0.5);
     const [top, setTop] = useState<number>(0.95);
+
     //Session settings
     const [pastMessages, setPastMessages] = useState<number>(10);
 
@@ -45,6 +46,9 @@ const Chat = () => {
                     maxResponse: maxResponse,
                     temperature: temperature,
                     top: top
+                },
+                sessionConfig: {
+                    pastMessages: pastMessages
                 }
             };
             console.log("request: ", request);

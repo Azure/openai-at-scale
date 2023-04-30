@@ -84,9 +84,7 @@ const Chat = () => {
                                 {answers.map((answer, index) => (
                                     <div key={index}>
                                         <UserChatMessage message={answer[0]} />
-                                        {/* <div className={styles.chatMessageGpt}> */}
                                         <Answer key={index} answer={answer[1]}></Answer>
-                                        {/* </div> */}
                                     </div>
                                 ))}
                                 {isLoading && (
@@ -132,7 +130,7 @@ const Chat = () => {
                         <Slider
                             className={styles.chatSettingsSeparator}
                             label="Max response"
-                            min={0}
+                            min={1}
                             max={4000}
                             step={1}
                             showValue

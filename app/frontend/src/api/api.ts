@@ -12,12 +12,9 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             history: options.history,
             approach: options.approach,
             overrides: {
-                semantic_ranker: options.overrides?.semanticRanker,
-                semantic_captions: options.overrides?.semanticCaptions,
                 top: options.overrides?.top,
                 temperature: options.overrides?.temperature,
-                prompt_system_template: options.overrides?.promptSystemTemplate,
-                exclude_category: options.overrides?.excludeCategory
+                prompt_system_template: options.overrides?.promptSystemTemplate
             }
         })
     });

@@ -5,14 +5,10 @@ export const enum Approaches {
 }
 
 export type AskRequestOverrides = {
-    semanticRanker?: boolean;
-    semanticCaptions?: boolean;
-    excludeCategory?: string;
     promptSystemTemplate?: string;
     maxResponse?: number;
     temperature?: number;
     top?: number;
-    pastMessages?: number;
 };
 
 export type AskResponse = {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Stack, TextField } from "@fluentui/react";
 import { Send28Filled } from "@fluentui/react-icons";
-
+import { useAppContext } from "../../context/AppContext";
 import styles from "./QuestionInput.module.css";
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
 }
 
 export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Props) => {
+    const app = useAppContext();
     const [question, setQuestion] = useState<string>("");
     const sendQuestion = () => {
         if (disabled || !question.trim()) {
@@ -52,6 +53,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
                 inputClassName={styles.questionInputTextAreaInput}
                 placeholder={placeholder}
                 multiline
+                autoAdjustHeight
                 resizable={false}
                 borderless
                 value={question}

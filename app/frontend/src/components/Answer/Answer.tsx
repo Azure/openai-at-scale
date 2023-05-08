@@ -21,9 +21,11 @@ export const Answer = ({ answer }: Props) => {
 
     return (
         <Stack className={`${styles.answerContainer}`} verticalAlign="space-between">
-            <div className={styles.answerLogo}>
-                <AnswerIcon />
-            </div>
+            <Stack.Item>
+                <div className={styles.answerLogo}>
+                    <AnswerIcon />
+                </div>
+            </Stack.Item>
             <Stack.Item grow>
                 <div className={styles.answerText} dangerouslySetInnerHTML={{ __html: sanitizedAnswerHtml }}></div>
             </Stack.Item>

@@ -16,6 +16,7 @@ const Chat = () => {
     const [promptSystemTemplate, setPromptSystemTemplate] = useState<string>("");
     const [temperature, setTemperature] = useState<number>(0.5);
     const [top, setTop] = useState<number>(0.95);
+
     //Session settings
     const [pastMessages, setPastMessages] = useState<number>(10);
 
@@ -44,7 +45,9 @@ const Chat = () => {
                     promptSystemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
                     maxResponse: maxResponse,
                     temperature: temperature,
-                    top: top,
+                    top: top
+                },
+                sessionConfig: {
                     pastMessages: pastMessages
                 }
             };
@@ -85,9 +88,7 @@ const Chat = () => {
                                 {answers.map((answer, index) => (
                                     <div key={index}>
                                         <UserChatMessage message={answer[0]} />
-                                        {/* <div className={styles.chatMessageGpt}> */}
                                         <Answer key={index} answer={answer[1]}></Answer>
-                                        {/* </div> */}
                                     </div>
                                 ))}
                                 {isLoading && (
@@ -133,7 +134,7 @@ const Chat = () => {
                         <Slider
                             className={styles.chatSettingsSeparator}
                             label="Max response"
-                            min={0}
+                            min={1}
                             max={4000}
                             step={1}
                             showValue

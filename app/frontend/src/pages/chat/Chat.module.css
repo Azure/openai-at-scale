@@ -8,6 +8,7 @@
 .stack {
     height: 100%;
 }
+
 .stackItem {
     display: flex;
     height: 100%;
@@ -74,7 +75,6 @@
 
 .chatMessageStream {
     flex-grow: 1;
-    max-height: 1024px;
     max-width: 1028px;
     width: 100%;
     overflow-y: auto;

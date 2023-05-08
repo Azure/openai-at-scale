@@ -27,10 +27,8 @@ openai.api_version = "2023-03-15-preview"
 # openai.api_key = openai_token.token
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-
 chat_approaches = {
     "rrr": ChatReadRetrieveReadApproach(AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT)
-
 }
 
 app = Flask(__name__)
@@ -43,14 +41,14 @@ def static_file(path):
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    print("/chat request", request)
+    print("/chat request", request.json)
     # ensure_openai_token()
     approach = request.json["approach"]
     try:
         impl = chat_approaches.get(approach)
         if not impl:
             return jsonify({"error": "unknown approach"}), 400
-        r = impl.run(request.json["history"], request.json.get("overrides") or {})
+        r = impl.run(request.json["history"], request.json.get("overrides") or {}, request.json.get("sessionConfig") or {})
         return jsonify(r)
     except Exception as e:
         logging.exception("Exception in /chat")

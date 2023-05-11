@@ -9,6 +9,7 @@ import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { UserChatMessage } from "../../components/UserChatMessage";
 import { ClearChatButton } from "../../components/ClearChatButton";
+import { useAppContext } from "../../context/AppContext";
 
 const Chat = () => {
     //Parameters of model
@@ -19,15 +20,16 @@ const Chat = () => {
 
     //Session settings
     const [pastMessages, setPastMessages] = useState<number>(10);
-
     const lastQuestionRef = useRef<string>("");
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<unknown>();
-
     const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
 
+    //UserInfo
+    const app = useAppContext()
+
     const makeApiRequest = async (question: string) => {
+
         console.log("make api request ....", question);
         lastQuestionRef.current = question;
         const nullAnswer: AskResponse = { answer: undefined };
@@ -49,6 +51,10 @@ const Chat = () => {
                 },
                 sessionConfig: {
                     pastMessages: pastMessages
+                },
+                userInfo:{
+                    username: app.user?.displayName,
+                    email: app.user?.email
                 }
             };
             console.log("request: ", request);

@@ -48,6 +48,12 @@ OpenAI at Scale は FastTrack for Azure が提供する計 3 日間のハンズ�
 
 ---
 ## 実装ベストプラクティス
+### Fine Tuning vs Prompt Engineering
+- Fine Tuning
+    - コスト (GPU)
+        - 特に Fine Tuning の頻度が多いと、計算コストだけでなく、テストなどの工数も必要になる。
+        - 2023年5月現在、Azure OpenAI Service で Fine Tuning は利用不可。
+    - データ不足
 
 
 ---

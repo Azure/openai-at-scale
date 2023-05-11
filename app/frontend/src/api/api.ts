@@ -19,6 +19,10 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             },
             sessionConfig: {
                 pastMessages: options.sessionConfig?.pastMessages
+            },
+            userInfo: {
+                username: options.userInfo?.username,
+                email: options.userInfo?.email
             }
         })
     });

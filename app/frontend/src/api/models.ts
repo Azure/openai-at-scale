@@ -26,14 +26,19 @@ export type ChatTurn = {
 };
 
 export type UserInfo = {
-    username?:string;
-    email?:string;
-}
+    username?: string;
+    email?: string;
+};
+
+export type AccessToken = {
+    accessToken?: string;
+};
 
 export type ChatRequest = {
     history: ChatTurn[];
     approach: Approaches;
     overrides?: AskRequestOverrides;
     sessionConfig?: SessionConfig;
-    userInfo?:UserInfo;
+    userInfo?: UserInfo;
+    accessToken: AccessToken;
 };

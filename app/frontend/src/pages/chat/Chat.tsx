@@ -26,10 +26,9 @@ const Chat = () => {
     const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
 
     //UserInfo
-    const app = useAppContext()
+    const app = useAppContext();
 
     const makeApiRequest = async (question: string) => {
-
         console.log("make api request ....", question);
         lastQuestionRef.current = question;
         const nullAnswer: AskResponse = { answer: undefined };
@@ -52,9 +51,12 @@ const Chat = () => {
                 sessionConfig: {
                     pastMessages: pastMessages
                 },
-                userInfo:{
+                userInfo: {
                     username: app.user?.displayName,
                     email: app.user?.email
+                },
+                accessToken: {
+                    accessToken: app.accessToken?.accessToken
                 }
             };
             console.log("request: ", request);

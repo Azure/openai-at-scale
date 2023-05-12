@@ -20,9 +20,14 @@ export interface AppError {
     debug?: string;
 }
 
+export interface AccessToken {
+    accessToken?: string;
+}
+
 type AppContext = {
     user?: AppUser;
     error?: AppError;
+    accessToken?: AccessToken;
     signIn?: MouseEventHandler<HTMLElement>;
     signOut?: MouseEventHandler<HTMLElement>;
     displayError?: Function;
@@ -59,6 +64,7 @@ function useProvideAppContext() {
     const msal = useMsal();
     const [user, setUser] = useState<AppUser | undefined>(undefined);
     const [error, setError] = useState<AppError | undefined>(undefined);
+    const [accessToken, setAccessToken] = useState<AccessToken | undefined>(undefined);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const displayError = (message: string, debug?: string) => {
@@ -95,6 +101,17 @@ function useProvideAppContext() {
                             email: user.mail || "",
                             avatar: avatar || ""
                         });
+                        msal.instance
+                            .acquireTokenSilent({
+                                scopes: ["user.read"],
+                                account: account
+                            })
+                            .then(function (accessTokenResponse) {
+                                setAccessToken({
+                                    accessToken: accessTokenResponse.accessToken
+                                });
+                                console.log("token", accessTokenResponse.accessToken);
+                            });
                     }
                 } catch (err: any) {
                     displayError(err.message);
@@ -129,6 +146,7 @@ function useProvideAppContext() {
     return {
         user,
         error,
+        accessToken,
         signIn,
         signOut,
         displayError,

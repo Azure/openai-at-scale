@@ -6,6 +6,7 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
     const response = await fetch("/chat", {
         method: "POST",
         headers: {
+            Authorization: "Bearer " + options.accessToken.accessToken,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -23,6 +24,9 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             userInfo: {
                 username: options.userInfo?.username,
                 email: options.userInfo?.email
+            },
+            accessToken: {
+                accessToken: options.accessToken.accessToken
             }
         })
     });

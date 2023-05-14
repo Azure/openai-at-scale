@@ -1,6 +1,6 @@
 export const aadConfig = {
-    clientId: "<your clientid>",
-    tenantId: "<your tenantid>",
-    redirectUri: "http://localhost:5000",
+    clientId: import.meta.env.VITE_clientId,
+    tenantId: import.meta.env.VITE_tenantId,
+    redirectUri: "http://localhost:5173",
     authorityBaseUrl: "https://login.microsoftonline.com/"
 };

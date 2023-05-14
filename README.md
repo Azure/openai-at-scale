@@ -35,7 +35,7 @@ You can follow the [official document](https://learn.microsoft.com/en-us/azure/c
 export SUBSCRIPTION_ID=<your subscription id>
 export RESOURCE_GROUP=<your resource group name>
 export LOCATION=eastus #hard coded to avoid confusion, you can change any avaiable location.
-export OPENAI_SERVICE_NAME=<your openai service name>
+export AZURE_OPENAI_SERVICE=<your openai service name>
 export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
 ```
 
@@ -44,7 +44,7 @@ az login #check your subscription id
 az account set --subscription $SUBSCRIPTION_ID
 az group create --name $RESOURCE_GROUP  --location $LOCATION
 az cognitiveservices account create \
-    --name $OPENAI_SERVICE_NAME \
+    --name $AZURE_OPENAI_SERVICE \
     --kind OpenAI \
     --sku S0 \
     --resource-group $RESOURCE_GROUP \
@@ -52,7 +52,7 @@ az cognitiveservices account create \
     --yes
 az cognitiveservices account deployment create \
    -g $RESOURCE_GROUP  \
-   -n $OPENAI_SERVICE_NAME \
+   -n $AZURE_OPENAI_SERVICE \
    --deployment-name $AZURE_OPENAI_CHATGPT_DEPLOYMENT \
    --model-name gpt-35-turbo \
    --model-version "0301"  \
@@ -69,7 +69,7 @@ export RESOURCE_GROUP=<your resource group name>
 export AZURE_OPENAI_SERVICE=<your openai service name>
 export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
 export OPENAI_API_KEY=`az cognitiveservices account keys list \
--n $OPENAI_SERVICE_NAME \
+-n $AZURE_OPENAI_SERVICE \
 -g $RESOURCE_GROUP \
 -o json \
 | jq -r .key1`

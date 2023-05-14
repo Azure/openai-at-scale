@@ -4,6 +4,10 @@ import openai
 from flask import Flask, request, jsonify
 from azure.identity import DefaultAzureCredential
 from approaches.chatreadretrieveread import ChatReadRetrieveReadApproach
+from dotenv import load_dotenv
+
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(env_path, verbose=True, override=True)
 
 # Replace these with your own values, either in environment variables or directly here
 AZURE_OPENAI_SERVICE = os.environ.get("AZURE_OPENAI_SERVICE") or "myopenai"

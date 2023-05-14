@@ -25,9 +25,7 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
                 username: options.userInfo?.username,
                 email: options.userInfo?.email
             },
-            accessToken: {
-                accessToken: options.accessToken.accessToken
-            }
+            accessToken: options.accessToken.accessToken
         })
     });
 

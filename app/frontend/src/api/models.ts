@@ -31,7 +31,11 @@ export type UserInfo = {
 };
 
 export type AccessToken = {
-    accessToken?: string;
+    accessToken: string;
+};
+
+export type SessionId = {
+    sessionId: string;
 };
 
 export type ChatRequest = {
@@ -40,5 +44,6 @@ export type ChatRequest = {
     overrides?: AskRequestOverrides;
     sessionConfig?: SessionConfig;
     userInfo?: UserInfo;
-    accessToken: AccessToken;
+    accessToken?: AccessToken;
+    sessionId?: SessionId;
 };

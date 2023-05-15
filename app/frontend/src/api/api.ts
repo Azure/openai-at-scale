@@ -3,10 +3,12 @@ import { AskResponse, ChatRequest } from "./models";
 export async function chatApi(options: ChatRequest): Promise<AskResponse> {
     console.log("options.approach:", options.approach);
     console.log("chatApi options: ", options.overrides?.promptSystemTemplate);
+    console.log("sessionId: ", options.sessionId?.sessionId);
     const response = await fetch("/chat", {
         method: "POST",
         headers: {
-            Authorization: "Bearer " + options.accessToken.accessToken,
+            Authorization: "Bearer " + options.accessToken?.accessToken || "",
+            SessionId: options.sessionId?.sessionId || "",
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -24,9 +26,6 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             userInfo: {
                 username: options.userInfo?.username,
                 email: options.userInfo?.email
-            },
-            accessToken: {
-                accessToken: options.accessToken.accessToken
             }
         })
     });

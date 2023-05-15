@@ -5,8 +5,8 @@ import React, { useContext, createContext, useState, MouseEventHandler, useEffec
 import { AuthCodeMSALBrowserAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser";
 import { InteractionType, PublicClientApplication } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
-
 import { getUser, getProfilePhoto } from "../GraphService";
+import { v4 as uuidv4 } from "uuid";
 
 // <AppContextSnippet>
 export interface AppUser {
@@ -24,10 +24,15 @@ export interface AccessToken {
     accessToken?: string;
 }
 
+export interface sessionInfo {
+    sessionId?: string;
+}
+
 type AppContext = {
     user?: AppUser;
     error?: AppError;
     accessToken?: AccessToken;
+    sessionId?: sessionInfo;
     signIn?: MouseEventHandler<HTMLElement>;
     signOut?: MouseEventHandler<HTMLElement>;
     displayError?: Function;
@@ -39,6 +44,8 @@ type AppContext = {
 const appContext = createContext<AppContext>({
     user: undefined,
     error: undefined,
+    accessToken: undefined,
+    sessionId: undefined,
     signIn: undefined,
     signOut: undefined,
     displayError: undefined,
@@ -65,6 +72,7 @@ function useProvideAppContext() {
     const [user, setUser] = useState<AppUser | undefined>(undefined);
     const [error, setError] = useState<AppError | undefined>(undefined);
     const [accessToken, setAccessToken] = useState<AccessToken | undefined>(undefined);
+    const [sessionId, setSessionId] = useState<sessionInfo | undefined>(undefined);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const displayError = (message: string, debug?: string) => {
@@ -94,7 +102,7 @@ function useProvideAppContext() {
                     if (account) {
                         // Get the user from Microsoft Graph
                         const user = await getUser(authProvider);
-                        console.log(user);
+                        console.log("user", user);
                         const avatar = await getProfilePhoto(authProvider);
                         setUser({
                             displayName: user.displayName || "",
@@ -111,7 +119,13 @@ function useProvideAppContext() {
                                     accessToken: accessTokenResponse.accessToken
                                 });
                                 console.log("token", accessTokenResponse.accessToken);
+                                console.log("session id", accessTokenResponse.idTokenClaims);
                             });
+
+                        //generate Session ID after user is logged in
+                        setSessionId({
+                            sessionId: uuidv4()
+                        });
                     }
                 } catch (err: any) {
                     displayError(err.message);
@@ -143,10 +157,15 @@ function useProvideAppContext() {
         setIsAuthenticated(false);
     };
 
+    const configureSessionId = (sessionId: string) => {
+        setSessionId({ sessionId });
+    };
+
     return {
         user,
         error,
         accessToken,
+        sessionId,
         signIn,
         signOut,
         displayError,

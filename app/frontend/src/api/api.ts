@@ -26,7 +26,7 @@ export async function chatApi(options: ChatRequest): Promise<AskResponse> {
             userInfo: {
                 username: options.userInfo?.username,
                 email: options.userInfo?.email
-            }
+            },
         })
     });
 

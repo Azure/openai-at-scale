@@ -56,7 +56,10 @@ const Chat = () => {
                     email: app.user?.email
                 },
                 accessToken: {
-                    accessToken: app.accessToken?.accessToken
+                    accessToken: app.accessToken?.accessToken || ""
+                },
+                sessionId: {
+                    sessionId: app.sessionId?.sessionId || ""
                 }
             };
             console.log("request: ", request);

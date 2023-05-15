@@ -11,7 +11,7 @@ This content is in early alpha stage and is subject to change.
 
 - Chat and Q&A interfaces
 - Configure system prompts and hyperparameters
-- Authenticate with Azure Active Directory
+- Authenticate with Azure Active Directory and get user information from Microsoft Graph
 - Store logs into Cosmos DB and Log Analytics
 
 <img src="./docs/chatscreen.png" width="400">
@@ -22,7 +22,7 @@ This content is in early alpha stage and is subject to change.
 
 ### Creating Azure OpenAI Service
 
-There are some way to create open ai service, we recommend to use Azure Portal if you are not familiar with Azure CLI.
+There are some ways to create Azure OpenAI Service, we recommend to use Azure Portal if you are not familiar with Azure CLI.
 
 Before started you need to choose a location for your service. You can find the list of available locations here -> supported location is here : [Supported locations](https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?regions=all&products=cognitive-services)
 
@@ -61,8 +61,8 @@ az cognitiveservices account deployment create \
 ```
 
 ### Deploy to local environment
-
-if you alrady set up your Open AI Service, you need to set up your environment variables before you spin up your app.
+#### Environment variables
+if you alrady set up your Azure OpenAI Service, you need to set up your environment variables before you spin up your app.
 
 ```shell
 export RESOURCE_GROUP=<your resource group name>
@@ -80,28 +80,52 @@ export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
 | jq -r .properties.endpoint`
 ```
 
-You need to create following file, which will be used for authentication function by Azure AD SDK.
+You need to create following files.
 
-- `app/frontend/src/aadConfig.ts`
-```typescript
-export const aadConfig = {
-    clientId: "<your clientid>",
-    tenantId: "<your tenantid>",
-    redirectUri: "http://localhost:5000",
-    authorityBaseUrl: "https://login.microsoftonline.com/"
-};
+- `app/frontend/.env`
+  - This file will be used for authentication function by Azure AD SDK.
 
+```shell
+VITE_clientId="<your client id>"
+VITE_tenantId="<your tenant id>"
 ```
 
-**Set up Python environment**
+- `app/backend/.env`
+  - This file will be used for accessing to Azure OpenAI Service.
 
+```shell
+AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
+OPENAI_API_KEY="<your Azure OpenAI Service key>"
+AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
+```
+
+### Python environment
+Python is required to run the backend application, Flask.
+
+#### Install Python libraries
 ```shell
 cd app/backend
 python -m venv ./backend_env
 ./backend_env/bin/python -m pip install -r requirements.txt
 ```
 
-**Start Frontend (React)**<br/>
+#### Start Backend (Flask)
+
+```shell
+cd app/backend
+./backend_env/bin/python ./app.py
+```
+
+### Node.js environment
+Node.js is required to run the frontend application, React.
+
+#### Install Node.js packages
+```shell
+cd app/frontend
+npm install
+```
+
+##### Start Frontend (React)
 For development<br/>
 ```shell
 cd app/frontend
@@ -118,12 +142,7 @@ npm run build
 > It is used to optimize and reduce the size of all application files which are deployed in app/backend/static folder. <br/>
 > Please access via Flask application.
 
-**Start Backend (Flask)**
 
-```shell
-cd app/backend
-./backend_env/bin/python ./app.py
-```
 
 ### Deploy to Azure
 

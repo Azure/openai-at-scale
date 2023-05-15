@@ -20,6 +20,32 @@ This content is in early alpha stage and is subject to change.
 
 ## Get Started
 
+### Prerequisites
+#### To run locally
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) (v4.28.1 or higher)
+- [Node.js](https://nodejs.org/en/download/) (v16.20 or higher)
+- [Python](https://www.python.org/downloads/) (v3.9 or higher)
+- [git](https://git-scm.com/downloads)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) or any other Docker environment
+  - for running VSCode DevContainer
+
+
+> ⚠ For Windows client user, please use WSL Ubuntu 20.04 LTS to run this application.
+
+#### To run on Azure
+- Azure subscription
+  - Resources
+    - Azure OpenAI Service
+    - Azure Active Directory application
+    - Azure Log Analytics
+    - (Optional) Azure Cosmos DB
+  - ⚠ Free account is not supported
+- Role
+  - Contributor role or higher for Azure subscription
+  - Permission to create Azure Active Directory application
+  - Permission to create Azure OpenAI Service
+
+
 ### Creating Azure OpenAI Service
 
 There are some ways to create Azure OpenAI Service, we recommend to use Azure Portal if you are not familiar with Azure CLI.
@@ -60,27 +86,21 @@ az cognitiveservices account deployment create \
    --scale-settings-scale-type "Standard"
 ```
 
+### Creating Azure Active Directory application
+
+Follow the steps in [register your application](https://learn.microsoft.com/azure/active-directory/develop/quickstart-register-app) to register your app.
+
+- Select **`Single-page application (SPA)`** as platform type
+- The Redirect URI will be **`http://localhost:5000`** and/or **`http://localhost:5173`** for local development
+- Keep the **`Application (client) ID`** and **`Directory (tenant) ID`** for later use
+
+
+
+
+
 ### Deploy to local environment
 #### Environment variables
-if you alrady set up your Azure OpenAI Service, you need to set up your environment variables before you spin up your app.
-
-```shell
-export RESOURCE_GROUP=<your resource group name>
-export OPENAI_SERVICE_NAME=<your openai service name>
-export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
-export OPENAI_API_KEY=`az cognitiveservices account keys list \
--n $OPENAI_SERVICE_NAME \
--g $RESOURCE_GROUP \
--o json \
-| jq -r .key1`
-export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
--n $OPENAI_SERVICE_NAME \
--g $RESOURCE_GROUP \
--o json \
-| jq -r .properties.endpoint`
-```
-
-You need to create following files.
+You need to create following files to set up your environment variables before you spin up your application.
 
 - `app/frontend/.env`
   - This file will be used for authentication function by Azure AD SDK.
@@ -98,6 +118,26 @@ AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
 OPENAI_API_KEY="<your Azure OpenAI Service key>"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
 ```
+
+
+> Run the following commands to get environment variables from Azure CLI.
+
+```shell
+export RESOURCE_GROUP=<your resource group name>
+export OPENAI_SERVICE_NAME=<your openai service name>
+export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
+export OPENAI_API_KEY=`az cognitiveservices account keys list \
+-n $OPENAI_SERVICE_NAME \
+-g $RESOURCE_GROUP \
+-o json \
+| jq -r .key1`
+export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
+-n $OPENAI_SERVICE_NAME \
+-g $RESOURCE_GROUP \
+-o json \
+| jq -r .properties.endpoint`
+```
+
 
 ### Python environment
 Python is required to run the backend application, Flask.

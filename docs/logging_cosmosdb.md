@@ -47,7 +47,7 @@ Following is the JSON document structure that will store the prompt log data.
 }
 
 ### Partitioning 
-Recommended partitioning key for storing prompt log data is "session_id". This will ensure that all prompts related to the same session are in the same partitions, and basic logging queries will avoid cross-partitions queries. 
+Recommended partitioning key for storing prompt log data is "chat_session_id". This will ensure that all prompts related to the same session are in the same partitions, and basic logging queries will avoid cross-partitions queries. 
 
 Following structure automatically created in the analytical store will enable further analytics (WIP).
 

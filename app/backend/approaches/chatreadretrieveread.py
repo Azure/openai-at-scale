@@ -23,7 +23,7 @@ class ChatReadRetrieveReadApproach(Approach):
         exclude_category = overrides.get("exclude_category") or None
         filter = "category ne '{}'".format(exclude_category.replace("'", "''")) if exclude_category else None
         temperature = overrides.get("temperature") or 0.5
-        promptSystemTemplate = overrides.get("prompt_system_template") or "You are an AI assistant that helps people find information."
+        promptSystemTemplate = overrides.get("prompt_system_template") or "You are an AI assistant that helps people find information and respond with information and also return a sentiment score based on 1 to 10 with 10 being highest score"
         # Step
         system_prompt_template = {}
         system_prompt_template["role"] = "system"

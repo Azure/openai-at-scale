@@ -5,10 +5,10 @@
 
 **OpenAI at Scale** is a workshop by FastTrack for Azure team that helps customers to build and deploy simple ChatGPT UI application on Azure.
 
-
 <img src="./docs/images/chatscreen.png" width="500" />
 
 ---
+
 ## 🎯 Features
 
 - Chat UI
@@ -19,11 +19,15 @@
 <img src="./docs/images/appcomponents.png" width="500" />
 
 ---
-## 🚀 Getting Started 
+
+## 🚀 Getting Started
 
 ### ⚒️ Prerequisites
+
 #### To run locally
+
 - OS - Windows 11, MacOS or Linux
+
 > **Note**
 > - For Windows client user, please use Ubuntu 20.04 LTS (Windows subsystem for Linux) to run this application. 
 > - GitHub Codespaces is supported as Linux envionment.
@@ -37,12 +41,14 @@
 
 
 #### To run on Azure
+
 - Azure subscription
   - Resources
     - Azure OpenAI Service
     - Azure Active Directory application
     - Azure Log Analytics
     - (Optional) Azure Cosmos DB
+
 > **Warning**
 > - Free account is not supported
 
@@ -50,7 +56,6 @@
   - Contributor role or higher for Azure subscription
   - Permission to create Azure Active Directory application
   - Permission to create Azure OpenAI Service
-
 
 ### 1. Creating Azure OpenAI Service 🧠
 
@@ -63,7 +68,6 @@ You can follow the [official document](https://learn.microsoft.com/en-us/azure/c
 - **Azure CLI** : You can use the following command to create Azure OpenAI Service.
 
 <details><summary>command example</summary><br/>
-
 
 ```shell
 # Set environment variables
@@ -105,10 +109,10 @@ Follow the steps in [register your application](https://learn.microsoft.com/azur
 - The Redirect URI will be **`http://localhost:5000`** and/or **`http://localhost:5173`** for local development
 - Keep the **`Application (client) ID`** and **`Directory (tenant) ID`** for later use
 
-
-
 ### 3. Deploying to local environment 💻
+
 #### Environment variables
+
 You need to create following files to set up your environment variables before you spin up your application.
 
 - `app/frontend/.env`
@@ -140,12 +144,15 @@ export OPENAI_API_KEY=`az cognitiveservices account keys list \
 -o json \
 | jq -r .key1`
 ```
+
 </details>
 
 ### Python environment
+
 Python is required to run the backend Flask application.
 
 #### Install Python libraries
+
 ```shell
 cd app/backend
 python -m venv ./backend_env
@@ -162,9 +169,11 @@ flask run --debug #hot reload
 ```
 
 ### Node.js environment
+
 Node.js is required to run the frontend React application.
 
 #### Install Node.js packages
+
 ```shell
 cd app/frontend
 npm install
@@ -172,11 +181,13 @@ npm install
 
 ##### Start Frontend (React)
 For development<br/>
+
 ```shell
 npm run dev
 ```
 
 For production<br/>
+
 ```shell
 npm run build
 ```
@@ -185,49 +196,114 @@ npm run build
 
 
 ### 4. Deploying to Azure ☁️
-> Under construction
 
 #### Deploy to Azure App Service
+
 > ⚠ Before you run following command, you must run `npm run build` on app/frontend to set frontend files to backend static dir.
 
 - example of App Service
-  - deploy to app service
-  ```shell
-  cd app/backend
-  az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
-  ```
+  - deploy app to App Service with easist way.
 
-  - after dployed webapp, you must change the environment variables with application settings of App Service.
-  ```shell
-  az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name>
-  ```
+    ```shell
+    cd app/backend
+    az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
+    ```
+
+  - deploy App Service Plan and Web App separately.
+    - you can deploy an app with above command but the command doesn't allow to change detailed App Service Plan and Web App settings. So if you want to change these settings you can deploy it separately with following command.
+    - Create App Service Plan resources
+
+      ```shell
+      az appservice plan create -g <Resource Group Name> -n <App Service Plan Name> --sku <SKU Name> --location eastus
+      ```
+
+    - Create WebApp Resource on above App Service Plan
+
+      ```shell
+      az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10"
+      ```
+
+      ⚡️completely optional: if your system needs to add private endpoint and/or VNET integration, you can add it here with following options.
+
+      - VNET Integration
+  
+        ```shell
+        # you need create vnet/subnet before execute this command
+        az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10" --vnet <VNET Name> --subnet <Subnet Name>
+        ```
+
+      - Private Endpoint
+
+        ```shell
+        # you need create vnet/subnet webapp before execute this command
+        az network private-endpoint create \
+          -n <PE Name> \
+          -g <Resource Group Name> \
+          --vnet-name <VNET Name> \
+          --subnet <Subnet Name> \
+          --connection-name <Private Endpoint Connection Name> \
+          --private-connection-resource-id /subscriptions/SubscriptionID/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/<WebApp Name> \
+          --group-id sites
+        ```
+
+    - Update redirectURI at aadConfig.ts and rebuild frontend app
+      - update redirectURI with following FQDN, which is webapp endpoint.
+  
+        ```shell
+        az webapp config hostname list -g <Resource Group Name> --webapp-name <WebApp Name> -o json | jq '.[0].name'
+        ```
+
+      - rebuild frontend
+
+        ```shell
+        cd app/frontend
+        npm run rebuild
+        ```
+
+    - Deploy demo app to WebApp
+
+      ```shell
+      cd app/backend
+      zip -r deploy.zip *
+      az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
+      ```
+
+    - after deployed webapp, you must change the environment variables with application settings of App Service.
+
+      ```shell
+      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
+      ```
 
 #### Log Analytics
+
 - example of Log collection
   - deploy Log Analytics workspace
-  ```shell
-  export APP_SERIVCE=<your app service name>
-  export LOCATION=<azure datacenter region - eastus, japaneast, etc...>
-  export RESOURCE_GROUP=<your resource group name>
-  export WORKSPACE=<your log analytics workspace name>
-  export DIAGSETTINNG_NAME=<your diagnistics setting name (arbitary)>
+  
+    ```shell
+    export APP_SERIVCE=<your app service name>
+    export LOCATION=<azure datacenter region - eastus, japaneast, etc...>
+    export RESOURCE_GROUP=<your resource group name>
+    export WORKSPACE=<your log analytics workspace name>
+    export DIAGSETTINNG_NAME=<your diagnistics setting name (arbitary)>
 
-  az monitor log-analytics workspace create --name $WORKSPACE  --resource-group $RESOURCE_GROUP --location $LOCATION
-  ```
+    az monitor log-analytics workspace create --name $WORKSPACE  --resource-group $RESOURCE_GROUP --location $LOCATION
+    ```
 
   - enable diagnostics setting  
-  ```shell
-  export RESOURCE_ID=`az webapp show -g $RESOURCE_GROUP -n $APP_SERIVCE --query id --output tsv | tr -d '\r'`
-  export WORKSPACE_ID=`az monitor log-analytics workspace show -g $RESOURCE_GROUP --workspace-name $WORKSPACE --query id --output tsv | tr -d '\r'`
 
-  az monitor diagnostic-settings create \
-  	--resource $RESOURCE_ID \
-  	--workspace $WORKSPACE_ID \
-	-n $DIAGSETTINNG_NAME \
-	--logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
-  ```
+    ```shell
+    export RESOURCE_ID=`az webapp show -g $RESOURCE_GROUP -n $APP_SERIVCE --query id --output tsv | tr -d '\r'`
+    export WORKSPACE_ID=`az monitor log-analytics workspace show -g $RESOURCE_GROUP --workspace-name $WORKSPACE --query id --output tsv | tr -d '\r'`
+
+    az monitor diagnostic-settings create \
+      --resource $RESOURCE_ID \
+      --workspace $WORKSPACE_ID \
+    -n $DIAGSETTINNG_NAME \
+    --logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
+    ```
 
 #### Cosmos DB
+
 ##### Setting up Azure Cosmos DB for logging chat messages 
 
 The [logging chat on cosmos db](docs/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure CosmosDB and used in deriving insights further downstream.
@@ -245,10 +321,13 @@ AZURE_COSMOSDB_DB=<CosmosDB Database Name>
 ```
 
 ---
+
 ## 🙋🏾‍♂️Question?
+
 [You can ask question about this repo on GitHub Issues.](https://github.com/Azure/openai-at-scale/issues)
 
 ---
+
 ## 📚 Resources
 
 - [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)

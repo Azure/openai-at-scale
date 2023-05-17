@@ -167,11 +167,11 @@ export OPENAI_API_KEY=`az cognitiveservices account keys list \
 
 </details>
 
-### Python environment
+#### Python environment
 
 Python is required to run the backend Flask application.
 
-#### Install Python libraries
+##### Install Python libraries
 
 ```shell
 cd app/backend
@@ -180,7 +180,7 @@ source .backend_env/bin/activate  #bash
 pip install -r requirements.txt
 ```
 
-#### Start Backend (Flask)
+##### Start Backend (Flask)
 
 ```shell
 cd app/backend
@@ -188,11 +188,11 @@ flask run --debug #hot reload
 #python ./app.py 
 ```
 
-### Node.js environment
+#### Node.js environment
 
 Node.js is required to run the frontend React application.
 
-#### Install Node.js packages
+##### Install Node.js packages
 
 ```shell
 cd app/frontend
@@ -294,7 +294,7 @@ npm run build
       az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
       ```
 
-
+### 6. Configuration ⚙️
 #### Collect application logs with Azure Log Analytics
 
   - Example of Log collection

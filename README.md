@@ -94,6 +94,7 @@ az cognitiveservices account deployment create \
    --model-format OpenAI \
    --scale-settings-scale-type "Standard"
 ```
+
 </details>
 
 ### 2. Creating Azure Active Directory application 🔑
@@ -126,8 +127,6 @@ AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
 OPENAI_API_KEY="<your Azure OpenAI Service key>"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
 ```
-
-
 
 <details><summary>command examples to get environment variables from Azure CLI.</summary><br/>
 
@@ -229,7 +228,21 @@ npm run build
   ```
 
 #### Cosmos DB
-> Under construction
+##### Setting up Azure Cosmos DB for logging chat messages 
+
+The [logging chat on cosmos db](docs/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure CosmosDB and used in deriving insights further downstream.
+
+You can create a Cosmos DB account by following instructions on the Azure docs [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and please make sure you enable Analytical Store, more details can be found [here](https://learn.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction).
+
+
+##### set environment variable for Cosmos DB
+
+``` shell
+export AZURE_COSMOSDB_ENDPOINT=https://<account_name>.documents.azure.com:443/
+AZURE_COSMOSDB_KEY=<CosmosDB Access Key>
+AZURE_COSMOSDB_DB=<CosmosDB Database Name>
+
+```
 
 ---
 ## 🙋🏾‍♂️Question?

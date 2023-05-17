@@ -1,36 +1,40 @@
 # OpenAI at Scale
->
-> Note
-This content is in early alpha stage and is subject to change.
+
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=622759641&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2&skip_quickstart=true&geo=SoutheastAsia)
+[![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure/openai-at-scale)
 
 **OpenAI at Scale** is a workshop by FastTrack for Azure team that helps customers to build and deploy simple ChatGPT UI application on Azure.
 
-<img src="./docs/appcomponents.png" width="400">
 
-## Features
-
-- Chat and Q&A interfaces
-- Configure system prompts and hyperparameters
-- Authenticate with Azure Active Directory and get user information from Microsoft Graph
-- Store logs into Cosmos DB and Log Analytics
-
-<img src="./docs/chatscreen.png" width="400">
+<img src="./docs/images/chatscreen.png" width="500" />
 
 ---
+## 🎯 Features
 
-## Get Started
+- Chat UI
+- Configure system prompts and hyperparameters
+- Authenticate with Azure Active Directory and get user information from Microsoft Graph
+- Store logs into Azure Log Analytics
 
-### Prerequisites
+<img src="./docs/images/appcomponents.png" width="500" />
+
+---
+## 🚀 Getting Started 
+
+### ⚒️ Prerequisites
 #### To run locally
+- OS - Windows 11, MacOS or Linux
+> **Note**
+> - For Windows client user, please use Ubuntu 20.04 LTS (Windows subsystem for Linux) to run this application. 
+> - GitHub Codespaces is supported as Linux envionment.
+
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) (v4.28.1 or higher)
 - [Node.js](https://nodejs.org/en/download/) (v16.20 or higher)
 - [Python](https://www.python.org/downloads/) (v3.9 or higher)
-- [git](https://git-scm.com/downloads)
+- [git client](https://git-scm.com/downloads)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or any other Docker environment
-  - for running VSCode DevContainer
+  - Docker is used for Visual Studio Code Dev Container.
 
-
-> ⚠ For Windows client user, please use WSL Ubuntu 20.04 LTS to run this application.
 
 #### To run on Azure
 - Azure subscription
@@ -39,14 +43,16 @@ This content is in early alpha stage and is subject to change.
     - Azure Active Directory application
     - Azure Log Analytics
     - (Optional) Azure Cosmos DB
-  - ⚠ Free account is not supported
+> **Warning**
+> - Free account is not supported
+
 - Role
   - Contributor role or higher for Azure subscription
   - Permission to create Azure Active Directory application
   - Permission to create Azure OpenAI Service
 
 
-### Creating Azure OpenAI Service
+### 1. Creating Azure OpenAI Service 🧠
 
 There are some ways to create Azure OpenAI Service, we recommend to use Azure Portal if you are not familiar with Azure CLI.
 
@@ -55,6 +61,9 @@ Before started you need to choose a location for your service. You can find the 
 - **Azure Portal** :
 You can follow the [official document](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal) to create Azure OpenAI Service.
 - **Azure CLI** : You can use the following command to create Azure OpenAI Service.
+
+<details><summary>command example</summary><br/>
+
 
 ```shell
 # Set environment variables
@@ -85,10 +94,11 @@ az cognitiveservices account deployment create \
    --model-format OpenAI \
    --scale-settings-scale-type "Standard"
 ```
+</details>
 
-### Creating Azure Active Directory application
+### 2. Creating Azure Active Directory application 🔑
 
-Follow the steps in [register your application](https://learn.microsoft.com/azure/active-directory/develop/quickstart-register-app) to register your app.
+Follow the steps in [register your application](https://learn.microsoft.com/azure/active-directory/develop/quickstart-register-app) to register your application.
 
 - Select **`Single-page application (SPA)`** as platform type
 - The Redirect URI will be **`http://localhost:5000`** and/or **`http://localhost:5173`** for local development
@@ -96,9 +106,7 @@ Follow the steps in [register your application](https://learn.microsoft.com/azur
 
 
 
-
-
-### Deploy to local environment
+### 3. Deploying to local environment 💻
 #### Environment variables
 You need to create following files to set up your environment variables before you spin up your application.
 
@@ -106,8 +114,8 @@ You need to create following files to set up your environment variables before y
   - This file will be used for authentication function by Azure AD SDK.
 
 ```shell
-VITE_clientId="<your client id>"
-VITE_tenantId="<your tenant id>"
+VITE_CLIENTID="<your client id>"
+VITE_TENANTID="<your tenant id>"
 ```
 
 - `app/backend/.env`
@@ -120,7 +128,8 @@ AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
 ```
 
 
-> Run the following commands to get environment variables from Azure CLI.
+
+<details><summary>command examples to get environment variables from Azure CLI.</summary><br/>
 
 ```shell
 export RESOURCE_GROUP=<your resource group name>
@@ -137,27 +146,29 @@ export AZURE_OPENAI_SERVICE_ENDPOINT=`az cognitiveservices account show \
 -o json \
 | jq -r .properties.endpoint`
 ```
-
+</details>
 
 ### Python environment
-Python is required to run the backend application, Flask.
+Python is required to run the backend Flask application.
 
 #### Install Python libraries
 ```shell
 cd app/backend
 python -m venv ./backend_env
-./backend_env/bin/python -m pip install -r requirements.txt
+source .backend_env/bin/activate
+pip install -r requirements.txt
 ```
 
 #### Start Backend (Flask)
 
 ```shell
 cd app/backend
-./backend_env/bin/python ./app.py
+python ./app.py 
+#flask run --debug ## hot reload
 ```
 
 ### Node.js environment
-Node.js is required to run the frontend application, React.
+Node.js is required to run the frontend React application.
 
 #### Install Node.js packages
 ```shell
@@ -168,26 +179,22 @@ npm install
 ##### Start Frontend (React)
 For development<br/>
 ```shell
-cd app/frontend
-npm install
 npm run dev
 ```
 
 For production<br/>
 ```shell
-cd app/frontend
-npm install
 npm run build
 ```
 > It is used to optimize and reduce the size of all application files which are deployed in app/backend/static folder. <br/>
-> Please access via Flask application.
 
 
 
-### Deploy to Azure
-
+### 4. Deploying to Azure ☁️
+@<Kyohei Moriyama> さん、よろしくお願いします！
 > Under construction
 
+#### Deploy to Azure App Service
 > ⚠ Before you run following command, you must run `npm run build` on app/frontend to set frontend files to backend static dir.
 
 - example of App Service
@@ -202,7 +209,40 @@ npm run build
   az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name>
   ```
 
-## Resources
+#### Log Analytics
+- example of Log collection
+  - deploy Log Analytics workspace
+  ```shell
+  export APP_SERIVCE=<your app service name>
+  export LOCATION=<azure datacenter region - eastus, japaneast, etc...>
+  export RESOURCE_GROUP=<your resource group name>
+  export WORKSPACE=<your log analytics workspace name>
+  export DIAGSETTINNG_NAME=<your diagnistics setting name (arbitary)>
+
+  az monitor log-analytics workspace create --name $WORKSPACE  --resource-group $RESOURCE_GROUP --location $LOCATION
+  ```
+
+  - enable diagnostics setting  
+  ```shell
+  export RESOURCE_ID=`az webapp show -g $RESOURCE_GROUP -n $APP_SERIVCE --query id --output tsv | tr -d '\r'`
+  export WORKSPACE_ID=`az monitor log-analytics workspace show -g $RESOURCE_GROUP --workspace-name $WORKSPACE --query id --output tsv | tr -d '\r'`
+
+  az monitor diagnostic-settings create \
+  	--resource $RESOURCE_ID \
+  	--workspace $WORKSPACE_ID \
+	-n $DIAGSETTINNG_NAME \
+	--logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
+  ```
+
+#### Cosmos DB
+> Under construction
+
+---
+## 🙋🏾‍♂️Question?
+[You can ask question about this repo on GitHub Issues.](https://github.com/Azure/openai-at-scale/issues)
+
+---
+## 📚 Resources
 
 - [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
   - This repo is based on this sample code.

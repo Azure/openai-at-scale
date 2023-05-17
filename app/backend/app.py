@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import openai
 from flask import Flask, request, jsonify
@@ -52,7 +53,7 @@ def chat():
         impl = chat_approaches.get(approach)
         if not impl:
             return jsonify({"error": "unknown approach"}), 400
-        r = impl.run(request.json["history"], request.json.get("overrides") or {}, request.json.get("sessionConfig") or {}, request.json.get("userInfo") or {})
+        r = impl.run(request.json["history"], request.json.get("overrides") or {}, request.json.get("sessionConfig") or {}, request.json.get("userInfo") or {}, dict(request.headers) or {})
         return jsonify(r)
 
     except Exception as e:

@@ -1,15 +1,16 @@
 import openai
+import uuid
 from approaches.approach import Approach
+import chat_log.cosmosdb_logging as cosmosdb_logging
 
 class ChatReadRetrieveReadApproach(Approach):
-
 
     # def __init__(self, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
     def __init__(self, chatgpt_deployment: str, gpt_deployment: str):
         self.chatgpt_deployment = chatgpt_deployment
         self.gpt_deployment = gpt_deployment
 
-    def run(self, history: list[dict], overrides: dict, sessionConfig: dict, userInfo:dict) -> any:
+    def run(self, history: list[dict], overrides: dict, sessionConfig: dict, userInfo:dict, header: dict) -> any:
         print("history:", history)
         print("override:", overrides)
         print("sessionConfig:", sessionConfig)
@@ -19,6 +20,9 @@ class ChatReadRetrieveReadApproach(Approach):
         max_tokens = overrides.get("maxResponse") or 800
         promptSystemTemplate = overrides.get("prompt_system_template") or "You are an AI assistant that helps people find information."
         pastMessages = sessionConfig.get("pastMessages") or 10
+        user_name= userInfo.get("username") or "anonymous user_name"
+        user_id = userInfo.get("email") or "anonymous user_id"
+        chat_session_id = header.get("SessionId") or "anonymous-" + str(uuid.uuid4())
 
         # Step
         system_prompt_template = {}
@@ -36,8 +40,19 @@ class ChatReadRetrieveReadApproach(Approach):
             presence_penalty=0,
             stop=None)
         print("completion: ", completion)
+
+        document_definition = { "id": str(uuid.uuid4()),
+                                "chat_session_id": chat_session_id, 
+                            "user": {"name": user_name,"user_id":user_id}, 
+                            'message': {"id":completion.get("id") or "anonymous-id",
+                                        "prompt":[system_prompt_template]+self.get_chat_history_as_text(history, pastMessages),
+                                        "other_attr":[{"completion": completion}],
+                                        "previous_message_id":"previous_message_id"}}
+        
+        cosmosdb_logging.insert_chat_log(document_definition)
         return {"answer": completion.choices[0].message["content"]}
     
+
     def get_chat_history_as_text(self, history, pastMessages) -> list:
         history_text = []
         for h in history:

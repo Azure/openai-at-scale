@@ -16,7 +16,8 @@
 - Chat UI
 - Configure system prompts and hyperparameters
 - Authenticate with Azure Active Directory and get user information from Microsoft Graph
-- Store logs into Azure Log Analytics
+- Collect application logs with Azure Log Analytics
+- Store prompt log data to Azure Cosmos DB
 
 <img src="./docs/images/appcomponents.png" width="500" />
 
@@ -220,16 +221,16 @@ npm run build
 
 > ⚠ Before you run following command, you must run `npm run build` on app/frontend to set frontend files to backend static dir.
 
-- example of App Service
-  - deploy app to App Service with easist way.
+- Example of Azure App Service
+  - Deploy app to App Service with easist way.
 
     ```shell
     cd app/backend
     az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
     ```
 
-  - deploy App Service Plan and Web App separately.
-    - you can deploy an app with above command but the command doesn't allow to change detailed App Service Plan and Web App settings. So if you want to change these settings you can deploy it separately with following command.
+  - Deploy App Service Plan and Web App separately.
+    - You can deploy an app with above command but the command doesn't allow to change detailed App Service Plan and Web App settings. So if you want to change these settings you can deploy it separately with following command.
     - Create App Service Plan resources
 
       ```shell
@@ -266,13 +267,13 @@ npm run build
         ```
 
     - Update redirectURI at aadConfig.ts and rebuild frontend app
-      - update redirectURI with following FQDN, which is webapp endpoint.
+      - Update redirectURI with following FQDN, which is webapp endpoint.
   
         ```shell
         az webapp config hostname list -g <Resource Group Name> --webapp-name <WebApp Name> -o json | jq '.[0].name'
         ```
 
-      - rebuild frontend
+      - Rebuild frontend
 
         ```shell
         cd app/frontend
@@ -287,7 +288,7 @@ npm run build
       az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
       ```
 
-    - after deployed webapp, you must change the environment variables with application settings of App Service.
+    - After deployed webapp, you must change the environment variables with application settings of App Service.
 
       ```shell
       az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
@@ -296,8 +297,8 @@ npm run build
 
 #### Collect application logs with Azure Log Analytics
 
-  - example of Log collection
-    - deploy Log Analytics workspace
+  - Example of Log collection
+    - Deploy Azure Log Analytics workspace
   
     ```shell
     export APP_SERIVCE=<your app service name>
@@ -309,7 +310,7 @@ npm run build
     az monitor log-analytics workspace create --name $WORKSPACE  --resource-group $RESOURCE_GROUP --location $LOCATION
     ```
 
-    - enable diagnostics setting  
+    - Enable diagnostics setting  
 
     ```shell
     export RESOURCE_ID=`az webapp show -g $RESOURCE_GROUP -n $APP_SERIVCE --query id --output tsv | tr -d '\r'`
@@ -323,7 +324,7 @@ npm run build
     ```
 
 
-#### (Optional) Storage prompt log data to Azure Cosmos DB
+#### (Optional) Store prompt log data to Azure Cosmos DB
 The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure Cosmos DB and used in deriving insights further downstream.
 
 

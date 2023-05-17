@@ -20,7 +20,6 @@ class ChatReadRetrieveReadApproach(Approach):
         promptSystemTemplate = overrides.get("prompt_system_template") or "You are an AI assistant that helps people find information."
         pastMessages = sessionConfig.get("pastMessages") or 10
 
-
         # Step
         system_prompt_template = {}
         system_prompt_template["role"] = "system"

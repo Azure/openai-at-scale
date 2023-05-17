@@ -1,12 +1,13 @@
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.errors as errors
 import azure.cosmos.exceptions as cosmos_exception
-import uuid
 import os
 import json
+from dotenv import load_dotenv
 
 ## Read environment variables
-## TODO: Replace with reading from Azure Key Vault
+env_path = os.path.join(os.path.dirname(__file__), '../.env')
+load_dotenv(env_path, verbose=True, override=True)
 
 endpoint = os.environ.get("AZURE_COSMOSDB_ENDPOINT") or None
 key = os.environ.get("AZURE_COSMOSDB_KEY") or None 
@@ -21,10 +22,7 @@ class chat_log_result:
     def __init__(self,is_err,err_msg):
         self.is_err = is_err
         self.err_msg = err_msg
-    
         
-        
-
 
 def insert_chat_log(chat_message) -> chat_log_result:
      chat_log_inserted = False 

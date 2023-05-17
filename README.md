@@ -235,7 +235,7 @@ The [logging chat on cosmos db](docs/logging_cosmosdb.md) section explains in de
 You can create a Cosmos DB account by following instructions on the Azure docs [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and please make sure you enable Analytical Store, more details can be found [here](https://learn.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction).
 
 
-# set environment variable for Cosmos DB
+##### set environment variable for Cosmos DB
 
 ``` shell
 export AZURE_COSMOSDB_ENDPOINT=https://<account_name>.documents.azure.com:443/

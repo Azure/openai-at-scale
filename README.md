@@ -115,17 +115,24 @@ You need to create following files to set up your environment variables before y
   - This file will be used for authentication function by Azure AD SDK.
 
 ```shell
+# Azure Active Directory application
 VITE_CLIENTID="<your client id>"
 VITE_TENANTID="<your tenant id>"
 ```
 
 - `app/backend/.env`
-  - This file will be used for accessing to Azure OpenAI Service.
+  - This file will be used for accessing to Azure OpenAI Service and Azure Cosmos DB.
 
 ```shell
+# Azure OpenAI Service
 AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
 OPENAI_API_KEY="<your Azure OpenAI Service key>"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
+
+# Azure Cosmos DB
+AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
+AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
+AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
 ```
 
 <details><summary>command examples to get environment variables from Azure CLI.</summary><br/>
@@ -202,7 +209,7 @@ npm run build
   az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name>
   ```
 
-#### Log Analytics
+#### Azure Log Analytics
 - example of Log collection
   - deploy Log Analytics workspace
   ```shell
@@ -227,22 +234,13 @@ npm run build
 	--logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
   ```
 
-#### Cosmos DB
+#### Azure Cosmos DB
 ##### Setting up Azure Cosmos DB for logging chat messages 
 
-The [logging chat on cosmos db](docs/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure CosmosDB and used in deriving insights further downstream.
+The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure Cosmos DB and used in deriving insights further downstream.
 
-You can create a Cosmos DB account by following instructions on the Azure docs [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and please make sure you enable Analytical Store, more details can be found [here](https://learn.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction).
+You can create a Azure Cosmos DB account by following instructions on the Azure docs [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and please make sure you enable Analytical Store, more details can be found [here](https://learn.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction).
 
-
-##### set environment variable for Cosmos DB
-
-``` shell
-export AZURE_COSMOSDB_ENDPOINT=https://<account_name>.documents.azure.com:443/
-AZURE_COSMOSDB_KEY=<CosmosDB Access Key>
-AZURE_COSMOSDB_DB=<CosmosDB Database Name>
-
-```
 
 ---
 ## 🙋🏾‍♂️Question?

@@ -105,9 +105,14 @@ Follow the steps in [register your application](https://learn.microsoft.com/azur
 - The Redirect URI will be **`http://localhost:5000`** and/or **`http://localhost:5173`** for local development
 - Keep the **`Application (client) ID`** and **`Directory (tenant) ID`** for later use
 
+### (Optional) 3. Creating Azure Cosmos DB 🪐	
 
+You can create a Azure Cosmos DB account by following instructions on the Azure docs [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and please make sure you enable Analytical Store, more details can be found [here](https://learn.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction).
 
-### 3. Deploying to local environment 💻
+- Select **`Core (SQL)`** as API
+- Container name will be **`chat_log`** and partition key will be **`/chat_session_id`**
+
+### 4. Deploying to local environment 💻
 #### Environment variables
 You need to create following files to set up your environment variables before you spin up your application.
 
@@ -129,7 +134,7 @@ AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
 OPENAI_API_KEY="<your Azure OpenAI Service key>"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
 
-# Azure Cosmos DB
+# (Optional) Azure Cosmos DB
 AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
 AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
 AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
@@ -191,7 +196,7 @@ npm run build
 
 
 
-### 4. Deploying to Azure ☁️
+### 5. Deploying to Azure ☁️
 > Under construction
 
 #### Deploy to Azure App Service
@@ -234,12 +239,10 @@ npm run build
 	--logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
   ```
 
-#### Azure Cosmos DB
-##### Setting up Azure Cosmos DB for logging chat messages 
-
+#### (Optional) Azure Cosmos DB
 The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure Cosmos DB and used in deriving insights further downstream.
 
-You can create a Azure Cosmos DB account by following instructions on the Azure docs [here](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and please make sure you enable Analytical Store, more details can be found [here](https://learn.microsoft.com/en-us/azure/cosmos-db/analytical-store-introduction).
+
 
 
 ---

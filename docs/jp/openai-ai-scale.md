@@ -15,14 +15,13 @@ OpenAI at Scale は [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pric
 |   |  |目的とアジェンダ| OpenAI at Scale の目的とアジェンダを説明します。 |  |
 |   |  |FastTrack for Azure| FastTrack for Azure のプログラムの概要を説明します。 | **プログラム紹介ページ** : [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pricing/offers/azure-fasttrack/) <br/> **セミナー** : [プログラムのご紹介（FTA Intro）セッション](https://developer.microsoft.com/en-us/reactor/events/17981/) |
 |   |  |アーキテクチャ| 本ハンズオンで構築するアプリケーションのアーキテクチャを説明します。 |  |
-|   | 環境の確認 ||  |  |
-|   |  | クライアント開発環境 | 開発者ごとのクライアント端末における開発環境を確認します。 |  |
-|   |  | Azure 環境の開発 | Azure OpenAI Service の申請状況、サブスクリプション上での権限の確認をします。 |  |
+|   |  | クライアント開発環境の確認 | 開発者ごとのクライアント端末における開発環境を確認します。 |  |
+|   |  | Azure 環境の確認 | Azure OpenAI Service の申請状況、サブスクリプション上での権限の確認をします。 |  |
 | 2 | Azure サービス構築と設定|  |  |  |
 |   |  |Azure Active Directory| アプリケーションを作成します。 | **製品資料** : [Azure Active Directory のアプリケーションオブジェクトとサービスプリンシパルオブジェクト](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/app-objects-and-service-principals) <br/> **リソース作成手順** : [チュートリアル: Microsoft ID プラットフォームにシングルページ アプリケーションを登録する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/single-page-app-tutorial-01-register-app)|
 |   |  |Azure OpenAI Service| Azure OpenAI Service のリソースを作成し、モデルをデプロイします。 | **製品資料** : [Web](https://azure.microsoft.com/ja-jp/products/cognitive-services/openai-service) / [Document](https://learn.microsoft.com/ja-JP/azure/cognitive-services/openai/overview) <br /> **リソース作成手順** : [リソースの作成 & モデルデプロイ](https://learn.microsoft.com/ja-JP/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal) |
 |   |  |Azure App Service| Azure App Service のリソースを作成します。 | **製品資料** : [Web](https://azure.microsoft.com/ja-jp/products/app-service) / [Document](https://learn.microsoft.com/ja-JP/azure/app-service/) <br/> **リソース作成資料** : [クイックスタート : Python をデプロイする](https://learn.microsoft.com/ja-jp/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cvscode-aztools%2Cvscode-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-azcli) |
-|   |  |Azure Monitor| Azure Monitor のリソースを作成します。 | **製品資料** : [Web](https://azure.microsoft.com/ja-jp/products/monitor) / [Document](https://learn.microsoft.com/ja-JP/azure/azure-monitor/) <br/> **リソース作成資料** : [チュートリアル : リソースログを収集して表示する](https://learn.microsoft.com/ja-jp/azure/azure-monitor/essentials/tutorial-resource-logs) |
+|   |  |Azure Log Analytics| Azure Log Analytics のリソースを作成します。 | **製品資料** : [Web](https://azure.microsoft.com/ja-jp/products/monitor) / [Document](https://learn.microsoft.com/ja-JP/azure/azure-monitor/) <br/> **リソース作成資料** : [チュートリアル : リソースログを収集して表示する](https://learn.microsoft.com/ja-jp/azure/azure-monitor/essentials/tutorial-resource-logs) |
 
 #### Day2
 |   | Section | Item | Description | Reference |
@@ -54,12 +53,11 @@ FastTrack for Azure は、Azure の迅速に & 確実な構築を支援するカ
 ## アーキテクチャ
 本セッションで構築するアプリケーションの全体像は以下の通りです。
 
-**開発環境の要件**
-![image.png](/.attachments/image-bfc7b574-70ca-46bb-ac3c-930dd362f381.png)
+**開発環境の要件**<br/>
+<img src="../images/appcomponents.png" width="500" />
 
-## 環境の確認
-本格的な作業に入る前に環境の確認を行います。
-### クライアント開発環境
+
+## クライアント開発環境の確認
 クライアント端末で開発環境を構築します。
 
 - [ ] GitHub Codespaces、Windows (WSL を利用)、MacOS/Ubuntu のクライアント端末
@@ -93,7 +91,7 @@ FastTrack for Azure は、Azure の迅速に & 確実な構築を支援するカ
          - Azure CLI (4.28.1 以上)
 
 
-### Azure 環境
+## Azure 環境の確認
 - Azure OpenAI Service 利用申請
    - Azure OpenAI Service を利用するためには、事前に利用申請を行い、Microsoft より承諾を得る必要があります。
    - 申請フォーム : [Request Access to Azure OpenAI Service](https://aka.ms/oai/access)
@@ -101,6 +99,7 @@ FastTrack for Azure は、Azure の迅速に & 確実な構築を支援するカ
    - Azure Subscription の共同管理者
    - Azure Active Directory のアプリケーションの登録 & そのアプリケーションへのロール割り当て可能な権限
 
+<br/>
 
 ---
 # 2. Azure サービス構築と設定 🛠️
@@ -147,10 +146,16 @@ App Service は、まず初めに、App Service Plan　を作り、その上に 
 - ポータルを使う場合
   - ポータルの操作など、詳しい説明は、割愛しますが、 App Service Plan を構成し、作成した Web App にアプリをデプロイするという流れは変わりません。Web App　のデプロイメントオプションについては、[こちら](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-best-practices)のドキュメントを参考にしてください。
 
-## Azure Monitor
+## Azure Log Analytics
 **製品概要**
 
 **構築と設定**
+
+
+## Azure Cosmos DB
+> コンテンツ作成中
+
+<br/>
 
 ---
 # 3. クライアント開発環境の構築 🖥️
@@ -209,34 +214,7 @@ az login --use-device
 
 ---
 # 4. ChatGPT アプリケーション構築 🤖
-> 詳細な手順は Readme.md をご参照ください。
-
-## ローカル環境
-Azure のアプリケーションをデプロイする前に、ローカル環境でアプリケーションをビルドし、最低限の動作確認をします。
-
-**手順概要**
-
-1. Python、Node.js のライブラリ/パッケージのインストール
-1. Flask/React の起動
-1. React のビルド
-1. 動作確認
-
-## Azure 環境
-ビルドした静的ファイルを含む Flask アプリケーションを Azure App Service にデプロイします。
-
-**手順概要**
-
-1. Azure CLI によるデプロイ
-1. 動作確認
-
-## 設定
-### Azure Active Directoy アプリケーション
-1. Redirect URL の設定
-
-### Azure Monitor
-
-
-### Azure Cosmos DB (Advanced)
+> 手順は [README.md - 3.Deploying to local environment 💻](../../README.md#3-deploying-to-local-environment-)をご参照ください。
 
 
 ---
@@ -244,15 +222,16 @@ Azure のアプリケーションをデプロイする前に、ローカル環�
 本ハンズオンで構築したアプリケーションは非常にシンプルで Sandbox としての利用用途を想定しています。今後より本格的にビジネスで活用していくためには、改良が必要になります。
 
 ## セキュリティ
-
+> コンテンツ作成中
 
 ## API Management
-
+> コンテンツ作成中
 
 ## デプロイの選択肢
+> コンテンツ作成中
+- https://learn.microsoft.com/ja-jp/azure/container-apps/compare-options
 
-
-https://learn.microsoft.com/ja-jp/azure/container-apps/compare-options
+<br/>
 
 ---
 # 6. 実装のベストプラクティス 📚
@@ -274,9 +253,10 @@ OpenAI 社が提供するモデルは汎用的なものであるため、ファ�
 - [Azure OpenAI Service - Transparency Note](https://learn.microsoft.com/en-us/legal/cognitive-services/openai/transparency-note?context=%2Fazure%2Fcognitive-services%2Fopenai%2Fcontext%2Fcontext&tabs=text)
 - [HAX Toolkit](https://www.microsoft.com/en-us/haxtoolkit/toolkit-overview/)
 
+<br/>
 
 ---
-# 8. その他 ❓
+# 7. その他 ❓
 ## Q&A
 コードに関する質問は GitHub の Issue よりお問い合わせください。
 - [Issue - Azure/openai-at-scale](https://github.com/Azure/openai-at-scale/issues)

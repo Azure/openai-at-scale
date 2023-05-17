@@ -27,10 +27,8 @@
 #### To run locally
 
 - OS - Windows 11, MacOS or Linux
-
-> **Note**
-> - For Windows client user, please use Ubuntu 20.04 LTS (Windows subsystem for Linux) to run this application. 
-> - GitHub Codespaces is supported as Linux envionment.
+> ⚠ For Windows client user, please use Ubuntu 20.04 LTS (Windows subsystem for Linux) to run this application. <br/>
+> ⚠ GitHub Codespaces is supported as Linux envionment.
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) (v4.28.1 or higher)
 - [Node.js](https://nodejs.org/en/download/) (v16.20 or higher)
@@ -48,14 +46,13 @@
     - Azure Active Directory application
     - Azure Log Analytics
     - (Optional) Azure Cosmos DB
-
-> **Warning**
-> - Free account is not supported
-
+> ⚠ Free account is not supported
 - Role
   - Contributor role or higher for Azure subscription
   - Permission to create Azure Active Directory application
   - Permission to create Azure OpenAI Service
+
+<br/>
 
 ### 1. Creating Azure OpenAI Service 🧠
 
@@ -101,6 +98,8 @@ az cognitiveservices account deployment create \
 
 </details>
 
+<br/>
+
 ### 2. Creating Azure Active Directory application 🔑
 
 Follow the steps in [register your application](https://learn.microsoft.com/azure/active-directory/develop/quickstart-register-app) to register your application.
@@ -108,6 +107,8 @@ Follow the steps in [register your application](https://learn.microsoft.com/azur
 - Select **`Single-page application (SPA)`** as platform type
 - The Redirect URI will be **`http://localhost:5000`** and/or **`http://localhost:5173`** for local development
 - Keep the **`Application (client) ID`** and **`Directory (tenant) ID`** for later use
+
+<br/>
 
 ### (Optional) 3. Creating Azure Cosmos DB 🪐	
 
@@ -117,6 +118,7 @@ You can create a Azure Cosmos DB account by following instructions on the Azure 
 - Container name will be **`chat_log`** and partition key will be **`/chat_session_id`**
 
 ### 4. Deploying to local environment 💻
+
 
 #### Environment variables
 
@@ -139,6 +141,7 @@ VITE_TENANTID="<your tenant id>"
 AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
 OPENAI_API_KEY="<your Azure OpenAI Service key>"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
+
 
 # (Optional) Azure Cosmos DB
 AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
@@ -206,6 +209,8 @@ For production<br/>
 npm run build
 ```
 > It is used to optimize and reduce the size of all application files which are deployed in app/backend/static folder. <br/>
+
+<br/>
 
 ### 5. Deploying to Azure ☁️
 
@@ -290,7 +295,7 @@ npm run build
 #### Collect application logs with Azure Log Analytics
 
   - example of Log collection
-  - deploy Log Analytics workspace
+    - deploy Log Analytics workspace
   
     ```shell
     export APP_SERIVCE=<your app service name>
@@ -302,7 +307,7 @@ npm run build
     az monitor log-analytics workspace create --name $WORKSPACE  --resource-group $RESOURCE_GROUP --location $LOCATION
     ```
 
-  - enable diagnostics setting  
+    - enable diagnostics setting  
 
     ```shell
     export RESOURCE_ID=`az webapp show -g $RESOURCE_GROUP -n $APP_SERIVCE --query id --output tsv | tr -d '\r'`
@@ -315,12 +320,10 @@ npm run build
     --logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
     ```
 
-#### Cosmos DB
-
-##### Setting up Azure Cosmos DB for logging chat messages 
 
 #### (Optional) Storage prompt log data to Azure Cosmos DB
 The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure Cosmos DB and used in deriving insights further downstream.
+
 
 ---
 

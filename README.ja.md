@@ -121,6 +121,7 @@ Azure ドキュメント [こちら](https://docs.microsoft.com/ja-jp/azure/cosm
 - **`Core (SQL)`** を API として選択します。
 - コンテナ名は **`chat_log`** とし、パーティションキーは **`/chat_session_id`** とします。
 
+<br/>
 
 ### 4. ローカル環境へのデプロイ 💻
 
@@ -296,6 +297,8 @@ npm run build
       ```shell
       az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
       ```
+
+<br/>
 
 ### 6. 設定 ⚙️
 #### Azure Log Analytics によるアプリケーションログの収集

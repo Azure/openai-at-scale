@@ -120,6 +120,8 @@ You can create a Azure Cosmos DB account by following instructions on the Azure 
 - Select **`Core (SQL)`** as API
 - Container name will be **`chat_log`** and partition key will be **`/chat_session_id`**
 
+<br/>
+
 ### 4. Deploying to local environment 💻
 
 
@@ -293,6 +295,8 @@ npm run build
       ```shell
       az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
       ```
+
+<br/>
 
 ### 6. Configuration ⚙️
 #### Collect application logs with Azure Log Analytics

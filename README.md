@@ -5,7 +5,7 @@
 
 🌏 English | [日本語](README.ja.md) 
 
-✨ **OpenAI at Scale** is a workshop by FastTrack for Azure team that helps customers to build and deploy simple ChatGPT UI application on Azure.
+✨ **OpenAI at Scale** is a workshop by **FastTrack for Azure in Microsoft** team that helps customers to build and deploy simple ChatGPT UI application on Azure.
 
 <img src="./docs/images/chatscreen.png" width="500" />
 
@@ -108,7 +108,7 @@ az cognitiveservices account deployment create \
 Follow the steps in [register your application](https://learn.microsoft.com/azure/active-directory/develop/quickstart-register-app) to register your application.
 
 - Select **`Single-page application (SPA)`** as platform type
-- The Redirect URI will be **`http://localhost:5000`** and/or **`http://localhost:5173`** for local development
+- The Redirect URI will be **`http://localhost:5000`** and **`http://localhost:5173`** for local development
 - Keep the **`Application (client) ID`** and **`Directory (tenant) ID`** for later use
 
 <br/>
@@ -120,15 +120,17 @@ You can create a Azure Cosmos DB account by following instructions on the Azure 
 - Select **`Core (SQL)`** as API
 - Container name will be **`chat_log`** and partition key will be **`/chat_session_id`**
 
+<br/>
+
 ### 4. Deploying to local environment 💻
 
 
 #### Environment variables
 
-You need to create following files to set up your environment variables before you spin up your application.
+You need to create `.env` files from `.env.sample` to set up your environment variables before you spin up your application.
 
 - `app/frontend/.env`
-  - This file will be used for authentication function by Azure AD SDK.
+  - This file will be used for authentication function by Azure Active Directory SDK.
 
 ```shell
 # Azure Active Directory application
@@ -167,11 +169,11 @@ export OPENAI_API_KEY=`az cognitiveservices account keys list \
 
 </details>
 
-### Python environment
+#### Python environment
 
 Python is required to run the backend Flask application.
 
-#### Install Python libraries
+##### Install Python libraries
 
 ```shell
 cd app/backend
@@ -180,7 +182,7 @@ source .backend_env/bin/activate  #bash
 pip install -r requirements.txt
 ```
 
-#### Start Backend (Flask)
+##### Start Backend (Flask)
 
 ```shell
 cd app/backend
@@ -188,11 +190,11 @@ flask run --debug #hot reload
 #python ./app.py 
 ```
 
-### Node.js environment
+#### Node.js environment
 
 Node.js is required to run the frontend React application.
 
-#### Install Node.js packages
+##### Install Node.js packages
 
 ```shell
 cd app/frontend
@@ -222,16 +224,16 @@ npm run build
 > ⚠ Before you run following command, you must run `npm run build` on app/frontend to set frontend files to backend static dir.
 
 - Example of Azure App Service
-  - Deploy app to App Service with easist way.
+  - Deploy app to Azure App Service with easist way.
 
     ```shell
     cd app/backend
     az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
     ```
 
-  - Deploy App Service Plan and Web App separately.
+  - Deploy Azure App Service Plan and Web App separately.
     - You can deploy an app with above command but the command doesn't allow to change detailed App Service Plan and Web App settings. So if you want to change these settings you can deploy it separately with following command.
-    - Create App Service Plan resources
+    - Create Azure App Service Plan resources
 
       ```shell
       az appservice plan create -g <Resource Group Name> -n <App Service Plan Name> --sku <SKU Name> --location eastus
@@ -288,13 +290,15 @@ npm run build
       az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
       ```
 
-    - After deployed webapp, you must change the environment variables with application settings of App Service.
+    - After deployed webapp, you must change the environment variables with application settings of Azure App Service.
 
       ```shell
       az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
       ```
 
+<br/>
 
+### 6. Configuration ⚙️
 #### Collect application logs with Azure Log Analytics
 
   - Example of Log collection
@@ -329,9 +333,9 @@ The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section expla
 
 
 ---
-## 🙋🏾‍♂️Question?
+## 🙋🏾‍♂️Question and Feedback
 
-[You can ask question about this repo on GitHub Issues.](https://github.com/Azure/openai-at-scale/issues)
+You can ask question and feedback about this repo on [GitHub Issues](https://github.com/Azure/openai-at-scale/issues).
 
 ---
 ## 📚 Resources
@@ -341,6 +345,6 @@ The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section expla
 
 ---
 ## 🤝 Contributing
-We are welcome your contribution from customers and internal Microsoft employees. Please see [CONTRIBUTING](./CONTRIBUTING.md). We appreciate all contributors to make this repo thrive.
+We are welcome your contribution from customers and internal Microsoft employees. Please see [CONTRIBUTING](./CONTRIBUTING.md). We appreciate all contributors to make this repo thrive!
 
 <a href="https://github.com/Azure/openai-at-scale/graphs/contributors"><img src="https://contrib.rocks/image?repo=Azure/openai-at-scale&max=240&columns=18" /></a>

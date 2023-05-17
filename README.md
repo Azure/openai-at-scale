@@ -203,7 +203,7 @@ npm run build
   az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
   ```
 
-  - after dployed webapp, you must change the environment variables with application settings of App Service.
+  - after deployed webapp, you must change the environment variables with application settings of App Service.
   ```shell
   az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name>
   ```

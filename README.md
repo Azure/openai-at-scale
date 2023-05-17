@@ -191,7 +191,6 @@ npm run build
 
 
 ### 4. Deploying to Azure ☁️
-@<Kyohei Moriyama> さん、よろしくお願いします！
 > Under construction
 
 #### Deploy to Azure App Service

@@ -4,6 +4,10 @@ import openai
 from flask import Flask, request, jsonify
 from azure.identity import DefaultAzureCredential
 from approaches.chatreadretrieveread import ChatReadRetrieveReadApproach
+from dotenv import load_dotenv
+
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(env_path, verbose=True, override=True)
 
 # Replace these with your own values, either in environment variables or directly here
 AZURE_OPENAI_SERVICE = os.environ.get("AZURE_OPENAI_SERVICE") or "myopenai"
@@ -48,11 +52,13 @@ def chat():
         impl = chat_approaches.get(approach)
         if not impl:
             return jsonify({"error": "unknown approach"}), 400
-        r = impl.run(request.json["history"], request.json.get("overrides") or {}, request.json.get("sessionConfig") or {})
+        r = impl.run(request.json["history"], request.json.get("overrides") or {}, request.json.get("sessionConfig") or {}, request.json.get("userInfo") or {})
         return jsonify(r)
+
     except Exception as e:
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
-    
+
+
 if __name__ == "__main__":
     app.run()

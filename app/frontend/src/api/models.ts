@@ -5,13 +5,13 @@ export const enum Approaches {
 }
 
 export type AskRequestOverrides = {
-    semanticRanker?: boolean;
-    semanticCaptions?: boolean;
-    excludeCategory?: string;
     promptSystemTemplate?: string;
     maxResponse?: number;
     temperature?: number;
     top?: number;
+};
+
+export type SessionConfig = {
     pastMessages?: number;
 };
 
@@ -25,8 +25,25 @@ export type ChatTurn = {
     bot: string | undefined;
 };
 
+export type UserInfo = {
+    username?: string;
+    email?: string;
+};
+
+export type AccessToken = {
+    accessToken: string;
+};
+
+export type SessionId = {
+    sessionId: string;
+};
+
 export type ChatRequest = {
     history: ChatTurn[];
     approach: Approaches;
     overrides?: AskRequestOverrides;
+    sessionConfig?: SessionConfig;
+    userInfo?: UserInfo;
+    accessToken?: AccessToken;
+    sessionId?: SessionId;
 };

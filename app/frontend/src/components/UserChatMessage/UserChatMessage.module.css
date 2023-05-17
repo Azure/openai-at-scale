@@ -3,13 +3,20 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    margin-top: 20px;
     margin-bottom: 20px;
-    max-width: 80%;
     margin-left: auto;
+    max-width: 80%;
 }
 
 .logo {
-    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 120px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .message {
@@ -18,4 +25,5 @@
     border-radius: 8px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.14), 0px 0px 2px rgba(0, 0, 0, 0.12);
     outline: transparent solid 1px;
+    max-width: 80%;
 }

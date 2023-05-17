@@ -9,6 +9,7 @@ import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { UserChatMessage } from "../../components/UserChatMessage";
 import { ClearChatButton } from "../../components/ClearChatButton";
+import { useAppContext } from "../../context/AppContext";
 
 const Chat = () => {
     //Parameters of model
@@ -16,15 +17,16 @@ const Chat = () => {
     const [promptSystemTemplate, setPromptSystemTemplate] = useState<string>("");
     const [temperature, setTemperature] = useState<number>(0.5);
     const [top, setTop] = useState<number>(0.95);
+
     //Session settings
     const [pastMessages, setPastMessages] = useState<number>(10);
-
     const lastQuestionRef = useRef<string>("");
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<unknown>();
-
     const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
+
+    //UserInfo
+    const app = useAppContext();
 
     const makeApiRequest = async (question: string) => {
         console.log("make api request ....", question);
@@ -44,8 +46,20 @@ const Chat = () => {
                     promptSystemTemplate: promptSystemTemplate.length === 0 ? undefined : promptSystemTemplate,
                     maxResponse: maxResponse,
                     temperature: temperature,
-                    top: top,
+                    top: top
+                },
+                sessionConfig: {
                     pastMessages: pastMessages
+                },
+                userInfo: {
+                    username: app.user?.displayName,
+                    email: app.user?.email
+                },
+                accessToken: {
+                    accessToken: app.accessToken?.accessToken || ""
+                },
+                sessionId: {
+                    sessionId: app.sessionId?.sessionId || ""
                 }
             };
             console.log("request: ", request);
@@ -85,9 +99,7 @@ const Chat = () => {
                                 {answers.map((answer, index) => (
                                     <div key={index}>
                                         <UserChatMessage message={answer[0]} />
-                                        {/* <div className={styles.chatMessageGpt}> */}
                                         <Answer key={index} answer={answer[1]}></Answer>
-                                        {/* </div> */}
                                     </div>
                                 ))}
                                 {isLoading && (
@@ -133,7 +145,7 @@ const Chat = () => {
                         <Slider
                             className={styles.chatSettingsSeparator}
                             label="Max response"
-                            min={0}
+                            min={1}
                             max={4000}
                             step={1}
                             showValue

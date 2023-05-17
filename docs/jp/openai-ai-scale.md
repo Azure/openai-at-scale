@@ -221,15 +221,16 @@ az login --use-device
 # 5. 今後の拡張案  💡
 本ハンズオンで構築したアプリケーションは非常にシンプルで Sandbox としての利用用途を想定しています。今後より本格的にビジネスで活用していくためには、改良が必要になります。
 
-## セキュリティ
-> コンテンツ作成中
+## ネットワーク アクセスの制御
+今回のハンズオンの環境は複数の PaaS サービスを使用しています。PaaS サービスはパブリック インターネットからアクセスすることが可能ですが、ほとんどのサービスではネットワーク アクセスの経路を制限するための設定を持っています。ここではパブリック インターネットからのアクセスを許可された経路だけに制限し、リソース間のアクセスを閉域ネットワークで行うための構成を紹介します。
+
+<img src="../images/network-control.png" width="800" />
 
 ## API Management
-> コンテンツ作成中
+API Management（以下、APIM） には、[こちら](https://learn.microsoft.com/ja-jp/azure/api-management/api-management-key-concepts) に紹介されているように、API ゲートウェイとしての機能、管理プレーンとして API を構成するための機能、API を開発者として利用するための、開発者ポータルなどがあります。特に今回のように、frontend のための backend API を公開するケースにおいては、APIM のゲートウェイ機能のAPI呼び入れ、JWTトークン、使用量のレートリミット、ロギングなどの機能が役にたつでしょう。
 
 ## デプロイの選択肢
-> コンテンツ作成中
-- https://learn.microsoft.com/ja-jp/azure/container-apps/compare-options
+今回の環境では、Azure のアプリケーション PaaS として運用が容易である、Azure App Service を使いましたが、その他のオプションについては、[Container Apps と他の Azure コンテナー オプションの比較](https://learn.microsoft.com/ja-jp/azure/container-apps/compare-options) と [Azure でアプリケーションをホストする](https://learn.microsoft.com/ja-jp/azure/developer/intro/hosting-apps-on-azure) のドキュメントを参考に選択すると良いでしょう。また、アプリケーションをどこにホストするか迷った時には、[Azure コンピューティング サービスを選択する](https://learn.microsoft.com/ja-jp/azure/architecture/guide/technology-choices/compute-decision-tree) のフローチャートも参考にしていただけたらと思います。
 
 <br/>
 

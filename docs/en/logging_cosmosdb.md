@@ -1,8 +1,8 @@
 ## Logging prompt log with Azure Cosmos DB
-Large scale systems that are adopting Open AI APIs to incorporate Large Language Models such as chatgpt. Logging the user interactions in terms of prompts and responses is very critical. This data can be used for downstream analytis in determining patterns of conversations, identifying risks and effectiveness of the model in providing accurate responses. 
+Large scale systems that are adopting Azure OpenAI APIs to incorporate Large Language Models such as chatgpt. Logging the user interactions in terms of prompts and responses is very critical. This data can be used for downstream analytis in determining patterns of conversations, identifying risks and effectiveness of the model in providing accurate responses. 
 
 ### Azure Cosmos DB
-We have decided to store the prompt log in Azure cosmos db as it can scale to a large number of concurrent transactions and has the provision of an Analytical store that enables executing analytical queries at scale with controlled costs.
+We have decided to store the prompt log in Azure Cosmos DB as it can scale to a large number of concurrent transactions and has the provision of an Analytical store that enables executing analytical queries at scale with controlled costs.
 
 ### Typical downstream Analytics
 Following are examples of some analytical use-cases in addition to the monitoring and logging use-cases that can be built. This repository will have a set of pre-designed dashboard implementing the below use-cases and can be extended to others depending on specific requirements of the implementations.
@@ -53,5 +53,5 @@ Following structure automatically created in the analytical store will enable fu
 
 Coming Soon
 1. Setting up Azure Cosmos DB for prompt logging
-2. Inserting prompt log data into Cosmos DB
+2. Inserting prompt log data into Azure Cosmos DB
 3. Dashboards for Analytics

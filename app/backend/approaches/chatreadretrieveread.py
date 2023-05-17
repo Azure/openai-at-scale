@@ -20,8 +20,8 @@ class ChatReadRetrieveReadApproach(Approach):
         max_tokens = overrides.get("maxResponse") or 800
         promptSystemTemplate = overrides.get("prompt_system_template") or "You are an AI assistant that helps people find information."
         pastMessages = sessionConfig.get("pastMessages") or 10
-        user_name= userInfo.get("username") or "anonymous"
-        user_id = userInfo.get("email") or "anonymous"
+        user_name= userInfo.get("username") or "anonymous user_name"
+        user_id = userInfo.get("email") or "anonymous user_id"
         chat_session_id = header.get("SessionId") or "anonymous-" + str(uuid.uuid4())
 
         # Step
@@ -52,6 +52,7 @@ class ChatReadRetrieveReadApproach(Approach):
         cosmosdb_logging.insert_chat_log(document_definition)
         return {"answer": completion.choices[0].message["content"]}
     
+
     def get_chat_history_as_text(self, history, pastMessages) -> list:
         history_text = []
         for h in history:

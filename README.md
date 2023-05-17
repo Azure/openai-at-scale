@@ -155,7 +155,7 @@ Python is required to run the backend Flask application.
 ```shell
 cd app/backend
 python -m venv ./backend_env
-source .backend_env/bin/activate
+source .backend_env/bin/activate  #bash
 pip install -r requirements.txt
 ```
 
@@ -163,8 +163,8 @@ pip install -r requirements.txt
 
 ```shell
 cd app/backend
-python ./app.py 
-#flask run --debug ## hot reload
+flask run --debug #hot reload
+#python ./app.py 
 ```
 
 ### Node.js environment

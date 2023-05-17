@@ -214,7 +214,7 @@ npm run build
   az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name>
   ```
 
-#### Azure Log Analytics
+#### Collect application logs with Azure Log Analytics
 - example of Log collection
   - deploy Log Analytics workspace
   ```shell
@@ -239,7 +239,7 @@ npm run build
 	--logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
   ```
 
-#### (Optional) Azure Cosmos DB
+#### (Optional) Storage prompt log data to Azure Cosmos DB
 The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section explains in detail on how chat messages can be logged into Azure Cosmos DB and used in deriving insights further downstream.
 
 

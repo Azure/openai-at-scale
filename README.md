@@ -3,9 +3,9 @@
 [![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=622759641&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2&skip_quickstart=true&geo=SoutheastAsia)
 [![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure/openai-at-scale)
 
-English | [日本語](README.ja.md) 
+🌏 English | [日本語](README.ja.md) 
 
-**OpenAI at Scale** is a workshop by FastTrack for Azure team that helps customers to build and deploy simple ChatGPT UI application on Azure.
+✨ **OpenAI at Scale** is a workshop by FastTrack for Azure team that helps customers to build and deploy simple ChatGPT UI application on Azure.
 
 <img src="./docs/images/chatscreen.png" width="500" />
 
@@ -328,14 +328,18 @@ The [logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) section expla
 
 
 ---
-
 ## 🙋🏾‍♂️Question?
 
 [You can ask question about this repo on GitHub Issues.](https://github.com/Azure/openai-at-scale/issues)
 
 ---
-
 ## 📚 Resources
 
 - [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
   - This repo is based on this sample code.
+
+---
+## 🤝 Contributing
+We are welcome your contribution from customers and internal Microsoft employees. Please see [CONTRIBUTING](./CONTRIBUTING.md). We appreciate all contributors to make this repo thrive.
+
+<a href="https://github.com/Azure/openai-at-scale/graphs/contributors"><img src="https://contrib.rocks/image?repo=Azure/openai-at-scale&max=240&columns=18" /></a>

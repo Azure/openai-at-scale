@@ -41,28 +41,13 @@ class ChatReadRetrieveReadApproach(Approach):
             stop=None)
         print("completion: ", completion)
 
-
         document_definition = { "id": str(uuid.uuid4()),
                                 "chat_session_id": chat_session_id, 
                             "user": {"name": user_name,"user_id":user_id}, 
-                            'message': {"id":completion.get("id") or "anonymous",
-                                        "prompt":[{"role":"system","content":"test content"},{"role":"human","content":"test content works!"}],
-                                        "other_attr":[{"completion":  {
-                                                            "choices": [
-                                                            {
-                                                                "finish_reason": "stop",
-                                                                "index": 0,
-                                                                "message": {
-                                                                "content": "",
-                                                                "role": "assistant"
-                                                                }
-                                                            }
-                                                            ]}},{"created":"datetime"},{"model": "gpt-35-turbo"},{"object": "chat.completion"},{"usage": {
-                                                                "completion_tokens": 95,
-                                                                "prompt_tokens": 664,
-                                                                "total_tokens": 759
-                                                            }}],
-                                                "previous_message_id":"previous_message_id"}}
+                            'message': {"id":completion.get("id") or "anonymous-id",
+                                        "prompt":[system_prompt_template]+self.get_chat_history_as_text(history, pastMessages),
+                                        "other_attr":[{"completion": completion}],
+                                        "previous_message_id":"previous_message_id"}}
         
         cosmosdb_logging.insert_chat_log(document_definition)
         return {"answer": completion.choices[0].message["content"]}

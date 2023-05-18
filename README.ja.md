@@ -155,7 +155,9 @@ AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
 AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
 AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
 ```
-
+> ⚠ 本番環境においては [Azure Key Vault](https://azure.microsoft.com/ja-jp/products/key-vault) を用いて環境変数を設定することを推奨します。
+  
+  
 <details><summary>Azure CLI を用いて環境変数を取得するコマンド例</summary><br/>
 
 ```shell

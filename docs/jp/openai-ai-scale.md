@@ -235,8 +235,7 @@ az login --use-device
 
 ---
 # 4. ChatGPT アプリケーション構築 🤖
-> 手順は [README.md - 3.Deploying to local environment 💻](../../README.md#3-deploying-to-local-environment-)をご参照ください。
-
+> 手順は [README.ja.md - 4. ローカル環境へのデプロイ 💻](../../README.ja.md#4-ローカル環境へのデプロイ-)をご参照ください。
 
 ---
 # 5. 今後の拡張案  💡

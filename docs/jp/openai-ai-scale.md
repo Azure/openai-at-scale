@@ -247,6 +247,49 @@ az login --use-device
 
 <img src="../images/network-control.png" width="800" />
 
+- シークレットを Key Vault に保存する
+  Open AI サービスにアクセスするキーはセキュアに取り扱う必要があるため、KeyVault に保存したものを参照するように構成します。
+
+  - App Service で Managed ID を有効化します。
+  - Key Vault を作成し、Key Vault の RBAC で App Service の Managed ID に [キー コンテナー シークレット ユーザー] を割り当てます。
+  - シークレットに Open AI サービスのキーを保存します。
+  - App Service のアプリケーション設定で次の環境変数を追加します。
+    名前 : OPENAI_API_KEY、値 : @Microsoft.KeyVault(SecretUri=<シークレットのURI>)  
+    [参考：App Service と Azure Functions の Key Vault 参照を使用する](https://learn.microsoft.com/ja-jp/azure/app-service/app-service-key-vault-references?tabs=azure-cli)
+
+- 仮想ネットワークの作成  
+  リソース間のネットワークアクセスを閉域化するための仮想ネットワークを作成します。各 PaaS リソースのプライベート エンドポイントを接続するために、リソースの種類ごとにサブネットを作成します。
+
+- Application Gateway の作成
+  アプリケーションの負荷分散とアクセス制御、既知の攻撃の検出とブロックを行うために Application Gateway を作成します。
+  
+  - App Service をバックエンドプールに追加し、Application Gateway 経由でアプリケーションにアクセスできるようにします。
+  - Application Gateway へのアクセスは許可された IP からのみの通信に制限します。
+  - Application Gateway の診断ログを Log Analytics ワークスペースに送信します。
+
+- App Service の閉域化
+  App Service はアプリケーションに対するインバウンド接続と、App Service からのアウトバウンド接続は異なる設定を持つため、それぞれに設定が必要です。  
+  
+  - App Service でプライベート エンドポイントを作成します。
+  - 「パブリック アクセスを許可する」を無効化し、パブリック インターネットからのアクセスが無効になることを確認します。
+  - App Service で VNET 統合を有効化し、アウトバウンド接続が仮想ネットワークを経由する設定にします。  
+
+    ※ この構成により、パブリック インターネットからのアプリケーション コードのアップロードも制限されるようになります。アプリケーションを更新する場合には仮想ネットワークを経由するアクセスとするか、一時的にパブリックアクセスを許可してください。
+
+- Key Vault の閉域化
+  - Key Vault でプライベートエンドポイントを作成します。
+  - 「パブリック アクセスの無効化」を選択し、パブリック インターネットからのアクセスが無効になることを確認します。
+  - Key Vault の診断ログを Log Analytics ワークスペースに送信します。
+
+    ※ App Service の VNET 統合が既に有効化されているため、App Service からのアクセスは仮想ネットワーク経由で行われます。
+
+- Azure OpenAI Service の閉域化
+
+  - OpenAI Service でプライベート エンドポイントを作成します。
+  - 許可するアクセス元を [無効] に設定し、パブリック インターネットからのアクセスが無効になることを確認します。
+
+    ※ この構成により、パブリック インターネット経由でアクセスするローカルコンピューター上のアプリケーションからのアクセスや、Azure Open AI Studio からのアクセスが制限されます。現在この構成の有効化 / 無効化には数時間程度かかる場合があるため注意してください。
+
 ## API Management
 API Management（以下、APIM） には、[こちら](https://learn.microsoft.com/ja-jp/azure/api-management/api-management-key-concepts) に紹介されているように、API ゲートウェイとしての機能、管理プレーンとして API を構成するための機能、API を開発者として利用するための、開発者ポータルなどがあります。特に今回のように、frontend のための backend API を公開するケースにおいては、APIM のゲートウェイ機能のAPI呼び入れ、JWTトークン、使用量のレートリミット、ロギングなどの機能が役にたつでしょう。
 

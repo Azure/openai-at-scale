@@ -52,7 +52,7 @@ class ChatReadRetrieveReadApproach(Approach):
                                         "other_attr":[{"completion": completion}],
                                         "previous_message_id":"previous_message_id"}}
         
-        cosmosdb_logging.insert_chat_log(document_definition) # Store prompt log data into Azure Cosmos DB
+        #cosmosdb_logging.insert_chat_log(document_definition) # Store prompt log data into Azure Cosmos DB
         return {"answer": completion.choices[0].message["content"]}
     
 

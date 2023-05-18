@@ -7,6 +7,8 @@
 
 ✨ **OpenAI at Scale** は Microsoft 社の FastTrack for Azure チームによるワークショップです。Azure 上にシンプルは GhatGPT のインターフェースを持つアプリケーションをビルドしデプロイします。
 
+👉 [Workshop 資料](./docs/jp/openai-ai-scale.md) 📖 
+
 <img src="./docs/images/chatscreen.png" width="500" />
 
 ---

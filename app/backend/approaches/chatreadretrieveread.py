@@ -11,10 +11,11 @@ class ChatReadRetrieveReadApproach(Approach):
         self.gpt_deployment = gpt_deployment
 
     def run(self, history: list[dict], overrides: dict, sessionConfig: dict, userInfo:dict, header: dict) -> any:
-        print("history:", history)
-        print("override:", overrides)
-        print("sessionConfig:", sessionConfig)
-        print("userInfo:", userInfo)
+        request_uuid=uuid.uuid4()
+        print("requestID:",request_uuid,",history:", history)
+        print("requestID:",request_uuid,",override:", overrides)
+        print("requestID:",request_uuid,",sessionConfig:", sessionConfig)
+        print("requestID:",request_uuid,",userInfo:", userInfo)
         top_p = overrides.get("top") or 0.95
         temperature = overrides.get("temperature") or 0.7
         max_tokens = overrides.get("maxResponse") or 800

@@ -146,16 +146,37 @@ App Service は、まず初めに、App Service Plan　を作り、その上に 
 - ポータルを使う場合
   - ポータルの操作など、詳しい説明は、割愛しますが、 App Service Plan を構成し、作成した Web App にアプリをデプロイするという流れは変わりません。Web App　のデプロイメントオプションについては、[こちら](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-best-practices)のドキュメントを参考にしてください。
 
-## Azure Log Analytics
+## Azure Monitor
+
 **製品概要**
+
+[Azure Monitor ログの概要](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/data-platform-logs)
 
 **構築と設定**
 
+Azure Monitor ログは Azure 上で様々なデータソースからログを収集し、分析を行うための Azure Monitor の機能です。Azure Monitor ログでは Log Analytics ワークスペースを作成し、リソースのログを収集します。
 
-## Azure Cosmos DB
-> コンテンツ作成中
+  - 次のドキュメントを参考に、Log Analytics ワークスペースを作成します。
+  
+    [Log Analytics ワークスペースを作成する](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/quick-create-workspace?tabs=azure-portal)
 
-<br/>
+
+  - 多くの Azure リソースは診断設定を持っており、様々なタイプのログを Log Analytics ワークスペースに取り込むことができます。
+    
+    [Azure Monitor の診断設定](https://learn.microsoft.com/ja-jp/azure/azure-monitor/essentials/diagnostic-settings?tabs=portal)
+
+Log Analytics ワークスペースを作成し、App Service のログを取り込むためのコマンドの例は次のリンクを参照してください。
+
+[Collect application logs with Azure Log Analytics](https://github.com/Azure/openai-at-scale/blob/main/README.md#collect-application-logs-with-azure-log-analytics)
+
+**ログの分析**
+  - Log Analytics ワークスペースに集約されたログは Kusto Query Language (KQL) という言語を使用して検索や可視化を行うことができます。基本的な使い方は[こちらのチュートリアル](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/log-analytics-tutorial)を参照してください。
+  
+  - 言語の詳細なリファレンスは以下のドキュメントを参考にしてください。
+
+
+    [Kusto クエリ言語](https://learn.microsoft.com/ja-jp/azure/data-explorer/kusto/query/)
+
 
 ---
 # 3. クライアント開発環境の構築 🖥️

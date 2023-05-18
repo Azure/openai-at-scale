@@ -153,7 +153,9 @@ AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
 AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
 AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
 ```
-
+> ⚠ Please use [Azure Key Vault](https://azure.microsoft.com/en-US/products/key-vault) to configure environment variables in production environments.
+  
+  
 <details><summary>command examples to get environment variables from Azure CLI.</summary><br/>
 
 ```shell

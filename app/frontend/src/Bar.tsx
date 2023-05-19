@@ -95,12 +95,12 @@ export default function Bar() {
                                 Sample code
                             </Label>
                         </Stack.Item>
-                        <Stack.Item className={styles.stack}>Visit the GitHub repo to check the source code of this application. experience.</Stack.Item>
+                        <Stack.Item className={styles.stack}>You can ask question and feedback about this application on GitHub Issues.</Stack.Item>
                         <Stack.Item className={styles.stack}>
                             <a
-                                href="https://github.com/Azure/openai-at-scale"
+                                href="https://github.com/Azure/openai-at-scale/issues"
                                 target={"_blank"}
-                                title="Github repository link"
+                                title="Github Issues"
                                 style={{ color: "rgb(1, 92, 218)" }}
                             >
                                 Azure/openai-at-scale
@@ -119,7 +119,7 @@ export default function Bar() {
                                 Sample code
                             </Label>
                         </Stack.Item>
-                        <Stack.Item className={styles.stack}>Visit the GitHub repo to check the source code of this application. experience.</Stack.Item>
+                        <Stack.Item className={styles.stack}>Visit the GitHub repo to check the source code of this application.</Stack.Item>
                         <Stack.Item className={styles.stack}>
                             <a
                                 href="https://github.com/Azure/openai-at-scale"

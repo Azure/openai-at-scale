@@ -281,8 +281,15 @@ npm run build
 
         ```shell
         cd app/frontend
-        npm run rebuild
+        npm run build
         ```
+  
+    - Before deployed webapp, you must change the environment variable with application settings of Azure App Service.
+
+      ```shell
+      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+      ```
+
 
     - Deploy demo app to WebApp
 

@@ -288,6 +288,12 @@ npm run build
         npm run build
         ```
 
+    - Web アプリケーションのデプロイ前に、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+
+      ```shell
+      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+      ```
+
     - Web アプリケーションのデプロイ
 
       ```shell

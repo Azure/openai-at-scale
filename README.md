@@ -238,7 +238,7 @@ npm run build
     - Create Azure App Service Plan resources
 
       ```shell
-      az appservice plan create -g <Resource Group Name> -n <App Service Plan Name> --sku <SKU Name> --location eastus
+      az appservice plan create -g <Resource Group Name> --is-linux -n <App Service Plan Name> --sku <SKU Name> --location eastus
       ```
 
     - Create WebApp Resource on above App Service Plan

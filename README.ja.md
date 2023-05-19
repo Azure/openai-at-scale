@@ -285,7 +285,7 @@ npm run build
 
         ```shell
         cd app/frontend
-        npm run rebuild
+        npm run build
         ```
 
     - Web アプリケーションのデプロイ

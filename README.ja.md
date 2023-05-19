@@ -292,7 +292,7 @@ npm run build
 
       ```shell
       cd app/backend
-      zip -r deploy.zip *
+      zip -r deploy.zip .
       az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
       ```
 

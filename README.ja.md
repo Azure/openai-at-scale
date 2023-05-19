@@ -242,7 +242,7 @@ npm run build
     - Azure App Service Plan リソースの作成します。
 
       ```shell
-      az appservice plan create -g <Resource Group Name> -n <App Service Plan Name> --sku <SKU Name> --location eastus
+      az appservice plan create -g <Resource Group Name> --is-linux -n <App Service Plan Name> --sku <SKU Name> --location eastus
       ```
 
     - 作成した Azure App Service Plan 上に Web アプリケーションのリソースを作成します。
@@ -287,6 +287,12 @@ npm run build
         cd app/frontend
         npm run build
         ```
+
+    - Web アプリケーションのデプロイ前に、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+
+      ```shell
+      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+      ```
 
     - Web アプリケーションのデプロイ
 

@@ -92,7 +92,7 @@ export default function Bar() {
                         <Stack.Item>
                             <Label className={styles.stack}>
                                 <img src={github} alt="Github logo" aria-label="Link to github repository" height="20px" style={{ padding: "0 5px 0 0" }} />
-                                Sample code
+                                Question & Feedback
                             </Label>
                         </Stack.Item>
                         <Stack.Item className={styles.stack}>You can ask question and feedback about this application on GitHub Issues.</Stack.Item>

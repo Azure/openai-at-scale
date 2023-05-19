@@ -5,6 +5,7 @@ import styles from "./Layout.module.css";
 
 import Avatar from "../../Avatar";
 import Bar from "../../Bar";
+import NavBar from "../../NavBar"
 
 const Layout = () => {
     return (
@@ -23,6 +24,9 @@ const Layout = () => {
                         <div className={styles.headerAvatar}>
                             <Avatar />
                         </div>
+                    </Stack.Item>
+                    <Stack.Item align="center" grow disableShrink className={styles.headerAvatar}>
+                            <NavBar />
                     </Stack.Item>
                 </Stack>
             </header>

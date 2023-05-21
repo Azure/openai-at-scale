@@ -4,8 +4,9 @@ import { Stack } from "@fluentui/react";
 import styles from "./Layout.module.css";
 
 import Avatar from "../../Avatar";
+import Avatar2 from "../../Avatar2";
 import Bar from "../../Bar";
-import NavBar from "../../NavBar"
+import {NavBar} from "../../NavBar"
 
 const Layout = () => {
     return (
@@ -25,9 +26,14 @@ const Layout = () => {
                             <Avatar />
                         </div>
                     </Stack.Item>
-                    <Stack.Item align="center" grow disableShrink className={styles.headerAvatar}>
+                    {/* <Stack.Item align="center" grow disableShrink className={styles.headerAvatar}>
+                        <div className={styles.headerAvatar}>
+                            <Avatar2 />
+                        </div>
+                    </Stack.Item> */}
+                    {/* <Stack.Item align="center" grow disableShrink className={styles.headerAvatar}>
                             <NavBar />
-                    </Stack.Item>
+                    </Stack.Item> */}
                 </Stack>
             </header>
             <Outlet />

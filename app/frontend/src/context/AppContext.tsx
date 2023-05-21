@@ -7,6 +7,8 @@ import { InteractionType, PublicClientApplication } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 import { getUser, getProfilePhoto } from "../GraphService";
 import { v4 as uuidv4 } from "uuid";
+import { Client } from '@microsoft/microsoft-graph-client';
+import { User, Event } from "microsoft-graph";
 
 // <AppContextSnippet>
 export interface AppUser {
@@ -68,6 +70,7 @@ export default function ProvideAppContext({ children }: ProvideAppContextProps) 
 // </AppContextSnippet>
 
 function useProvideAppContext() {
+    const [userInfo, setUserInfo] = useState();
     const msal = useMsal();
     const [user, setUser] = useState<AppUser | undefined>(undefined);
     const [error, setError] = useState<AppError | undefined>(undefined);
@@ -92,69 +95,113 @@ function useProvideAppContext() {
     });
     // </AuthProviderSnippet>
 
+    async function getAccessToken(): Promise<string | undefined> {
+        try {
+          console.log("####")
+          const response = await fetch('/.auth/me');
+          const payload = await response.json();
+          console.log(payload[0])
+          console.log(payload[0].access_token)
+          return payload[0].access_token;
+        } catch (error) {
+          console.error('No accessToken could be found');
+          return undefined;
+        }
+    }
+
+    let graphClient : Client | undefined = undefined;
+
+    //create graphClient from access token from .auth/me
+    async function getGraphClient(accessToken: string) {
+        console.log("getGraphClient accessToken: " + accessToken);
+        if (graphClient === undefined) {
+            graphClient = Client.init({
+                authProvider: (done) => {
+                    done(null, accessToken);
+                }
+            });
+        }
+        return graphClient;
+    }
+    
+
+    async function getUser(accessToken: string): Promise<User> {
+        const client = await getGraphClient(accessToken);
+        const user = await client.api('/me').get();
+        return user;
+    }
+    
+    async function getProfilePhoto(accessToken: string): Promise<string> {
+        const client = await getGraphClient(accessToken);
+        const photo = await client.api('/me/photo/$value').get();
+        const url = window.URL || window.webkitURL;
+        return url.createObjectURL(photo);
+    }
+
     // <UseEffectSnippet>
     useEffect(() => {
         const checkUser = async () => {
             if (!user) {
                 try {
-                    // Check if user is already signed in
-                    const account = msal.instance.getActiveAccount();
-                    if (account) {
-                        // Get the user from Microsoft Graph
-                        const user = await getUser(authProvider);
-                        console.log("user", user);
-                        const avatar = await getProfilePhoto(authProvider);
-                        setUser({
-                            displayName: user.displayName || "",
-                            email: user.mail || "",
-                            avatar: avatar || ""
-                        });
-                        msal.instance
-                            .acquireTokenSilent({
-                                scopes: ["user.read"],
-                                account: account
-                            })
-                            .then(function (accessTokenResponse) {
-                                setAccessToken({
-                                    accessToken: accessTokenResponse.accessToken
-                                });
-                                console.log("token", accessTokenResponse.accessToken);
-                                console.log("session id", accessTokenResponse.idTokenClaims);
-                            });
+                    //if access token exists, set it
+                    const token = await getAccessToken();
+                    const user = await getUser(token || "")
+                    console.log("user", user)
+                    const avatar = await getProfilePhoto(token || "")
+                    console.log("avatar", avatar)
+                    setUser({
+                        displayName: user.displayName || "",
+                        email: user.mail || "",
+                        avatar: avatar || ""
+                    });
+                    setIsAuthenticated(true);
 
-                        //generate Session ID after user is logged in
-                        setSessionId({
-                            sessionId: uuidv4()
-                        });
-                    }
-                } catch (err: any) {
-                    displayError(err.message);
+                } catch (err:any) {
+                    displayError("Error signing in", err.message);
                 }
             }
         };
         checkUser();
-    });
+    }
+    );
+
+    async function getUserInfo() {
+        try {
+          const response = await fetch('/.auth/me');
+          const payload = await response.json();
+          const { clientPrincipal } = payload;
+          console.log(clientPrincipal)
+          return clientPrincipal;
+        } catch (error) {
+          console.error('No profile could be found');
+          return undefined;
+        }
+    }
 
     const signIn = async () => {
-        await msal.instance.loginPopup({
-            scopes: ["user.read"],
-            prompt: "select_account"
-        });
+        console.log("signIn")
 
-        // Get the user from Microsoft Graph
-        const user = await getUser(authProvider);
+        // setUserInfo(await getUserInfo());
 
-        setUser({
-            displayName: user.displayName || "",
-            email: user.mail || ""
-        });
-        setIsAuthenticated(true);
+        // await msal.instance.loginPopup({
+        //     scopes: ["user.read"],
+        //     prompt: "select_account"
+        // });
+
+        // // Get the user from Microsoft Graph
+        // const user = await getUser(authProvider);
+
+        // setUser({
+        //     displayName: user.displayName || "",
+        //     email: user.mail || ""
+        // });
+        // setIsAuthenticated(true);
     };
 
     const signOut = async () => {
-        await msal.instance.logoutPopup();
-        setUser(undefined);
-        setIsAuthenticated(false);
+        // await msal.instance.logoutPopup();
+        // setUser(undefined);
+        // setIsAuthenticated(false);
     };
 
     const configureSessionId = (sessionId: string) => {

@@ -250,10 +250,12 @@ az login --use-device
   Open AI サービスにアクセスするキーはセキュアに取り扱う必要があるため、KeyVault に保存したものを参照するように構成します。
 
   - App Service で Managed ID を有効化します。
-  - Key Vault を作成し、Key Vault の RBAC で App Service の Managed ID に [キー コンテナー シークレット ユーザー] を割り当てます。
+  - Key Vault を作成します。
+  - Key Vault の RBAC でシークレットの操作を行うユーザーに [キー コンテナー シークレット責任者] を割り当てます。
   - シークレットに Open AI サービスのキーを保存します。
-  - App Service のアプリケーション設定で次の環境変数を追加します。
-    名前 : OPENAI_API_KEY、値 : @Microsoft.KeyVault(SecretUri=<シークレットのURI>)  
+  - Key Vault の RBAC で App Service の Managed ID に [キー コンテナー シークレット ユーザー] を割り当てます。
+  - App Service のアプリケーション設定で次の環境変数を追加します。  
+    **名前 : OPENAI_API_KEY、値 : @Microsoft.KeyVault(SecretUri=<シークレットのURI>)**  
     [参考：App Service と Azure Functions の Key Vault 参照を使用する](https://learn.microsoft.com/ja-jp/azure/app-service/app-service-key-vault-references?tabs=azure-cli)
 
 - 仮想ネットワークの作成  

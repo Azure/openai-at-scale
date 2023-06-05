@@ -449,7 +449,9 @@ npm run build
 
 
 ### (オプション) プロンプトログの Azure Cosmos DB への格納
-[Logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) セクションでは、チャットメッセージを Azure Cosmos DB にログ出力し、さらにダウンストリームで洞察を導出する方法について詳しく説明します。
+[Logging chat on Azure Cosmos DB](../en/logging_cosmosdb.md) のドキュメント (英語) では、チャットメッセージを Azure Cosmos DB にログ出力し、さらにダウンストリームで洞察を導出する方法について詳しく説明しています。
+
+<br/>
 
 ---
 # 5. 今後の拡張案  💡
@@ -539,4 +541,3 @@ OpenAI 社が提供するモデルは汎用的なものであるため、ファ�
 - [Issue - Azure/openai-at-scale](https://github.com/Azure/openai-at-scale/issues)
 
 ## 参考情報
-

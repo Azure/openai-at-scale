@@ -47,8 +47,8 @@ OpenAI at Scale は [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pric
 ## FastTrack for Azure
 FastTrack for Azure は、Azure の迅速に & 確実な構築を支援するカスタマーサクセスプログラムです。Azure 製品部門に所属する Engineer と Program Manager が担当します。Azure をご利用いただくお客様やパートナー様がご利用になれます。
 
-なお、5月24日(水) 13:00 より Program Manager による FastTrack for Azure 紹介セッションが予定されています。ぜひ参加ください。<br/>
-:point_right: [プログラムのご紹介（FTA Intro）セッション](https://developer.microsoft.com/en-us/reactor/events/17981/)
+なお、6月21日(水) 13:00 より Program Manager による FastTrack for Azure 紹介セッションが予定されています。ぜひ参加ください。<br/>
+:point_right: [プログラムのご紹介（FTA Intro）セッション](https://developer.microsoft.com/en-us/reactor/events/17982/)
 
 ## アーキテクチャ
 本セッションで構築するアプリケーションの全体像は以下の通りです。
@@ -75,9 +75,8 @@ Azure サブスクリプションにおける要件は[こちら](https://github
 
 **構築と設定**
 1. [チュートリアル: Microsoft ID プラットフォームにシングルページ アプリケーションを登録する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/single-page-app-tutorial-01-register-app) の内容に従って、Azure Active Directory アプリケーションを作成します。
-  - **`Single-page application (SPA)`** をプラットフォームとして選択します。
-  - Redict URI は、ローカル開発用に **`http://localhost:5000`** と **`http://localhost:5173`** を設定しておきます。
-
+    - **`Single-page application (SPA)`** をプラットフォームとして選択します。
+    - Redict URI は、ローカル開発用に **`http://localhost:5000`** と **`http://localhost:5173`** を設定しておきます。
 1. 下記の情報を控えておきます。
    - クライアント ID
    - テナント ID
@@ -129,23 +128,22 @@ Azure Log Analytics は Azure 上で様々なデータソースからログを�
 
   - 次のドキュメントを参考に、Log Analytics ワークスペースを作成します。
   
-    [Log Analytics ワークスペースを作成する](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/quick-create-workspace?tabs=azure-portal)
+    - [Log Analytics ワークスペースを作成する](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/quick-create-workspace?tabs=azure-portal)
 
 
   - 多くの Azure リソースは診断設定を持っており、様々なタイプのログを Log Analytics ワークスペースに取り込むことができます。
     
-    [Azure Monitor の診断設定](https://learn.microsoft.com/ja-jp/azure/azure-monitor/essentials/diagnostic-settings?tabs=portal)
+    - [Azure Monitor の診断設定](https://learn.microsoft.com/ja-jp/azure/azure-monitor/essentials/diagnostic-settings?tabs=portal)
 
 Log Analytics ワークスペースを作成し、App Service のログを取り込むためのコマンドの例は次のリンクを参照してください。
 
-[Collect application logs with Azure Log Analytics](https://github.com/Azure/openai-at-scale/blob/main/README.md#collect-application-logs-with-azure-log-analytics)
+  - [Azure Log Analytics によるアプリケーションログの収集](#azure-log-analytics-によるアプリケーションログの収集)
 
 **ログの分析**
   - Log Analytics ワークスペースに集約されたログは Kusto Query Language (KQL) という言語を使用して検索や可視化を行うことができます。基本的な使い方は[こちらのチュートリアル](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/log-analytics-tutorial)を参照してください。
   
   - 言語の詳細なリファレンスは以下のドキュメントを参考にしてください。
-　
-    [Kusto クエリ言語](https://learn.microsoft.com/ja-jp/azure/data-explorer/kusto/query/)
+    - [Kusto クエリ言語の概要](https://learn.microsoft.com/ja-jp/azure/data-explorer/kusto/query/)
 
 
 ## (任意) Azure Cosmos DB の作成 🪐	
@@ -154,10 +152,13 @@ Log Analytics ワークスペースを作成し、App Service のログを取り
 [Azure Cosmos DB の概要](https://learn.microsoft.com/ja-jp/azure/cosmos-db/introduction)
 
 **構築と設定**
+
 Azure ドキュメント [こちら](https://docs.microsoft.com/ja-jp/azure/cosmos-db/create-cosmosdb-resources-portal) を参考に Azure Cosmos DB を作成します。また、Azure Cosmos DB に Analytical Store を有効にする必要があります。詳細は [こちら](https://docs.microsoft.com/ja-jp/azure/cosmos-db/analytical-store-introduction) を参照してください。
 
 - **`Core (SQL)`** を API として選択します。
 - コンテナ名は **`chat_log`** とし、パーティションキーは **`/chat_session_id`** とします。
+
+<br/>
 
 ---
 # 3. クライアント開発環境の構築 🖥️

@@ -7,11 +7,15 @@
 
 ✨ **OpenAI at Scale** は Microsoft 社の FastTrack for Azure チームによるワークショップです。Azure 上にシンプルは GhatGPT のインターフェースを持つアプリケーションをビルドしデプロイします。
 
-👉 [Workshop 資料](./docs/jp/openai-ai-scale.md) 📖 
+
 
 <img src="./docs/images/chatscreen.png" width="500" />
 
----
+## 🚀 ハンズオンセッション
+
+ハンズオンセッションの資料はこちらです。
+👉 [セッション資料](./docs/jp/openai-ai-scale.md) 📖 
+
 
 ## 🎯 機能
 
@@ -24,19 +28,16 @@
 <img src="./docs/images/appcomponents.png" width="500" />
 
 
----
 ## 🙋🏾‍♂️ 質問やフィードバック
 
 [GitHub Issues](https://github.com/Azure/openai-at-scale/issues) でこのリポジトリに関する質問やフィードバックをお寄せください。
 
 
----
 ## 📚 参考情報
 
 - [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
   - This repo is based on this sample code.
 
----
 ## 🤝 貢献
 
 お客様や Microsoft 社員からの貢献を歓迎しています。[CONTRIBUTING](./CONTRIBUTING.md) を参照してください。このリポジトリの発展に貢献いただく全ての方に感謝します！

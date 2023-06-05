@@ -29,8 +29,8 @@ OpenAI at Scale は [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pric
 | 2' | Azure サービス構築と設定 |  前日の続き |  |  |
 | 3 |　クライアント開発環境の構築 | クライアント端末へソフトウェアインストール| Docker、VSCode、Python、Node.js、Azure CLI をインストールします。|  |
 | 4 | ChatGPT アプリケーション構築|  |  |  |
-|   |  | ローカル環境| ローカル環境でアプリケーションを構築し、動作確認をします。 |  |
-|   |  | Azure 環境| Azure 環境でアプリケーションをデプロイし、動作確認をします。 |  |
+|   |  | ローカル環境へのデプロイ| ローカル環境でアプリケーションを構築し、動作確認をします。 |  |
+|   |  | Azure 環境へのデプロイ| Azure 環境でアプリケーションをデプロイし、動作確認をします。 |  |
 |   |  | 設定 | ログの取得などの追加設定を行い、動作確認をします。 |  |
 
 #### Day3
@@ -110,7 +110,7 @@ App Service は、まず初めに、App Service Plan　を作り、その上に 
 
 > コマンドライン (azure-cli) を用いても同様の操作が可能です。上記クイックスタートのドキュメントにも記載がありますが、`az webapp up` コマンドを用いると、リソースグループの作成、App Service Plan の作成、Web App のデプロイまで一括で行うことができます。 
 
-## Azure Monitor
+## Azure Log Analytics
 
 **製品概要**
 
@@ -118,7 +118,7 @@ App Service は、まず初めに、App Service Plan　を作り、その上に 
 
 **構築と設定**
 
-Azure Monitor ログは Azure 上で様々なデータソースからログを収集し、分析を行うための Azure Monitor の機能です。Azure Monitor ログでは Log Analytics ワークスペースを作成し、リソースのログを収集します。
+Azure Log Analytics は Azure 上で様々なデータソースからログを収集し、分析を行うための Azure Monitor の機能です。ここでは Log Analytics ワークスペースを作成し、リソースのログを収集します。
 
   - 次のドキュメントを参考に、Log Analytics ワークスペースを作成します。
   
@@ -137,8 +137,7 @@ Log Analytics ワークスペースを作成し、App Service のログを取り
   - Log Analytics ワークスペースに集約されたログは Kusto Query Language (KQL) という言語を使用して検索や可視化を行うことができます。基本的な使い方は[こちらのチュートリアル](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/log-analytics-tutorial)を参照してください。
   
   - 言語の詳細なリファレンスは以下のドキュメントを参考にしてください。
-
-
+　
     [Kusto クエリ言語](https://learn.microsoft.com/ja-jp/azure/data-explorer/kusto/query/)
 
 
@@ -199,7 +198,222 @@ az login --use-device
 
 ---
 # 4. ChatGPT アプリケーション構築 🤖
-> 手順は [README.ja.md - 4. ローカル環境へのデプロイ 💻](../../README.ja.md#4-ローカル環境へのデプロイ-)をご参照ください。
+## ローカル環境へのデプロイ
+### 環境変数の設定
+
+アプリケーションを起動する前に、環境変数を設定するために、`.env.sample` ファイルを参考に `.env` ファイルを作成します。
+
+- `app/frontend/.env`
+  - Azure Active Directory の SDK で利用されます.
+
+```shell
+# Azure Active Directory application
+VITE_CLIENTID="<your client id>"
+VITE_TENANTID="<your tenant id>"
+```
+
+- `app/backend/.env`
+  - Azure OpenAI Service と Azure Cosmos DB への接続に利用されます。
+
+```shell
+# Azure OpenAI Service
+AZURE_OPENAI_SERVICE="<your Azure OpenAI Service endpoint>"
+OPENAI_API_KEY="<your Azure OpenAI Service key>"
+AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
+
+
+# (Optional) Azure Cosmos DB
+AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
+AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
+AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
+```
+> ⚠ 本番環境においては [Azure Key Vault](https://azure.microsoft.com/ja-jp/products/key-vault) を用いて環境変数を設定することを推奨します。
+  
+  
+<details><summary>Azure CLI を用いて環境変数を取得するコマンド例</summary><br/>
+
+```shell
+export RESOURCE_GROUP=<your resource group name>
+export AZURE_OPENAI_SERVICE=<your openai service name>
+export AZURE_OPENAI_CHATGPT_DEPLOYMENT=<deployment name of your gpt-35-turbo model>
+export OPENAI_API_KEY=`az cognitiveservices account keys list \
+-n $AZURE_OPENAI_SERVICE \
+-g $RESOURCE_GROUP \
+-o json \
+| jq -r .key1`
+```
+
+</details>
+
+### Python 環境
+
+Python は Flask アプリケーションを稼働されるために必要です。
+
+#### Python ライブラリのインストール
+
+```shell
+cd app/backend
+python -m venv ./backend_env
+source .backend_env/bin/activate  #bash
+pip install -r requirements.txt
+```
+
+#### バックエンドアプリケーションの開始 (Flask)
+
+```shell
+cd app/backend
+flask run --debug #hot reload
+#python ./app.py 
+```
+
+### Node.js 環境
+
+Node.js is は React アプリケーションを稼働させるために必要です。
+
+#### Node.js パッケージのインストール
+
+```shell
+cd app/frontend
+npm install
+```
+
+#### フロントエンドアプリケーションの開始 (React)
+開発用途<br/>
+
+```shell
+npm run dev
+```
+
+本番用途<br/>
+
+```shell
+npm run build
+```
+
+> このコマンドは app/backend/static フォルダにデプロイされるアプリケーションファイルのサイズを最適化し削減します。<br/>
+
+<br/>
+
+## Azure へのデプロイ ☁️
+
+### Azure App Service へのデプロイ
+
+> ⚠ 以下のコマンドを実行する前に、app/frontend で `npm run build` を実行し、フロントエンドファイルを app/backend/static に配置してください。
+
+
+- Azure App Service の例
+  - 簡単な方法でアプリケーションを Azure App Service にデプロイします。
+
+    ```shell
+    cd app/backend
+    az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
+    ```
+
+  - Azure App Service Plan と Web アプリケーションを別々にデプロイ
+    - 上記のコマンドでもアプリケーションをデプロイできますが、詳細な Azure App Service Plan や Web アプリケーションの設定を変更することはできません。したがって、これらの設定を変更したい場合は、以下のコマンドで別途デプロイする必要があります。
+    - Azure App Service Plan リソースの作成します。
+
+      ```shell
+      az appservice plan create -g <Resource Group Name> --is-linux -n <App Service Plan Name> --sku <SKU Name> --location eastus
+      ```
+
+    - 作成した Azure App Service Plan 上に Web アプリケーションのリソースを作成します。
+
+      ```shell
+      az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10"
+      ```
+
+      ⚡️ 任意: システムにプライベートエンドポイントやVNETの統合を追加する必要がある場合は、以下のオプションを使用して追加できます。
+
+      - VNET Integration
+  
+        ```shell
+        # you need create vnet/subnet before execute this command
+        az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10" --vnet <VNET Name> --subnet <Subnet Name>
+        ```
+
+      - Private Endpoint
+
+        ```shell
+        # you need create vnet/subnet webapp before execute this command
+        az network private-endpoint create \
+          -n <PE Name> \
+          -g <Resource Group Name> \
+          --vnet-name <VNET Name> \
+          --subnet <Subnet Name> \
+          --connection-name <Private Endpoint Connection Name> \
+          --private-connection-resource-id /subscriptions/SubscriptionID/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/<WebApp Name> \
+          --group-id sites
+        ```
+
+    - aadConfig.ts ファイルの redirectURI を更新し、フロントエンドアプリを再構築します
+      - 以下で出力される FQDN を使用して、redirectURI を更新してください。これは Webアプリケーションのエンドポイントです。
+  
+        ```shell
+        az webapp config hostname list -g <Resource Group Name> --webapp-name <WebApp Name> -o json | jq '.[0].name'
+        ```
+
+      - フロントの再ビルド
+
+        ```shell
+        cd app/frontend
+        npm run build
+        ```
+
+    - Web アプリケーションのデプロイ前に、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+
+      ```shell
+      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+      ```
+
+    - Web アプリケーションのデプロイ
+
+      ```shell
+      cd app/backend
+      zip -r deploy.zip .
+      az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
+      ```
+
+    - Web アプリケーションをデプロイした後、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+
+      ```shell
+      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
+      ```
+
+<br/>
+
+## 設定 ⚙️
+### Azure Log Analytics によるアプリケーションログの収集
+
+  - ログ収集の例
+    - Azure Log Analytics workspace のデプロイ
+  
+    ```shell
+    export APP_SERIVCE=<your app service name>
+    export LOCATION=<azure datacenter region - eastus, japaneast, etc...>
+    export RESOURCE_GROUP=<your resource group name>
+    export WORKSPACE=<your log analytics workspace name>
+    export DIAGSETTINNG_NAME=<your diagnistics setting name (arbitary)>
+
+    az monitor log-analytics workspace create --name $WORKSPACE  --resource-group $RESOURCE_GROUP --location $LOCATION
+    ```
+
+    - 診断設定の有効化
+
+    ```shell
+    export RESOURCE_ID=`az webapp show -g $RESOURCE_GROUP -n $APP_SERIVCE --query id --output tsv | tr -d '\r'`
+    export WORKSPACE_ID=`az monitor log-analytics workspace show -g $RESOURCE_GROUP --workspace-name $WORKSPACE --query id --output tsv | tr -d '\r'`
+
+    az monitor diagnostic-settings create \
+      --resource $RESOURCE_ID \
+      --workspace $WORKSPACE_ID \
+    -n $DIAGSETTINNG_NAME \
+    --logs '[{"category": "AppServiceAppLogs", "enabled": true},{"category": "AppServicePlatformLogs", "enabled": true},{"category": "AppServiceConsoleLogs", "enabled": true},{"category": "AppServiceAuditLogs", "enabled": true},{"category": "AppServiceHTTPLogs", "enabled": true}]'
+    ```
+
+
+### (オプション) プロンプトログの Azure Cosmos DB への格納
+[Logging chat on Azure Cosmos DB](docs/en/logging_cosmosdb.md) セクションでは、チャットメッセージを Azure Cosmos DB にログ出力し、さらにダウンストリームで洞察を導出する方法について詳しく説明します。
 
 ---
 # 5. 今後の拡張案  💡

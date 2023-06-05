@@ -105,14 +105,10 @@ Azure サブスクリプションにおける要件は[こちら](https://github
 
 **構築と設定**
   
-App Service は、まず初めに、App Service Plan　を作り、その上に Web App として、アプリをデプロイする流れとなります。そのため、`azure-cli` か `Azure Portal` を使い、上記の流れにしたがって
+App Service は、まず初めに、App Service Plan　を作り、その上に Web App として、アプリをデプロイする流れとなります。ここでは [クイックスタート：Python Web アプリを Azure App　Service にデプロイする](https://learn.microsoft.com/ja-jp/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cazure-cli%2Cvscode-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-azcli) 
+ を参考に、`Azure Portal` を用いて App Service Plan の作成と Web App のデプロイを行います。
 
-- コマンドラインの場合
-  - 最も簡単な例
-    - [クイックスタート：Python Web アプリを Azure App　Service にデプロイする](https://learn.microsoft.com/ja-jp/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cazure-cli%2Cvscode-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-azcli) を参考に `az webapp up` コマンドを使うと、デフォルトの設定で App Service が構築され、ローカルのアプリケーションを App Service 上で実行することができます。
-
-- ポータルを使う場合
-  - ポータルの操作など、詳しい説明は、割愛しますが、 App Service Plan を構成し、作成した Web App にアプリをデプロイするという流れは変わりません。Web App　のデプロイメントオプションについては、[こちら](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-best-practices)のドキュメントを参考にしてください。
+> コマンドライン (azure-cli) を用いても同様の操作が可能です。上記クイックスタートのドキュメントにも記載がありますが、`az webapp up` コマンドを用いると、リソースグループの作成、App Service Plan の作成、Web App のデプロイまで一括で行うことができます。 
 
 ## Azure Monitor
 

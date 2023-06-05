@@ -68,24 +68,31 @@ Azure サブスクリプションにおける要件は[こちら](https://github
 
 ---
 # 2. Azure サービス構築と設定 🛠️
-## Azure Active Directory
+## Azure Active Directory アプリケーション 🔑
 **製品概要**
 - [Azure Active Directory とは](https://learn.microsoft.com/ja-jp/azure/active-directory/fundamentals/active-directory-whatis)
 - [Azure Active Directory のアプリケーションオブジェクトとサービスプリンシパルオブジェクト](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/app-objects-and-service-principals)
 
 **構築と設定**
 1. [チュートリアル: Microsoft ID プラットフォームにシングルページ アプリケーションを登録する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/single-page-app-tutorial-01-register-app) の内容に従って、Azure Active Directory アプリケーションを作成します。
-1. 下記の情報を取得します。
+  - **`Single-page application (SPA)`** をプラットフォームとして選択します。
+  - Redict URI は、ローカル開発用に **`http://localhost:5000`** と **`http://localhost:5173`** を設定しておきます。
+
+1. 下記の情報を控えておきます。
    - クライアント ID
    - テナント ID
 
-## Azure OpenAI Service
+## Azure OpenAI Service 🧠
 **製品概要**
 - [Azure OpenAI Service とは](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/overview)
 - [Azure OpenAI Service モデル](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/concepts/models)
 
 
 **構築と設定**
+Azure OpenAI Service のリソースを作成する方法はいくつかございますが、Azure CLI に慣れていない方は Azure Portal から作成することをおすすめします。
+
+始める前に、Azure OpenAI Service のリージョンを選択する必要があります。利用可能なリージョンは [こちら](https://azure.microsoft.com/ja-JP/explore/global-infrastructure/products-by-region/?regions=all&products=cognitive-services) から確認できます。
+
 1. [Azure OpenAI を使用してリソースを作成し、モデルをデプロイする](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal) の内容に従って、Azure OpenAI Serivce のリソースを作成します。
    - モデル : ChatGPT (gpt-35-turbo)
    - 既存のリソースがある場合はそちらをご利用いただいて構いません。
@@ -98,7 +105,7 @@ Azure サブスクリプションにおける要件は[こちら](https://github
 
 
 
-## Azure App Service
+## Azure App Service 🌐
 
 **製品概要**
 - [App Service について](https://learn.microsoft.com/ja-jp/azure/app-service/overview)
@@ -110,7 +117,7 @@ App Service は、まず初めに、App Service Plan　を作り、その上に 
 
 > コマンドライン (azure-cli) を用いても同様の操作が可能です。上記クイックスタートのドキュメントにも記載がありますが、`az webapp up` コマンドを用いると、リソースグループの作成、App Service Plan の作成、Web App のデプロイまで一括で行うことができます。 
 
-## Azure Log Analytics
+## Azure Log Analytics 🖌️
 
 **製品概要**
 
@@ -140,6 +147,17 @@ Log Analytics ワークスペースを作成し、App Service のログを取り
 　
     [Kusto クエリ言語](https://learn.microsoft.com/ja-jp/azure/data-explorer/kusto/query/)
 
+
+## (任意) Azure Cosmos DB の作成 🪐	
+**製品概要**
+
+[Azure Cosmos DB の概要](https://learn.microsoft.com/ja-jp/azure/cosmos-db/introduction)
+
+**構築と設定**
+Azure ドキュメント [こちら](https://docs.microsoft.com/ja-jp/azure/cosmos-db/create-cosmosdb-resources-portal) を参考に Azure Cosmos DB を作成します。また、Azure Cosmos DB に Analytical Store を有効にする必要があります。詳細は [こちら](https://docs.microsoft.com/ja-jp/azure/cosmos-db/analytical-store-introduction) を参照してください。
+
+- **`Core (SQL)`** を API として選択します。
+- コンテナ名は **`chat_log`** とし、パーティションキーは **`/chat_session_id`** とします。
 
 ---
 # 3. クライアント開発環境の構築 🖥️
@@ -301,7 +319,7 @@ npm run build
 > ⚠ 以下のコマンドを実行する前に、app/frontend で `npm run build` を実行し、フロントエンドファイルを app/backend/static に配置してください。
 
 
-- まず、`az webapp up` コマンドを用いた簡単な方法でアプリケーションを Azure App Service にデプロイします。
+- 簡単のために、`az webapp up` コマンドを用いたアプリケーションのデプロイ
   - `az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。
     ```shell
     cd app/backend
@@ -313,7 +331,6 @@ npm run build
     - AZURE_OPENAI_SERVICE
   
   - aadConfig.ts ファイルの redirectURI を Web アプリケーションの FQDN に更新し、フロントエンドアプリを再構築します
-    - 以下で出力される FQDN を使用して、redirectURI を更新してください。これは Webアプリケーションのエンドポイントです。\
 
   - アプリケーションを再度ビルドします。
       ```shell

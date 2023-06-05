@@ -247,7 +247,7 @@ export OPENAI_API_KEY=`az cognitiveservices account keys list \
 
 ### Python 環境
 
-Python は Flask アプリケーションを稼働されるために必要です。
+Python は Flask アプリケーションを稼働させるために必要です。
 
 #### Python ライブラリのインストール
 
@@ -301,84 +301,102 @@ npm run build
 > ⚠ 以下のコマンドを実行する前に、app/frontend で `npm run build` を実行し、フロントエンドファイルを app/backend/static に配置してください。
 
 
-- Azure App Service の例
-  - 簡単な方法でアプリケーションを Azure App Service にデプロイします。
-
+- まず、`az webapp up` コマンドを用いた簡単な方法でアプリケーションを Azure App Service にデプロイします。
+  - `az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。
     ```shell
     cd app/backend
     az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
     ```
-
-  - Azure App Service Plan と Web アプリケーションを別々にデプロイ
-    - 上記のコマンドでもアプリケーションをデプロイできますが、詳細な Azure App Service Plan や Web アプリケーションの設定を変更することはできません。したがって、これらの設定を変更したい場合は、以下のコマンドで別途デプロイする必要があります。
-    - Azure App Service Plan リソースの作成します。
-
-      ```shell
-      az appservice plan create -g <Resource Group Name> --is-linux -n <App Service Plan Name> --sku <SKU Name> --location eastus
-      ```
-
-    - 作成した Azure App Service Plan 上に Web アプリケーションのリソースを作成します。
-
-      ```shell
-      az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10"
-      ```
-
-      ⚡️ 任意: システムにプライベートエンドポイントやVNETの統合を追加する必要がある場合は、以下のオプションを使用して追加できます。
-
-      - VNET Integration
+  - Web アプリケーションをデプロイした後、`Azure Portal` の Azure App Service のアプリケーション設定で環境変数を変更します。
+    - OPENAI_API_KEY
+    - AZURE_OPENAI_CHATGPT_DEPLOYMENT
+    - AZURE_OPENAI_SERVICE
   
-        ```shell
-        # you need create vnet/subnet before execute this command
-        az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10" --vnet <VNET Name> --subnet <Subnet Name>
-        ```
+  - aadConfig.ts ファイルの redirectURI を Web アプリケーションの FQDN に更新し、フロントエンドアプリを再構築します
+    - 以下で出力される FQDN を使用して、redirectURI を更新してください。これは Webアプリケーションのエンドポイントです。\
 
-      - Private Endpoint
+  - アプリケーションを再度ビルドします。
+      ```shell
+      cd app/frontend
+      npm run build
+      ```
+  - 再度、`az webapp up` コマンドを実行します。
+    ```shell
+    cd app/backend
+    az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
+    ```
+    
 
-        ```shell
-        # you need create vnet/subnet webapp before execute this command
-        az network private-endpoint create \
-          -n <PE Name> \
-          -g <Resource Group Name> \
-          --vnet-name <VNET Name> \
-          --subnet <Subnet Name> \
-          --connection-name <Private Endpoint Connection Name> \
-          --private-connection-resource-id /subscriptions/SubscriptionID/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/<WebApp Name> \
-          --group-id sites
-        ```
+- (任意) Azure App Service Plan と Web アプリケーションを別々にデプロイ
+  - ⚠ 上記の手順でもアプリケーションをデプロイできますが、詳細な Azure App Service Plan や Web アプリケーションの設定を変更することはできません。また手動で行なっている部分も多く、自動化することができません。コマンドベースで詳細な設定を行いたい場合は、以下の手順を実行してください。
+  - Azure App Service Plan リソースの作成します。
 
-    - aadConfig.ts ファイルの redirectURI を更新し、フロントエンドアプリを再構築します
-      - 以下で出力される FQDN を使用して、redirectURI を更新してください。これは Webアプリケーションのエンドポイントです。
-  
-        ```shell
-        az webapp config hostname list -g <Resource Group Name> --webapp-name <WebApp Name> -o json | jq '.[0].name'
-        ```
+    ```shell
+    az appservice plan create -g <Resource Group Name> --is-linux -n <App Service Plan Name> --sku <SKU Name> --location eastus
+    ```
 
-      - フロントの再ビルド
+  - 作成した Azure App Service Plan 上に Web アプリケーションのリソースを作成します。
 
-        ```shell
-        cd app/frontend
-        npm run build
-        ```
+    ```shell
+    az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10"
+    ```
 
-    - Web アプリケーションのデプロイ前に、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+    ⚡️ 任意: システムにプライベートエンドポイントやVNETの統合を追加する必要がある場合は、以下のオプションを使用して追加できます。
+
+    - VNET Integration
 
       ```shell
-      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+      # you need create vnet/subnet before execute this command
+      az webapp create -g <Resource Group Name> -n <WebApp Name> -p <App Service Plan Name> -r "python:3.10" --vnet <VNET Name> --subnet <Subnet Name>
       ```
 
-    - Web アプリケーションのデプロイ
+    - Private Endpoint
 
       ```shell
-      cd app/backend
-      zip -r deploy.zip .
-      az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
+      # you need create vnet/subnet webapp before execute this command
+      az network private-endpoint create \
+        -n <PE Name> \
+        -g <Resource Group Name> \
+        --vnet-name <VNET Name> \
+        --subnet <Subnet Name> \
+        --connection-name <Private Endpoint Connection Name> \
+        --private-connection-resource-id /subscriptions/SubscriptionID/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/<WebApp Name> \
+        --group-id sites
       ```
 
-    - Web アプリケーションをデプロイした後、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+  - aadConfig.ts ファイルの redirectURI を更新し、フロントエンドアプリを再構築します
+    - 以下で出力される FQDN を使用して、redirectURI を更新してください。これは Webアプリケーションのエンドポイントです。
 
       ```shell
-      az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
+      az webapp config hostname list -g <Resource Group Name> --webapp-name <WebApp Name> -o json | jq '.[0].name'
       ```
+
+    - フロントの再ビルド
+
+      ```shell
+      cd app/frontend
+      npm run build
+      ```
+
+  - Web アプリケーションのデプロイ前に、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+
+    ```shell
+    az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+    ```
+
+  - Web アプリケーションのデプロイ
+
+    ```shell
+    cd app/backend
+    zip -r deploy.zip .
+    az webapp deploy -g <Resource Group Name> -n <Webapp Name> --src-path deploy.zip --type zip
+    ```
+
+  - Web アプリケーションをデプロイした後、Azure App Service のアプリケーション設定で環境変数を変更する必要があります。
+
+    ```shell
+    az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
+    ```
 
 <br/>
 

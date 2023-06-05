@@ -317,33 +317,45 @@ npm run build
 
 ### Azure App Service へのデプロイ
 
-> ⚠ 以下のコマンドを実行する前に、app/frontend で `npm run build` を実行し、フロントエンドファイルを app/backend/static に配置してください。
 
 
-- 簡単のために、`az webapp up` コマンドを用いたアプリケーションのデプロイ
-  - `az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。
+- `az webapp up` コマンドを用いたアプリケーションのデプロイ
+  - aadConfig.ts ファイルの redirectURI を Web アプリケーションの FQDN に更新します。
+    ```typescript
+    export const aadConfig = {
+    clientId: import.meta.env.VITE_CLIENTID,
+    tenantId: import.meta.env.VITE_TENANTID,
+    redirectUri: "http://<WebApp FQDN>:5173", //Edit here
+    authorityBaseUrl: "https://login.microsoftonline.com/"
+    };
+    ```
+  
+  - フロントエンドアプリを構築します。
+    ```shell
+    cd app/frontend
+    npm run build
+    ```
+> ⚠ `npm run build` を実行することで、フロントエンドファイルが app/backend/static に配置されます。
+
+  - ここでは簡単のために、`az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。まず dryrun オプションを用いて、デプロイの確認を行います。    
     ```shell
     cd app/backend
-    az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
+    az webapp up --runtime "python:3.10" --sku B1 -n <WebApp Name> -p <App Service Plan Name> -g <Resource Group Name> --dryrun
     ```
+
+  - 問題がなければ、`az webapp up` コマンドを実行します。
+    ```shell
+    cd app/backend
+    az webapp up --runtime "python:3.10" --sku B1 -n <WebApp Name> -p <App Service Plan Name> -g <Resource Group Name>
+    ```
+
   - Web アプリケーションをデプロイした後、`Azure Portal` の Azure App Service のアプリケーション設定で環境変数を変更します。
     - OPENAI_API_KEY
     - AZURE_OPENAI_CHATGPT_DEPLOYMENT
     - AZURE_OPENAI_SERVICE
   
-  - aadConfig.ts ファイルの redirectURI を Web アプリケーションの FQDN に更新し、フロントエンドアプリを再構築します
-
-  - アプリケーションを再度ビルドします。
-      ```shell
-      cd app/frontend
-      npm run build
-      ```
-  - 再度、`az webapp up` コマンドを実行します。
-    ```shell
-    cd app/backend
-    az webapp up --runtime "python:3.10" --sku B1 -g <Resource Group Name>
-    ```
-    
+  - アプリケーションを開き、動作確認をします。
+ 
 
 - (任意) Azure App Service Plan と Web アプリケーションを別々にデプロイ
   - ⚠ 上記の手順でもアプリケーションをデプロイできますが、詳細な Azure App Service Plan や Web アプリケーションの設定を変更することはできません。また手動で行なっている部分も多く、自動化することができません。コマンドベースで詳細な設定を行いたい場合は、以下の手順を実行してください。

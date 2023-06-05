@@ -335,7 +335,7 @@ npm run build
     cd app/frontend
     npm run build
     ```
-> ⚠ `npm run build` を実行することで、フロントエンドファイルが app/backend/static に配置されます。
+    > ⚠ `npm run build` を実行することで、フロントエンドファイルが app/backend/static に配置されます。
 
   - ここでは簡単のために、`az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。まず dryrun オプションを用いて、デプロイの確認を行います。    
     ```shell

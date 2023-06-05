@@ -58,46 +58,11 @@ FastTrack for Azure は、Azure の迅速に & 確実な構築を支援するカ
 
 
 ## クライアント開発環境の確認
-クライアント端末で開発環境を構築します。
-
-- [ ] GitHub Codespaces、Windows (WSL を利用)、MacOS/Ubuntu のクライアント端末
-   - Windows の場合、**Ubuntu 22.04 (Windows Subsystem for Linux)** を利用すること
-- [ ] 統合開発環境/エディタ
-   - [Visual Studio Code](https://code.visualstudio.com/) を推奨
-- [ ] [Docker Desktop](https://www.docker.com/products/docker-desktop/) (もしくは [Rancher Desktop](https://rancherdesktop.io/)
- などの代替品)
-- [ ] インターネット接続
-    - コードのダウンロード、Python/Javascript やそのライブラリのダウンロードに利用
-- [ ] ブラウザ
-    - Microsoft Edge もしくは Google Chrome
-- [ ] [Git クライアント](https://git-scm.com/downloads)
-- [ ] GitHub アカウント
-- [ ] ソフトウェア群 (Python、Node.js、Azure CLI)
-   - GitHub Codespaces の場合
-      - 必要なソフトウェアは Dockerfile の内容に従ってインストールされます。
-
-   - Windows の場合
-      - Visual Studio Code Dev Container を利用するため、必要なソフトウェアは Dockerfile の内容に従ってインストールされます。
-      - Docker が利用できない場合は、以下をマニュアルで Ubuntu 22.04 (Windows Subsystem for Linux) 上にインストールしてください。
-         - Python (3.9 以上)
-         - Node.js (16.20 以上)
-         - Azure CLI (4.28.1 以上)
-
-   - MacOS/Ubuntu の場合
-      - Visual Studio Code Dev Container を利用するため、必要なソフトウェアは Dockerfile の内容に従ってインストールされます。
-      - Docker が利用できない場合は、以下をマニュアルでインストールしてください。
-         - Python (3.9 以上)
-         - Node.js (16.20 以上)
-         - Azure CLI (4.28.1 以上)
+クライアント端末における開発環境の要件を[こちら](https://github.com/Azure/openai-at-scale/wiki/%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83%E3%81%AE%E8%A6%81%E4%BB%B6)よりご確認ください。
 
 
 ## Azure 環境の確認
-- Azure OpenAI Service 利用申請
-   - Azure OpenAI Service を利用するためには、事前に利用申請を行い、Microsoft より承諾を得る必要があります。
-   - 申請フォーム : [Request Access to Azure OpenAI Service](https://aka.ms/oai/access)
-- Azure 権限
-   - Azure Subscription の共同管理者
-   - Azure Active Directory のアプリケーションの登録 & そのアプリケーションへのロール割り当て可能な権限
+Azure サブスクリプションにおける要件は[こちら](https://github.com/Azure/openai-at-scale/wiki/Azure-%E3%82%B5%E3%83%96%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E8%A6%81%E4%BB%B6)よりご確認ください。
 
 <br/>
 
@@ -124,11 +89,14 @@ FastTrack for Azure は、Azure の迅速に & 確実な構築を支援するカ
 1. [Azure OpenAI を使用してリソースを作成し、モデルをデプロイする](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal) の内容に従って、Azure OpenAI Serivce のリソースを作成します。
    - モデル : ChatGPT (gpt-35-turbo)
    - 既存のリソースがある場合はそちらをご利用いただいて構いません。
+   - ⚠ Azure OpenAI Servce のリソース作成や、モデルのデプロイに時間がかかる場合があります。
 
 1. 下記の情報を取得します。
    - エンドポイント名
    - キー
    - モデルデプロイ名
+
+
 
 ## Azure App Service
 

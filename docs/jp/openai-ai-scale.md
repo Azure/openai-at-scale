@@ -273,7 +273,7 @@ Python は Flask アプリケーションを稼働させるために必要です
 ```shell
 cd app/backend
 python -m venv ./backend_env
-source .backend_env/bin/activate  #bash
+source ./backend_env/bin/activate  #bash
 pip install -r requirements.txt
 ```
 

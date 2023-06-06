@@ -76,7 +76,7 @@ Azure サブスクリプションにおける要件は[こちら](https://github
 **構築と設定**
 1. [チュートリアル: Microsoft ID プラットフォームにシングルページ アプリケーションを登録する](https://learn.microsoft.com/ja-jp/azure/active-directory/develop/single-page-app-tutorial-01-register-app) の内容に従って、Azure Active Directory アプリケーションを作成します。
     - **`Single-page application (SPA)`** をプラットフォームとして選択します。
-    - Redict URI は、ローカル開発用に **`http://localhost:5000`** と **`http://localhost:5173`** を設定しておきます。
+    - リダイレクト URI は、ローカル開発用に **`http://localhost:5000`** と **`http://localhost:5173`** を設定しておきます。
 1. 下記の情報を控えておきます。
    - クライアント ID
    - テナント ID
@@ -317,15 +317,14 @@ npm run build
 
 ### Azure App Service へのデプロイ
 
-
-
 - `az webapp up` コマンドを用いたアプリケーションのデプロイ
   - aadConfig.ts ファイルの redirectURI を Web アプリケーションの FQDN に更新します。
+    > ⚠ Web アプリケーションの名前はグローバルで一意である必要があります。
     ```typescript
     export const aadConfig = {
     clientId: import.meta.env.VITE_CLIENTID,
     tenantId: import.meta.env.VITE_TENANTID,
-    redirectUri: "http://<WebApp FQDN>:5173", //Edit here
+    redirectUri: "http://<WebApp Name>.azurewebsites.net/", //Edit here
     authorityBaseUrl: "https://login.microsoftonline.com/"
     };
     ```
@@ -337,7 +336,10 @@ npm run build
     ```
     > ⚠ `npm run build` を実行することで、フロントエンドファイルが app/backend/static に配置されます。
 
-  - ここでは簡単のために、`az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。まず dryrun オプションを用いて、デプロイの確認を行います。    
+  - Azure Active Directory アプリケーションのリダイレクト URI に Web アプリケーションの FQDN (`http://<WebApp Name>.azurewebsites.net/`) を追加します。
+
+  - ここでは簡単のために、`az webapp up` コマンドを用いて、Azure App Service と Web アプリケーションを同時にデプロイします。まず dryrun オプションを用いて、`The webapp '<WebApp Name>' doesn't exist` と表示されるか確認します。
+    > ⚠ エラーが発生した場合、Web アプリケーションの名前がグローバルで一意になっていない可能性があります。その場合は、新たに Web アプリケーションの名前を決めていただき、本セクションの最初からやり直してください。 
     ```shell
     cd app/backend
     az webapp up --runtime "python:3.10" --sku B1 -n <WebApp Name> -p <App Service Plan Name> -g <Resource Group Name> --dryrun
@@ -349,7 +351,7 @@ npm run build
     az webapp up --runtime "python:3.10" --sku B1 -n <WebApp Name> -p <App Service Plan Name> -g <Resource Group Name>
     ```
 
-  - Web アプリケーションをデプロイした後、`Azure Portal` の Azure App Service のアプリケーション設定で環境変数を変更します。
+  - Web アプリケーションをデプロイした後、`Azure Portal` の Azure App Service のアプリケーション設定で以下の環境変数を変更します。
     - OPENAI_API_KEY
     - AZURE_OPENAI_CHATGPT_DEPLOYMENT
     - AZURE_OPENAI_SERVICE
@@ -357,7 +359,9 @@ npm run build
   - アプリケーションを開き、動作確認をします。
  
 
-- (任意) Azure App Service Plan と Web アプリケーションを別々にデプロイ
+<details><summary>(任意) コマンドベースで Azure App Service Plan と Web アプリケーションをデプロイする方法</summary>
+
+
   - ⚠ 上記の手順でもアプリケーションをデプロイできますが、詳細な Azure App Service Plan や Web アプリケーションの設定を変更することはできません。また手動で行なっている部分も多く、自動化することができません。コマンドベースで詳細な設定を行いたい場合は、以下の手順を実行してください。
   - Azure App Service Plan リソースの作成します。
 
@@ -427,6 +431,7 @@ npm run build
     ```shell
     az webapp config appsettings set --name <Web App Name> -g <Resource Group Name> --settings OPENAI_API_KEY=<KEY> AZURE_OPENAI_CHATGPT_DEPLOYMENT=<Deployment Model Name> AZURE_OPENAI_SERVICE=<OpenAI Service Name>
     ```
+</details>
 
 <br/>
 

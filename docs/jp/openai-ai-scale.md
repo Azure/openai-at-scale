@@ -473,57 +473,96 @@ npm run build
 
 ---
 # 5. 今後の拡張案  💡
+
 本ハンズオンで構築したアプリケーションは非常にシンプルで Sandbox としての利用用途を想定しています。今後より本格的にビジネスで活用していくためには、改良が必要になります。
 
-## ネットワーク アクセスの制御
-今回のハンズオンの環境は複数の PaaS サービスを使用しています。PaaS サービスはパブリック インターネットからアクセスすることが可能ですが、ほとんどのサービスではネットワーク アクセスの経路を制限するための設定を持っています。ここではパブリック インターネットからのアクセスを許可された経路だけに制限し、リソース間のアクセスを閉域ネットワークで行うための構成を紹介します。
+## 標準的なセキュア化
+
+Azure で考慮すべきセキュリティ コントロールや、各リソースのセキュリティ設定の推奨を確認するためには [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/ja-jp/security/benchmark/azure/overview) を参照します。ここでは一般的に行われるセキュリティ対策として、Azure Open AIサービスのキーの保護と、ネットワーク制御の方法を紹介します。
 
 <img src="../images/network-control.png" width="800" />
 
-- シークレットを Key Vault に保存する
-  Open AI サービスにアクセスするキーはセキュアに取り扱う必要があるため、KeyVault に保存したものを参照するように構成します。
+### シークレットの保護
 
-  - App Service で Managed ID を有効化します。
-  - Key Vault を作成します。
-  - Key Vault の RBAC でシークレットの操作を行うユーザーに [キー コンテナー シークレット責任者] を割り当てます。
-  - シークレットに Open AI サービスのキーを保存します。
-  - Key Vault の RBAC で App Service の Managed ID に [キー コンテナー シークレット ユーザー] を割り当てます。
-  - App Service のアプリケーション設定で次の環境変数を追加します。  
-    **名前 : OPENAI_API_KEY、値 : @Microsoft.KeyVault(SecretUri=<シークレットのURI>)**  
+Open AI サービスにアクセスするキーはセキュアに取り扱う必要があります。キーを Key Vault に保存することで、複数のアプリケーションでキーを利用する際の運用を簡単にし、アプリケーションへの権限とキーに対するアクセスの権限を分けることができます。
+
+  <details>
+  <summary> 手順の概要 </summary>
+
+  ※ この手順の実行には `Microsoft.Authorization/roleAssignments/write` および `Microsoft.Authorization/roleAssignments/delete` のアクセス許可 (ユーザー アクセス管理者や所有者など) が必要です。
+
+- App Service で Managed ID を有効化します。
+- Key Vault を作成します。
+- Key Vault の RBAC でシークレットの操作を行うユーザーに [キー コンテナー シークレット責任者] を割り当てます。
+- シークレットに Open AI サービスのキーを保存します。
+- Key Vault の RBAC で App Service の Managed ID に [キー コンテナー シークレット ユーザー] を割り当てます。
+- App Service のアプリケーション設定で次の環境変数を追加します。  
+  **名前 : OPENAI_API_KEY、値 : @Microsoft.KeyVault(SecretUri=<シークレットのURI>)**  
     [参考：App Service と Azure Functions の Key Vault 参照を使用する](https://learn.microsoft.com/ja-jp/azure/app-service/app-service-key-vault-references?tabs=azure-cli)
 
-- 仮想ネットワークの作成  
-  リソース間のネットワークアクセスを閉域化するための仮想ネットワークを作成します。各 PaaS リソースのプライベート エンドポイントを接続するために、リソースの種類ごとにサブネットを作成します。
+  </details>
+  
+### ネットワークアクセスの制御
+
+今回のハンズオンの環境は複数の PaaS サービスを使用しています。PaaS サービスはパブリック インターネットからアクセスすることが可能ですが、ほとんどのサービスではネットワーク アクセスの経路を制限するための設定を持っています。ここではパブリック インターネットからのアクセスを許可された経路だけに制限し、リソース間のアクセスをプライベート ネットワークで行うための構成を紹介します。
+
+- 仮想ネットワークの構成  
+  リソース間のネットワークアクセスをプライベート ネットワーク経由にするために仮想ネットワークを作成します。各 PaaS リソースのプライベート エンドポイントを作成するため、リソースの種類ごとにサブネットを作成します。
 
 - Application Gateway の作成
-  アプリケーションの負荷分散とアクセス制御、既知の攻撃の検出とブロックを行うために Application Gateway を作成します。
-  
+  アプリケーションの負荷分散とアクセス制御、Web Application Firewall を使用して既知の攻撃の検出とブロックを行うために Application Gateway を作成します。
+  <details>
+  <summary> 手順の概要 </summary>
+
   - App Service をバックエンドプールに追加し、Application Gateway 経由でアプリケーションにアクセスできるようにします。
   - Application Gateway へのアクセスは許可された IP からのみの通信に制限します。
   - Application Gateway の診断ログを Log Analytics ワークスペースに送信します。
 
-- App Service の閉域化
-  App Service はアプリケーションに対するインバウンド接続と、App Service からのアウトバウンド接続は異なる設定を持つため、それぞれに設定が必要です。  
-  ※ この構成により、パブリック インターネットからのアプリケーション コードのアップロードも制限されるようになります。アプリケーションを更新する場合には仮想ネットワークを経由するアクセスとするか、一時的にパブリックアクセスを許可してください。
+  </details>
+
+- App Service の閉域化  
+  App Service はアプリケーションに対するインバウンド接続と、App Service からのアウトバウンド接続は異なる設定を持つため、それぞれにプライベート通信のための接続を行います。
   
+  <details>
+  <summary>手順の概要 </summary>
+
   - App Service でプライベート エンドポイントを作成します。
   - 「パブリック アクセスを許可する」を無効化し、パブリック インターネットからのアクセスが無効になることを確認します。
   - App Service で VNET 統合を有効化し、アウトバウンド接続が仮想ネットワークを経由する設定にします。  
 
+  ※ この構成により、パブリック インターネットからのアプリケーション コードのアップロードも制限されるようになります。アプリケーションを更新する場合には仮想ネットワークを経由するアクセスとするか、一時的にパブリックアクセスを許可する必要があります。
+
+</details>
+
 - Key Vault の閉域化
+  
+  Key Vault に対するアクセスは Managed ID によるセキュアな認証と認可が行われますが、ネットワーク制御を行うことで攻撃面を小さくすることができます。
+
+  <details>
+  <summary> 手順の概要 </summary>
+
   - Key Vault でプライベートエンドポイントを作成します。
   - 「パブリック アクセスの無効化」を選択し、パブリック インターネットからのアクセスが無効になることを確認します。
   - Key Vault の診断ログを Log Analytics ワークスペースに送信します。
 
     ※ App Service の VNET 統合が既に有効化されているため、App Service からのアクセスは仮想ネットワーク経由で行われます。
 
+</details>
+
 - Azure OpenAI Service の閉域化
-  ※ この構成により、パブリック インターネット経由でアクセスするローカルコンピューター上のアプリケーションからのアクセスや、Azure Open AI Studio からのアクセスが制限されます。現在この構成の有効化 / 無効化には数時間程度かかる場合があるため注意してください。
+
+  Open AI Service にプライベート エンドポイントを構成し、全てのサービス間の通信がプライベート ネットワークを経由するようにします。
+
+  <details>
+  <summary> 手順の概要 </summary>
 
   - OpenAI Service でプライベート エンドポイントを作成します。
   - 許可するアクセス元を [無効] に設定し、パブリック インターネットからのアクセスが無効になることを確認します。
 
-    
+  ※ この構成により、パブリック インターネット経由でアクセスするローカルコンピューター上のアプリケーションからのアクセスや、Azure Open AI Studio からのアクセスが制限されます。現在この構成の有効化 / 無効化には数時間程度かかる場合があるため注意してください。
+
+</details>
+
 ## API Management
 API Management（以下、APIM） には、[こちら](https://learn.microsoft.com/ja-jp/azure/api-management/api-management-key-concepts) に紹介されているように、API ゲートウェイとしての機能、管理プレーンとして API を構成するための機能、API を開発者として利用するための、開発者ポータルなどがあります。特に今回のように、frontend のための backend API を公開するケースにおいては、APIM のゲートウェイ機能のAPI呼び入れ、JWTトークン、使用量のレートリミット、ロギングなどの機能が役にたつでしょう。
 

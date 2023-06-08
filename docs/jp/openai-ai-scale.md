@@ -13,7 +13,7 @@ OpenAI at Scale は [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pric
 |---|--|--|--|--|
 | 1 | OpenAI at Scale 概要|  |  |  |
 |   |  |目的とアジェンダ| OpenAI at Scale の目的とアジェンダを説明します。 |  |
-|   |  |FastTrack for Azure| FastTrack for Azure のプログラムの概要を説明します。 | **プログラム紹介ページ** : [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pricing/offers/azure-fasttrack/) <br/> **セミナー** : [プログラムのご紹介（FTA Intro）セッション](https://developer.microsoft.com/en-us/reactor/events/17981/) |
+|   |  |FastTrack for Azure| FastTrack for Azure のプログラムの概要を説明します。 | **プログラム紹介ページ** : [FastTrack for Azure](https://azure.microsoft.com/ja-jp/pricing/offers/azure-fasttrack/) <br/> **セミナー** : [プログラムのご紹介（FTA Intro）セッション](https://developer.microsoft.com/en-us/reactor/events/17982/) |
 |   |  |アーキテクチャ| 本ハンズオンで構築するアプリケーションのアーキテクチャを説明します。 |  |
 |   |  | クライアント開発環境の確認 | 開発者ごとのクライアント端末における開発環境を確認します。 |  |
 |   |  | Azure 環境の確認 | Azure OpenAI Service の申請状況、サブスクリプション上での権限の確認をします。 |  |

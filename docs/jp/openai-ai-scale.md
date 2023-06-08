@@ -231,6 +231,23 @@ VITE_CLIENTID="<your client id>"
 VITE_TENANTID="<your tenant id>"
 ```
 
+- `app/fronend/src/aadConfig.ts`
+  - Azure Active Directory による認証で用いられます。
+
+
+```typescript
+export const aadConfig = {
+    clientId: import.meta.env.VITE_CLIENTID,
+    tenantId: import.meta.env.VITE_TENANTID,
+    redirectUri: "http://localhost:5173",
+    authorityBaseUrl: "https://login.microsoftonline.com/"
+};
+```
+
+>⚠ 今は変更する必要はありませんが、以降の手順でアプリケーションを起動した際は、Web アプリケーションの環境 (URL、ポート) に応じて redirectUri を変更する必要があります。
+>- GitHub Codespaces を用いている場合は、ポート転送で Web アプリケーションにアクセスします。そのため、redirectUri は `http://localhost:5173` ではなく、Codespaces 環境の URL に変更します。ポート番号 5173 の場合は、`https://xxxx-5173.preview.app.github.dev/` のようになります。URL は Visual Studio Code のポートタブから確認できます。
+>- また、Azure Active Directory アプリケーションのリダイレクト URI の設定にもこの URL を適宜追加します。
+
 - `app/backend/.env`
   - Azure OpenAI Service と Azure Cosmos DB への接続に利用されます。
 
@@ -242,9 +259,9 @@ AZURE_OPENAI_CHATGPT_DEPLOYMENT="<your model deployment>"
 
 
 # (Optional) Azure Cosmos DB
-AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
-AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
-AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
+# AZURE_COSMOSDB_ENDPOINT="https://<account_name>.documents.azure.com:443/"
+# AZURE_COSMOSDB_KEY="<your Azure Cosmos DB access Key>"
+# AZURE_COSMOSDB_DB="< your Azure Cosmos DB database name>"
 ```
 > ⚠ 本番環境においては [Azure Key Vault](https://azure.microsoft.com/ja-jp/products/key-vault) を用いて環境変数を設定することを推奨します。
   
@@ -310,6 +327,9 @@ npm run build
 ```
 
 > このコマンドは app/backend/static フォルダにデプロイされるアプリケーションファイルのサイズを最適化し削減します。<br/>
+
+### 動作確認
+
 
 <br/>
 

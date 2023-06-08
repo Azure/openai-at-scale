@@ -342,7 +342,8 @@ npm run build
     > ⚠ エラーが発生した場合、Web アプリケーションの名前がグローバルで一意になっていない可能性があります。その場合は、新たに Web アプリケーションの名前を決めていただき、本セクションの最初からやり直してください。 
     ```shell
     cd app/backend
-    az webapp up --runtime "python:3.10" --sku B1 -n <WebApp Name> -p <App Service Plan Name> -g <Resource Group Name> --dryrun
+    az webapp up -n <WebApp Name> --dryrun
+    #az webapp up --runtime "python:3.10" --sku B1 -n <WebApp Name> -p <App Service Plan Name> -g <Resource Group Name> --dryrun
     ```
 
   - 問題がなければ、`az webapp up` コマンドを実行します。

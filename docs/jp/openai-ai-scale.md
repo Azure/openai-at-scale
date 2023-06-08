@@ -347,7 +347,7 @@ npm run build
     export const aadConfig = {
     clientId: import.meta.env.VITE_CLIENTID,
     tenantId: import.meta.env.VITE_TENANTID,
-    redirectUri: "http://<WebApp Name>.azurewebsites.net/", //Edit here
+    redirectUri: "https://<WebApp Name>.azurewebsites.net/", //Edit here
     authorityBaseUrl: "https://login.microsoftonline.com/"
     };
     ```

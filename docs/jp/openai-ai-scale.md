@@ -248,6 +248,8 @@ export const aadConfig = {
 >- GitHub Codespaces を用いている場合は、ポート転送で Web アプリケーションにアクセスします。そのため、redirectUri は `http://localhost:5173` ではなく、Codespaces 環境の URL に変更します。ポート番号 5173 の場合は、`https://xxxx-5173.preview.app.github.dev/` のようになります。URL は Visual Studio Code のポートタブから確認できます。
 >- また、Azure Active Directory アプリケーションのリダイレクト URI の設定にもこの URL を適宜追加します。
 
+<br/>
+
 - `app/backend/.env`
   - Azure OpenAI Service と Azure Cosmos DB への接続に利用されます。
 

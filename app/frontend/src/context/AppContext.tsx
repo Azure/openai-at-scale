@@ -3,7 +3,7 @@
 
 import React, { useContext, createContext, useState, MouseEventHandler, useEffect } from "react";
 import { AuthCodeMSALBrowserAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser";
-import { InteractionType, PublicClientApplication } from "@azure/msal-browser";
+import { InteractionType, PublicClientApplication, AuthenticationResult } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 import { getUser, getProfilePhoto } from "../GraphService";
 import { v4 as uuidv4 } from "uuid";
@@ -103,7 +103,7 @@ function useProvideAppContext() {
                         // Get the user from Microsoft Graph
                         const user = await getUser(authProvider);
                         console.log("user", user);
-                        const avatar = await getProfilePhoto(authProvider);
+                        const avatar = await getProfilePhoto(authProvider).catch(() => undefined);
                         setUser({
                             displayName: user.displayName || "",
                             email: user.mail || "",
@@ -126,6 +126,7 @@ function useProvideAppContext() {
                         setSessionId({
                             sessionId: uuidv4()
                         });
+                        setIsAuthenticated(true);
                     }
                 } catch (err: any) {
                     displayError(err.message);
@@ -136,10 +137,18 @@ function useProvideAppContext() {
     });
 
     const signIn = async () => {
-        await msal.instance.loginPopup({
-            scopes: ["user.read"],
-            prompt: "select_account"
-        });
+        try {
+            // signin then set access token and session id after successful signin
+            await msal.instance.loginPopup({
+                scopes: ["user.read"],
+                prompt: "select_account"
+            }).then((response: AuthenticationResult) => {
+                setAccessToken({ accessToken: response.accessToken });
+                setSessionId({ sessionId: uuidv4() });
+            }, (error: any) => { console.log(error) });
+        } catch (err: any) {
+            displayError(err.message);
+        }            
 
         // Get the user from Microsoft Graph
         const user = await getUser(authProvider);
